@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/style.css"><!--Este es el que contiene el css-->
+  <title>Restablecer Contraseña</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url(https://pbs.twimg.com/media/CoPhtqmVYAAx76C.jpg:large);
+      background-size: cover;
+    }
+    
+    .container {
+      text-align: center;
+    }
+
+    h1{
+        font-size: 22px;
+        float: center;
+    }
+    
+    .containerForm{
+        border-color: white;
+        background-color: rgba(193, 183, 183, 0.867);
+        border-radius: 5%;
+        padding: 10% 10% 10% 10%;
+    }
+    </style>
+</head>
+<body>
+    <div class="col-4">
+        <div class="containerForm">
+            <div class="container">
+                <h1>Restablecer Contraseña</h1>
+                <br><br>
+                <form>
+                    <div class="form-group ">
+                        <label for="usuario" class="control-label">Usuario(CURP):</label>
+                        <input type="text" id="usuario" name="usuario" class="form-control" value="" placeholder="CURP" required>
+                    </div>
+                    <div class="form-group ">
+                        <label for="correo" class="control-label">Correo Electrónico:</label>
+                        <input type="email" id="correo" name="correo" class="form-control" value="" placeholder="ejemplo@dominio.com"required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Restablecer Contraseña</button>
+                        <a href="index.html" class="btn btn-default  btn-block">Salir</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="styleMenu.css">
+    
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Ticket-Mayordomía®</title> 
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="logoTM.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">USUARIOS</span>
+                    <span class="profession">M-2024</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Buscar...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="indexUsuario.html">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="opcionesUsuario/boletos/boletosUsuario.html">
+                            <i class='bx bx-purchase-tag-alt icon'></i>
+                            <span class="text nav-text">Boletos</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="/pruebas/index.html">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Salir</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Modo oscuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="text">TM</div>
+        <div class="text"> Bienvenido a Ticket-Mayordomía® proceso 2024</div>
+
+        <!-- Aquí es donde he añadido las reglas -->
+        <div class="reglas">
+            <h3>Reglas de operación del sistema:</h3>
+            <ul>
+                <li>1. La función del presente sistema es brindar una manera más agil de elegir tus boletos, por lo cual su función es "apartar" tu boleto y poder ver cuales estan disponibles para su venta.</li>
+                <li>2. Podrás comprar el número de boletos que desees.
+                    <ul class="sublista">
+                        <li>2.1. Si deseas compras tus boletos con diferentes nombres, es necesitará comprar de manera individual cada uno.</li>
+                    </ul>
+                </li>
+                <li>3. Una vez elegidos tus boletos no podrás modificar la información ingresada en cada uno de ellos.</li>
+                <li>4. Contarás con un tiempo límite para seleccionar y compras tus boletos.</li>
+                <li>5. Una vez que hallas llenado la información de tus boletos, es importante recordar él(los) número de los boletos.</li>
+                <ul class="sublista">
+                    <li>5.1. A partir de la finalización de la compra de tus boletos contarás con 7 días naturales para efectuar el pago en la santa iglesia catedral, por la calle prisciliano Sánchez #30, en rectoría.</li>
+                    <li>5.2. Pasados los 7 días naturales de a ver selecionado sus boletos y no a liquidado el costo de ellos, seran regresados al panel general y seran puestos a la venta de nueva cuanta, por ende ya no le pertenecesan.</li>
+                </ul>
+                <li>6. EL número y costos de los boletos estan condicionados a los tiempos y disposición de los mismos, por lo cual pude a ver cambios sin previo aviso.</li>
+                <li>7. Al usar el presente sistema Ticket-Mayordomía® esta aceptando y dando autorización al tratamiento de sus datos personales para la función del mismo.</li>
+
+
+            </ul>
+
+            <div class="btn-container">
+                <button onclick="location.href='opcionesUsuario/boletos/boletosUsuario.php'">Proceder a comprar boletos</button>
+            </div>
+        </div>
+        </section>      
+        
+
+    <script src="script.js"></script>
+
+</body>
+</html>

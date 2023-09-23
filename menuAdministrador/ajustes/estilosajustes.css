@@ -1,0 +1,41 @@
+.settings {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color:darkgray;
+  }
+  
+  .settings h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .settings form {
+    margin-bottom: 20px;
+  }
+  
+  .settings label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .settings input[type="password"] {
+    padding: 8px;
+    width: 350px;
+    margin-bottom: 10px;
+  }
+  
+  .settings button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .settings button:hover {
+    background-color: #45a049;
+  }

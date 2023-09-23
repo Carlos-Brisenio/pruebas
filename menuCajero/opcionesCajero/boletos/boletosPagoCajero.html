@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
+    <link rel="stylesheet" href="/pruebas/menuUsuario/opcionesUsuario/boletos/resgistro.css">
+    
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Ticket-Mayordomía®</title> 
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">CAJERO</span>
+                    <span class="profession">M-2024</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Buscar...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/menuUsuario/opcionesUsuario/boletos/boletosUsuario.html">
+                            <i class='bx bx-purchase-tag-alt icon'></i>
+                            <span class="text nav-text">Boletos</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="/pruebas/index.html">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Salir</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Modo oscuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="text">Información de pago</div>
+
+        <div class="section">
+            <h2 class="section-title">Datos del Boleto</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="numero-boleto">Número(s) de Boleto(s):</label>
+                <input type="text" id="numero-boleto" name="numero-boleto">
+              </div>
+              <div class="form-group">
+                <label for="nombre_boleto">Nombre del Boleto:</label>
+                <input type="text" id="nombre_boleto" name="nombre_boleto" required>
+              </div>
+            </div>
+                <h2 class="section-title">Opciones de pago</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <button class="button">Pago en el banco</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="button">Pago en catedral</button>
+                    </div>  
+                </div>
+            
+                <div class="button-container">
+                    <button class="button" class='bx bx-home-alt icon' onclick="window.location.href='/pruebas/menuCajero/indexCajero.html'"><i class='bx bx-home-alt'></i> Regresar al inicio</button>
+                  </div>
+          </div>
+    </section>
+    <script src="/pruebas/menuUsuario/script.js"></script>
+</body>
+</html>

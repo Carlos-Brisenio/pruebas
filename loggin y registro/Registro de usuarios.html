@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css"> 
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <title>Registro de usuario</title>
+</head>
+<body>
+    <div class="container">
+        <header>Registro de usuario</header>
+    
+        <div class="progress-bar">
+            <div class="paso">
+                <p>Datos</p>
+                <div class="num">
+                    <span>1</span>
+                </div>
+                <div class="check  fas fa-check"></div>
+            </div>
+            <div class="paso"> 
+                <p>Contacto</p>
+                <div class="num">
+                    <span>2</span>
+                </div>
+                <div class="check  fas fa-check"></div>
+            </div>
+            <div class="paso"> 
+                <p>Usuario</p>
+                <div class="num">
+                    <span>3</span>
+                </div>
+                <div class="check  fas fa-check"></div>
+            </div>
+            <div class="paso"> 
+                <p>Fin</p>
+                <div class="num">
+                    <span>4</span>
+                </div>
+                <div class="check  fas fa-check"></div>
+            </div>
+        </div>
+
+        <div class="form-princ">
+            <form action="#">
+                <!--Primera parte-->
+                <div class="pagina movPag">
+                    <div class="titulo">Informacion del usuario</div>
+                    <div class="campo">
+                        <div class="label">CURP:</div>
+                        <input type="text" id="curp" placeholder="CURP">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Nombre:</div>
+                        <input type="text" id="nom" placeholder="Nombre(s)">
+                    </div>
+                    
+                    <div class="campo">
+                        <div class="label">Apellido Paterno:</div>
+                        <input type="text" id="ap_paterno" placeholder="Apellido paterno">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Apellido Materno:</div>
+                        <input type="text" id="ap_materno" placeholder="Apellido materno">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Fecha de nacimiento:</div>
+                        <input type="date" id="fecha_nat" >
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Genero:</div>
+                        <input type="text" id="genero" placeholder="Genero">
+                    </div>
+    
+                    <div class="campo sigPag">
+                        <button>Siguiente</button>
+                    </div>
+                    <div class="campo btns">
+                        <button class="salir">Salir</button>
+                    </div>
+                </div>
+    
+                <!--Segunda parte-->
+                <div class="pagina">
+                    <div class="titulo">Informacion Secundaria</div>
+                    <div class="campo">
+                        <div class="label">Domicilio:</div>
+                        <input type="text" id="dom" placeholder="Domicilio">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Colonia</div>
+                        <input type="text" id="col" placeholder="Colonia">
+                    </div>
+                    
+                    <div class="campo">
+                        <div class="label">Código postal</div>
+                        <input type="number" id="codP" placeholder="Codigo postal">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Numero #:</div>
+                        <input type="number" id="num_Dom" placeholder="Numero">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Telefono de casa:</div>
+                        <input type="number" id="tel_casa" placeholder="Telefono de casa">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Telefono celular:</div>
+                        <input type="number" id="tel_cel" placeholder="Celular">
+                    </div>
+    
+                    <div class="campo btns">
+                        <button class="volver-pag1 volver">Atras</button>
+                        <button class="adelante-pag3 adelante">Siguiente</button>
+                    </div>
+                </div>
+    
+                <!--Tercera parte-->
+                <div class="pagina">
+                    <div class="titulo">Creacion de usuario</div>
+                    <div class="campo">
+                        <div class="label">Nombre de usuario:</div>
+                        <input type="text" id="user" placeholder="usuario">
+                    </div>
+    
+                    <div class="campo">
+                        <div class="label">Correo electronico:</div>
+                        <input type="email" id="correo" placeholder="email">
+                    </div>
+                    
+                    <div class="campo">
+                        <div class="label">Contraseña:</div>
+                        <input type="password" id="password" placeholder="Contraseña">
+                    </div>
+    
+                    <div class="campo1">
+                        <div class="label1">Terminos y condiciones</div>
+                        <input type="checkbox" id="terminos"> Acepto los terminos y condiciones al crear mi usuario/cuenta
+                    </div>
+    
+                    <div class="campo">
+                        <button class="adelante-pag4 adelante">Aceptar</button>
+                        <button class="volver-pag2 volver">Atras</button>
+                    </div>
+                </div>
+
+                <!--cuarta parte-->
+                <div class="pagina">
+                    <div class="titulo">Bienvenido</div>
+                    <div class="campo">
+                        <p>El llenado de los campos ha sido exitoso, bienvenido al sistema</p>
+                    </div>
+    
+                    <div class="campo btns">
+                        <button class="final">Finalizar</button>
+                    </div>
+                </div>
+            </form>
+    
+        </div>
+    </div>
+
+    <script src="movimiento.js"></script>
+</body>
+</html>

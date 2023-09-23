@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
+    <link rel="stylesheet" href="styledatos.css">
+
+    
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Ticket-Mayordomía®</title> 
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">USUARIOS</span>
+                    <span class="profession">M-2024</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Buscar...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/pruebas/menuUsuario/indexUsuario.html">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas//menuUsuario/opcionesUsuario/datos/datosUsuario.html">
+                            <i class='bx bx-data icon'></i>
+                            <span class="text nav-text">Mis datos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuUsuario/opcionesUsuario/boletos/boletosUsuario.html">
+                            <i class='bx bx-purchase-tag-alt icon'></i>
+                            <span class="text nav-text">Boletos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuUsuario/opcionesUsuario/ajustes/ajustesUsuario.html">
+                            <i class='bx bx-cog icon' ></i>
+                            <span class="text nav-text">Ajustes</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="/pruebas/index.html">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Salir</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Modo oscuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="text"> Mis datos</div>
+
+        <div class="section">
+            <h2 class="section-title">Datos generales</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="curp">CURP:</label>
+                <input type="text" id="curp" name="curp">
+              </div>
+              <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="text" id="edad" name="edad">
+              </div>
+              <div class="form-group">
+                <label for="genero">Genero:</label>
+                <input type="text" id="genero" name="genero">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre">
+              </div>
+              <div class="form-group">
+                <label for="aPaterno">Apellidos Paterno:</label>
+                <input type="text" id="aPaterno" name="aPaterno">
+              </div>
+              <div class="form-group">
+                <label for="aPaterno">Apellidos Materno:</label>
+                <input type="text" id="aMaterno" name="aMaterno">
+              </div>
+        
+            </div>
+            <div class="button-container">
+                <button class="button">Modificar datos generales</button>
+              </div>
+          </div>
+          
+          <div class="section">
+            <h2 class="section-title">Datos Domiciliarios</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ciudad">Ciudad:</label>
+                    <input type="text" id="ciudad" name="ciudad" required>
+                </div>
+                <div class="form-group">
+                    <label for="calle">Calle:</label>
+                    <input type="text" id="calle" name="calle" required>
+                </div>
+                <div class="form-group">
+                    <label for="numero">Número:</label>
+                    <input type="text" id="numero" name="numero" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="codigo_postal">Código Postal:</label>
+                    <input type="text" id="codigo_postal" name="codigo_postal" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="colonia">Colonia:</label>
+                    <input type="text" id="colonia" name="colonia" required>
+                </div>
+                <div class="form-group">
+                    <label for="colinda1">Calle Colinda 1:</label>
+                    <input type="text" id="colinda1" name="colinda1" required>
+                </div>
+            </div>
+        
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="colinda2">Calle Colinda 2:</label>
+                    <input type="text" id="colinda2" name="colinda2" required>
+                </div>
+                <div class="form-group">
+                    <label for="referencia">Referencia:</label>
+                    <input type="text" id="referencia" name="referencia" required>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button class="button">Modificar datos Domiciliarios</button>
+              </div>
+          </div>
+          
+          <div class="section">
+            <h2 class="section-title">Datos de Contacto</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telefono_casa">Teléfono de Casa:</label>
+                    <input type="text" id="telefono_casa" name="telefono_casa" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="celular">Celular:</label>
+                    <input type="text" id="celular" name="celular" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" name="correo" required>
+                </div>
+                
+          </div>
+          <div class="button-container">
+            <button class="button">Modificar datos de contacto</button>
+          </div>
+        </div>
+          
+
+
+    </section>
+    <script src="/pruebas/menuUsuario/script.js"></script>
+</body>
+</html>

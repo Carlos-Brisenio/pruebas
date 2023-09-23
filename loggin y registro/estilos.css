@@ -1,0 +1,214 @@
+*{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    font-family: serif;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color:darkgreen;
+    background-image: url(https://pbs.twimg.com/media/CoPhtqmVYAAx76C.jpg:large);
+    background-size: cover;
+}
+
+.container{
+    width: 350px;
+    background-color: white;
+    border-radius: 7px;
+    text-align: center;
+    padding: 30px 35px 0 35px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.container header{
+    font-size: 20px;
+    font-weight: 600px;
+    margin: 0 0 30px 0;
+}
+
+.container .form-princ{
+    width:100%;
+    overflow: hidden;
+}
+
+.form-princ form{
+    display: flex;
+    width: 400%;
+}
+
+.form-princ form .pagina{
+    width: 25%;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.form-princ form .pagina .titulo{
+    text-align: left;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.form-princ form .pagina .campo{
+    height: 35px;
+    width: 350px;
+    margin: 40px 0;
+    display: flex;
+    position: relative;
+}
+
+.form-princ form .pagina .campo .label{
+    position: absolute;
+    top:-30px;
+    font-weight: 500;
+    font-size: 14px;
+    font-style: italic;
+    float: left;
+    text-align: left;
+    width: 100%;
+}
+
+.form-princ form .pagina .campo input{
+    width: 100%;
+    height: 100%;
+    border:1px solid lightgrey;
+    border-radius: 5px;
+    font-size: 10px;
+    padding-left: 15px;
+}
+
+.form-princ form .pagina .campo button{
+    width: 100%;
+    height: calc(100% + 5px);
+    margin-top: -20px;
+    border: none;
+    background: #0e2c48;
+    border-radius: 7px;
+    color:white;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.form-princ form .pagina .campo button:hover{
+    background: yellowgreen;
+}
+
+.form-princ form .pagina .btns button{
+    margin-top: -20px!important;
+}
+
+form .pagina .btns button.volver{
+    margin-left: 3px;
+    font-size: 17px;
+}
+
+form .pagina .btns button.adelante{
+    margin-left: 3px;
+    font-size: 17px;
+}
+
+.container .progress-bar{
+    display: flex;
+    margin: 40px 0;
+}
+
+.container .progress-bar .paso{
+    text-align: center;
+    width: 100%;
+    position: relative;
+}
+
+.progress-bar .paso p{
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+    margin-bottom: 8px;
+    transition: 0.2s;
+}
+
+.progress-bar .paso p.active{
+    color: #db2a31;
+
+}
+
+.progress-bar .paso .num{
+    position: relative;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 25px;
+    transition: 0.2s;
+}
+
+.progress-bar .paso .num.active{
+    border-color: #db2a31;
+    background-color: #db2a31;
+}
+
+.progress-bar .paso .num span{
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 25px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.progress-bar .paso .num.active span{
+    display: none;
+}
+
+.progress-bar .paso .check{
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    font-size: 15px;
+    transform: translate(-50%, -50%);
+}
+
+.progress-bar .paso .check.active{
+    display: block;
+    color:#000;
+}
+
+.progress-bar .paso .num:before,
+.progress-bar .paso .num:after{
+    position: absolute;
+    content: '';
+    width: 44px;
+    height: 3px;
+    bottom: 11px;
+    right: -53px;
+    background: #000;
+}
+
+.progress-bar .paso:last-child .num:before,
+.progress-bar .paso:last-child .num:after{
+    display: none;
+}
+
+.progress-bar .paso .num.active:after{
+    background-color: #db2a31;
+    animation: mov_Linea 0.3s linear forwards;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+@keyframes mov_Linea{
+    100%{
+        transform: scaleX(1);
+    }
+}
+

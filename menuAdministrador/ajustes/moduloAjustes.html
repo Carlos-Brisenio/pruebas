@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
+    <link rel="stylesheet" href="estilosajustes.css">
+    
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    <title>Ticket-Mayordomía®/Ajustes</title> 
+</head>
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
+                </span>
+
+                <div class="text logo-text">
+                    <span class="name">ADMINISTRADOR</span>
+                    <span class="profession">M-2024</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="text" placeholder="Buscar...">
+                </li>
+
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/indexAdministrador.html">
+                            <i class='bx bx-home-alt icon' ></i>
+                            <span class="text nav-text">Inicio</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/datos/misDatos.html">
+                            <i class='bx bx-data icon'></i>
+                            <span class="text nav-text">Mis datos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/usuarios/moduloUsers.html">
+                            <i class='bx bx-user icon'></i>
+                            <span class="text nav-text">Usuarios</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/boletos/moduloBoletos.html">
+                            <i class='bx bx-purchase-tag-alt icon'></i>
+                            <span class="text nav-text">Boletos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/estadisticas/estadisticas.html">
+                            <i class='bx bx-bar-chart-square icon'></i>
+                            <span class="text nav-text">Estadisticas</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="moduloAjustes.html">
+                            <i class='bx bx-cog icon' ></i>
+                            <span class="text nav-text">Ajustes</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="">
+                    <a href="/pruebas/principal-Administracion.html">
+                        <i class='bx bx-log-out icon' ></i>
+                        <span class="text nav-text">Salir</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Modo oscuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+                
+            </div>
+        </div>
+
+    </nav>
+
+    <section class="home">
+        <div class="text">Ajustes</div>
+        
+        <div class="settings">
+            
+        <form>
+            <h2>Cambiar contraseña</h2>
+            <label for="current-password">Contraseña actual:</label>
+            <input type="password" id="current-password" required>
+
+            <label for="new-password">Nueva contraseña:</label>
+            <input type="password" id="new-password" disabled>
+            <br>
+            <button type="button">Actualizar contraseña</button>
+        </form>
+
+
+        </div>
+    </section>
+
+    
+    <script src="/pruebas/menuUsuario/script.js"></script>
+
+    
+
+</body>
+</html>

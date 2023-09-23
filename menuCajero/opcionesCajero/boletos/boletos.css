@@ -1,0 +1,29 @@
+		.container {
+			margin: auto;
+			text-align: center;
+		}
+		button {
+        width: 60px;
+        height: 60px;
+        border: none;
+        margin: 2px;
+        background-color: white;
+        border: 1px solid black;
+
+        color: black;
+        font-size: 18px;
+      }
+		.button:hover {
+			background-color: #204d0c;
+			color: white;
+		}
+
+    #board {
+      position: relative;  /* Establece una posición relativa para el div board */
+  }
+
+
+  .selected {
+    background-color: #007BFF; /* Color de fondo cuando está seleccionado */
+    color: white; /* Color del texto cuando está seleccionado */
+}

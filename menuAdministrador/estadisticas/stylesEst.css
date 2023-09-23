@@ -1,0 +1,54 @@
+#ventasContainer, #boletosContainer {
+    margin-top: 50px;
+  }
+  
+  #ventasMenu, #boletosMenu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  h2{
+    margin-left: 20px;
+  }
+  
+  .reporteBtn {
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .verde {
+    background: linear-gradient(to bottom right, #00cc00, #009900);
+  }
+  
+  .amarillo {
+    background: linear-gradient(to bottom right, #ffff00, #ffcc00);
+  }
+  
+  .reporteBtn:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  
+  #ventasReporteContainer, #boletosReporteContainer {
+    margin-top: 20px;
+  }
+  
+  .reporteBtn i {
+    margin-right: 5px;
+  }
+  
+  #ventasReporteContainer,
+  #boletosReporteContainer {
+    margin-top: 20px;
+  }
