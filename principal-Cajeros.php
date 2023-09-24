@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="bannerV2.png" alt="Login" class="max-w-full">
             <br>
             <p class="text-center text-xs">
-                <a target="_blank">Ticket-Mayordomia©</a><br>Todos los derechos reservados © 2023.
+                <a target="_blank">Mayordomía Señor San José 2024®</a><br>Todos los derechos reservados © 2023.
                 <br>Un producto de DreamCreators</a>.
             </p>
         </div>
