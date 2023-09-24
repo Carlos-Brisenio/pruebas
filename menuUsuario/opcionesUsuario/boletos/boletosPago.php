@@ -82,7 +82,7 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="numero-boleto">Número de Boleto:</label>
-                <input type="text" id="numero-boleto" name="numero-boleto">
+                <input type="text" id="numero-boleto" name="numero-boleto" readonly>
               </div>
               <div class="form-group">
                 <label for="nombre_boleto">Nombre del Boleto:</label>
@@ -109,5 +109,14 @@
           </div>
     </section>
     <script src="/pruebas/menuUsuario/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const numeroBoleto = urlParams.get('numeroBoleto');
+            if (numeroBoleto) {
+                document.getElementById("numero-boleto").value = numeroBoleto;
+            }
+        });
+    </script>    
 </body>
 </html>

@@ -51,7 +51,10 @@
         $stmtBoleto->execute([$fechaCompra, $fechaLimite, $idBoleto]);
         
         // Redireccionar después de insertar
-        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.html");
+        //header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.html");
+        // Redireccionar después de insertar
+        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?numeroBoleto=".$idBoleto);
+
     }
 ?>
 
@@ -138,7 +141,7 @@
             <h2 class="section-title">Datos del Boleto</h2>
             <div class="form-row">
               <div class="form-group">
-                <label for="numero-boleto">Número(s) de Boleto(s):</label>
+                <label for="numero-boleto">Número de Boleto:</label>
                 <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
 
               </div>
@@ -238,24 +241,24 @@
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
         function updateColonias() {
-    var cp = document.getElementById("codigo_postal").value;
+            var cp = document.getElementById("codigo_postal").value;
 
-    if (cp.length == 5) {  // Asume que los códigos postales tienen 5 dígitos
-        fetch('/pruebas/menuUsuario/opcionesUsuario/boletos/getColonias.php?codigo_postal=' + cp)
-            .then(response => response.json())
-            .then(data => {
-                var coloniaSelect = document.getElementById("colonia");
-                coloniaSelect.innerHTML = "";  // Limpiar las opciones existentes
-                
-                data.forEach(function(colonia) {
-                    var option = document.createElement("option");
-                    option.value = colonia;
-                    option.text = colonia;
-                    coloniaSelect.appendChild(option);
-                });
-            });
-    }
-}
+            if (cp.length == 5) {  // Asume que los códigos postales tienen 5 dígitos
+                fetch('/pruebas/menuUsuario/opcionesUsuario/boletos/getColonias.php?codigo_postal=' + cp)
+                    .then(response => response.json())
+                    .then(data => {
+                        var coloniaSelect = document.getElementById("colonia");
+                        coloniaSelect.innerHTML = "";  // Limpiar las opciones existentes
+                        
+                        data.forEach(function(colonia) {
+                            var option = document.createElement("option");
+                            option.value = colonia;
+                            option.text = colonia;
+                            coloniaSelect.appendChild(option);
+                        });
+                    });
+            }
+        }
     </script>
 
 </body>
