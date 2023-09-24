@@ -18,7 +18,7 @@ $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 // Función para obtener el tipo de usuario
 function obtenerTipoUsuario($conn, $usuario, $password) {
     $query = "SELECT idTipoUsuario FROM Usuarios WHERE usuario = '".$usuario."' AND password = '".$password."'";
-    echo $query;
+    //echo $query;
     $stmt = $conn->prepare($query);
     $stmt->execute();    
     @$result = $stmt->fetch(PDO::FETCH_ASSOC);    
