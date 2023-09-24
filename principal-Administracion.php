@@ -26,7 +26,7 @@ function obtenerTipoUsuario($conn, $usuario, $password) {
 // Verificar el inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] == "POST") {    
     $usuario = $_POST["userAdmin"];
-    $password = $_POST["passwordAdmi"]; // Supongamos que almacenas contraseñas en formato MD5
+    $password = $_POST["passwordAdmin"]; // Supongamos que almacenas contraseñas en formato MD5
 
     // Obtener el tipo de usuario
     $tipoUsuario = obtenerTipoUsuario($conn, $usuario, $password);
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($tipoUsuario != "") {
         if ($tipoUsuario == 1) { // Modificado aquí para permitir solo idTipoUsuario 1
             // Redirigir al usuario con permisos
-            header("Location: menuCajero/indexAdmistrador.html");
+            header("Location: menuAdministrador/indexAdministrador.html");
             exit();
         } else {
             // Mostrar mensaje de falta de permisos
