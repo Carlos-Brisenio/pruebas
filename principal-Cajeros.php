@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li role="presentation"><a href="principal-Administracion.html">Administración</a></li>
             </ul>
             <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" id="login" class="w-full md:w-2/3 p-4">
-                <input type="hidden" name="_token" value="KrT0K4JDi7KSb2c43qIg4ffxdybnDXB6ru5JXNjT">                <div class="row">
+                <input type="hidden" name="_token">                <div class="row">
                     <div class="col-12">
                         <div class="form-group ">
                             <label for="user" class="control-label">Usuario</label>
