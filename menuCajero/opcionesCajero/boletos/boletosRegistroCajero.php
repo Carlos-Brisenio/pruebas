@@ -27,7 +27,7 @@
     if(isset($_POST['apartar_boleto'])) {
         $idBoleto = $_POST['numero-boleto'];
         $nombre = $_POST['nombre_boleto'];
-        $ciudad = $_POST['ciudad'];
+        $ciudad = "Ciudad Guzmán";  // Asignamos directamente el valor
         $colonia = $_POST['colonia'];
         $calle = $_POST['calle'];
         $numero = $_POST['numero'];
@@ -155,7 +155,7 @@
                 <!-- Ciudad -->
                 <div class="form-group">
                     <label for="ciudad">Ciudad:</label>
-                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" required>
+                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" required readonly>
                 </div>
 
                 <!-- Código Postal -->
