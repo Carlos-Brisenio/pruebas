@@ -139,7 +139,7 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="numero-boleto">Número(s) de Boleto(s):</label>
-                <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>">
+                <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
 
               </div>
               <div class="form-group">
