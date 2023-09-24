@@ -5,15 +5,13 @@ $db_name = "dbMayordomia";
 $username = "root";
 $password = "";
 
-$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-
-/*try {
+try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     die();
-}*/
+}
 
 // Función para obtener el tipo de usuario
 function obtenerTipoUsuario($conn, $usuario, $password) {
