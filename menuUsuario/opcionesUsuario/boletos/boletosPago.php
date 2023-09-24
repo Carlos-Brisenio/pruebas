@@ -1,3 +1,26 @@
+<?php
+    // Conexión a la base de datos
+    $host = "localhost";
+    $db_name = "dbMayordomia";
+    $username = "root";
+    $password = "";
+    $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+
+    // Recuperar el número de boleto desde la URL
+    $numeroBoleto = "";
+    $nombreBoleto = "";
+    if(isset($_GET['numeroBoleto'])) {
+        $numeroBoleto = $_GET['numeroBoleto'];
+
+        // Realizar consulta a la base de datos
+        $stmt = $conn->prepare("SELECT nombre FROM InfoBoletos WHERE idBoleto = ?");
+        $stmt->execute([$numeroBoleto]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $nombreBoleto = $result['nombre'];
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -86,9 +109,12 @@
               </div>
               <div class="form-group">
                 <label for="nombre_boleto">Nombre del Boleto:</label>
-                <input type="text" id="nombre_boleto" name="nombre_boleto" required>
+                <input type="text" id="nombre_boleto" name="nombre_boleto" readonly>
               </div>
             </div>
+            <div class="button-container">
+                    <button class="button">Imprimir orden de pago</button>
+                </div>
             <div class="reglasPago">
                 <h2 class="section-title">Instrucciones de pago</h2>
                 <ul>
@@ -117,6 +143,14 @@
                 document.getElementById("numero-boleto").value = numeroBoleto;
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+        const numeroBoletoElement = document.getElementById("numero-boleto");
+        const nombreBoletoElement = document.getElementById("nombre_boleto");
+        
+        numeroBoletoElement.value = "<?php echo $numeroBoleto; ?>";
+        nombreBoletoElement.value = "<?php echo $nombreBoleto; ?>";
+    });
     </script>    
 </body>
 </html>
