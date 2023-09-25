@@ -1,5 +1,5 @@
 <?php
-    require '/pruebas/fpdf/fpdf.php';
+    require '/fpdf.php';
 
     $pdf = new FPDF();
     $pdf->AddPage();
