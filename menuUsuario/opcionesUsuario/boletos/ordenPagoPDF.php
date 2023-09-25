@@ -1,5 +1,9 @@
 <?php
-require '/pruebas/pdf/fpdf.php';  // Cambia 'path_to_fpdf' a la ruta correcta
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+require '../pdf/fpdf.php';
 
 // Conexión a la base de datos
 $host = "localhost";
@@ -7,6 +11,7 @@ $db_name = "dbMayordomia";
 $username = "root";
 $password = "";
 $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Recuperar el número de boleto desde la URL
 if(isset($_GET['numeroBoleto'])) {
@@ -16,6 +21,8 @@ if(isset($_GET['numeroBoleto'])) {
     $stmt = $conn->prepare("SELECT * FROM InfoBoletos WHERE idBoleto = ?");
     $stmt->execute([$numeroBoleto]);
     $boletoInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    echo "Antes de generar el PDF.<br>";
 
     if($boletoInfo) {
         $pdf = new FPDF();
@@ -29,6 +36,7 @@ if(isset($_GET['numeroBoleto'])) {
         // Puedes continuar agregando más datos aquí
 
         $pdf->Output();
+        echo "Después de generar el PDF.";
     } else {
         echo "Error: No se encontró información para el boleto.";
     }
