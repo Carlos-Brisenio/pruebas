@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-require '../pdf/fpdf.php';
+require '/pruebas/fpdf186/fpdf.php';
 
 // Conexión a la base de datos
 $host = "localhost";
