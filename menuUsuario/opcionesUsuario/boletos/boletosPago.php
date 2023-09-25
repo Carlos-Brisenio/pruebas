@@ -113,7 +113,7 @@
               </div>
             </div>
             <div class="button-container">
-                <button class="button" id="ordenPago" name="ordenPago" onclick="window.location.href='/pruebas/menuUsuario/opcionesUsuario/boletos/ordenPagoPDF.php?numeroBoleto='".$idBoleto>Imprimir orden de pago</button>
+                <button class="button" id="ordenPago" name="ordenPago" onclick="window.location.href='/pruebas/menuUsuario/opcionesUsuario/boletos/ordenPagoPDF.php?numeroBoleto=<?php echo $numeroBoleto; ?>'">Imprimir orden de pago</button>
             </div>
 
 
