@@ -1,5 +1,5 @@
 <?php
-require '/pruebas/fpdf/fpdf.php';  // Cambia 'path_to_fpdf' a la ruta correcta
+require '/pruebas/pdf/fpdf.php';  // Cambia 'path_to_fpdf' a la ruta correcta
 
 // Conexión a la base de datos
 $host = "localhost";
