@@ -113,8 +113,10 @@
               </div>
             </div>
             <div class="button-container">
-                    <button class="button">Imprimir orden de pago</button>
-                </div>
+                <button class="button" id="ordenPago" onclick="window.location.href='ordenPagoPDF.php?numeroBoleto='+document.getElementById('numero-boleto').value">Imprimir orden de pago</button>
+            </div>
+
+
             <div class="reglasPago">
                 <h2 class="section-title">Instrucciones de pago</h2>
                 <ul>
