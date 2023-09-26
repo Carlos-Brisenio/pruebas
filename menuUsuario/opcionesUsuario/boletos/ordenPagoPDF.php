@@ -3,8 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-require '/pruebas/fpdf186/fpdf.php';
+require '/pruebas/menuUsuario/opcionesUsuario/boletos/fpdf186/fpdf.php';
 
+//savePDF - - jsPDF
 // Conexión a la base de datos
 $host = "localhost";
 $db_name = "dbMayordomia";

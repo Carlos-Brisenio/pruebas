@@ -134,7 +134,7 @@
 
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script src="reloj.js"></script>
-    <script src="boletos.js"></script>s
+    <script src="boletos.js"></script>
 
 </body>
 </html>
