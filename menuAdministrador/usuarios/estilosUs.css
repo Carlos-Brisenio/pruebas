@@ -11,7 +11,7 @@
   }
   
 .user-table {
-    width: 98%;
+    width: 80%;
     border-collapse:collapse,solid,rgb(255, 255, 255);
     margin-top: 20px;
     margin-left: 10px;
@@ -70,3 +70,6 @@
 #btn-generate-report:hover{
     background-color: #010716;
 }
+
+
+
