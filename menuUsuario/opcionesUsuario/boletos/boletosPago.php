@@ -163,9 +163,7 @@
                     doc.text('Datos de contacto: ', 10, 70);
                     doc.text('Telefono de casa: ' + data.telefono1, 10, 80);
                     doc.text('Telefono de celular: ' + data.telefono2, 10, 90);
-                    doc.setFontType("bold");
                     doc.text('Instrucciones de pago: ', 10, 100);
-                    doc.setFontType("normal");
                     doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 110);
 
                     doc.save('OrdenPago.pdf');
