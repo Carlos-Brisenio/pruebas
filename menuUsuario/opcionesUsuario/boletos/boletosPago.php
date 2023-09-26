@@ -27,6 +27,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
@@ -113,7 +115,7 @@
               </div>
             </div>
             <div class="button-container">
-                <button class="button" id="ordenPago" name="ordenPago" onclick="window.location.href='/pruebas/menuUsuario/opcionesUsuario/boletos/ordenPagoPDF.php?numeroBoleto=<?php echo $numeroBoleto; ?>'">Imprimir orden de pago</button>
+                <button class="button" id="ordenPago" name="ordenPago" onclick="generarOrdenPago()">Imprimir orden de pago</button>
             </div>
 
 
@@ -138,21 +140,45 @@
     </section>
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const numeroBoleto = urlParams.get('numeroBoleto');
-            if (numeroBoleto) {
-                document.getElementById("numero-boleto").value = numeroBoleto;
-            }
-        });
+        function generarOrdenPago() {
+            const numeroBoleto = document.getElementById("numero-boleto").value;
 
-        document.addEventListener("DOMContentLoaded", function() {
-        const numeroBoletoElement = document.getElementById("numero-boleto");
-        const nombreBoletoElement = document.getElementById("nombre_boleto");
-        
-        numeroBoletoElement.value = "<?php echo $numeroBoleto; ?>";
-        nombreBoletoElement.value = "<?php echo $nombreBoleto; ?>";
-    });
-    </script>    
+            fetch(`/pruebas/menuUsuario/opcionesUsuario/boletos/getBoletoInfo.php?numeroBoleto=${numeroBoleto}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    doc.setFontSize(16);
+
+                    // Estilo normal para los datos previos
+                    doc.setFontType("normal");
+                    doc.text('Número de Boleto: ' + data.idBoleto, 10, 10);
+                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 20);
+                    doc.text('Ciudad: ' + data.ciudad, 10, 30);
+                    doc.text('Colonia: ' + data.colonia, 90, 30);
+                    doc.text('Callle: ' + data.calle, 10, 40);
+                    doc.text('Número: ' + data.numero, 70, 40);
+                    doc.text('Datos de contacto: ', 10, 70);
+                    doc.text('Telefono de casa: ' + data.telefono1, 10, 80);
+                    doc.text('Telefono de celular: ' + data.telefono2, 10, 90);
+
+                    // Estilo en negritas para "Instrucciones de pago:"
+                    doc.setFontType("bold");
+                    doc.text('Instrucciones de pago: ', 10, 100);
+
+                    // Puedes continuar agregando más datos aquí...
+
+                    doc.save('OrdenPago.pdf');
+                }
+            })
+            .catch(error => {
+                console.error('Hubo un problema con la petición Fetch:', error);
+            });
+        }
+    </script> 
 </body>
 </html>
