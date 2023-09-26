@@ -36,6 +36,9 @@
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Asegúrate de que la ruta de la imagen sea la correcta -->
+    <img id="imagenParaPdf" src="/pruebas/bannerV2.png" style="display: none;">
+
     
     <title>Ticket-Mayordomía®</title> 
 </head>
@@ -153,18 +156,49 @@
                     const doc = new jsPDF();
 
                     doc.setFontSize(16);
-                    doc.setFontType("normal");
-                    doc.text('Número de Boleto: ' + data.idBoleto, 10, 10);
-                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 20);
-                    doc.text('Ciudad: ' + data.ciudad, 10, 30);
-                    doc.text('Colonia: ' + data.colonia, 90, 30);
-                    doc.text('Callle: ' + data.calle, 10, 40);
-                    doc.text('Número: ' + data.numero, 70, 40);
-                    doc.text('Datos de contacto: ', 10, 70);
-                    doc.text('Telefono de casa: ' + data.telefono1, 10, 80);
-                    doc.text('Telefono de celular: ' + data.telefono2, 10, 90);
-                    doc.text('Instrucciones de pago: ', 10, 100);
-                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 110);
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Forma de pago ', 10, 10);
+
+                    const img = document.getElementById('imagenParaPdf');
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    const imgData = canvas.toDataURL('image/png', 1.0);
+
+                    // Agregar imagen al PDF
+                    // Ajusta las coordenadas y dimensiones según lo necesites
+                    doc.addImage(imgData, 'JPEG', 20, 20, 40, 40);
+                    doc.setFontSize(14);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Diosesis De Ciudad Gúzman', 70, 30);
+                    doc.text('Mayordomía 2024', 70, 40);
+
+                    doc.setFontSize(14);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Número de Boleto: ' + data.idBoleto, 150, 60);
+                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 70);
+                    doc.text('Ciudad: ' + data.ciudad, 10, 80);
+                    doc.text('Colonia: ' + data.colonia, 90, 80);
+                    doc.text('Callle: ' + data.calle, 10, 90);
+                    doc.text('Número: ' + data.numero, 70, 90);
+                    doc.text('Entre las calles: ' + data.colinda1 + ' y ' + data.colinda2, 10, 100);
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Datos de contacto: ', 10, 120);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Telefono de casa: ' + data.telefono1, 10, 130);
+                    doc.text('Telefono de celular: ' + data.telefono2, 100, 140);
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Instrucciones de pago: ', 10, 150);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 160);
+                    doc.text('Lunes a domingo', 10, 170);
+                    doc.text('11:30 hrs a 14:00 hrs', 10, 180);
+                    doc.text('17:30 hrs a 20:00 hrs', 10, 190);
+
 
                     doc.save('OrdenPago.pdf');
                 }
