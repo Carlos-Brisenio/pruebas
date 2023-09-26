@@ -107,11 +107,11 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="numero-boleto">Número de Boleto:</label>
-                <input type="text" id="numero-boleto" name="numero-boleto" readonly>
+                <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
               </div>
               <div class="form-group">
                 <label for="nombre_boleto">Nombre del Boleto:</label>
-                <input type="text" id="nombre_boleto" name="nombre_boleto" readonly>
+                <input type="text" id="nombre_boleto" name="nombre_boleto" value="<?php echo $nombreBoleto; ?>" readonly>
               </div>
             </div>
             <div class="button-container">
@@ -153,8 +153,6 @@
                     const doc = new jsPDF();
 
                     doc.setFontSize(16);
-
-                    // Estilo normal para los datos previos
                     doc.setFontType("normal");
                     doc.text('Número de Boleto: ' + data.idBoleto, 10, 10);
                     doc.text('Nombre del Boleto: ' + data.nombre, 10, 20);
@@ -165,12 +163,10 @@
                     doc.text('Datos de contacto: ', 10, 70);
                     doc.text('Telefono de casa: ' + data.telefono1, 10, 80);
                     doc.text('Telefono de celular: ' + data.telefono2, 10, 90);
-
-                    // Estilo en negritas para "Instrucciones de pago:"
                     doc.setFontType("bold");
                     doc.text('Instrucciones de pago: ', 10, 100);
-
-                    // Puedes continuar agregando más datos aquí...
+                    doc.setFontType("normal");
+                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 110);
 
                     doc.save('OrdenPago.pdf');
                 }

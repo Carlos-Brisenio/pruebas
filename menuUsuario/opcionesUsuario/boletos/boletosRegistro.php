@@ -51,8 +51,6 @@
         $stmtBoleto->execute([$fechaCompra, $fechaLimite, $idBoleto]);
         
         // Redireccionar después de insertar
-        //header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.html");
-        // Redireccionar después de insertar
         header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?numeroBoleto=".$idBoleto);
 
     }
