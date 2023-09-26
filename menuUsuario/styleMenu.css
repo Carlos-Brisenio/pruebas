@@ -382,21 +382,21 @@ button:hover {
     /*========Código Botones de estado========*/
     .botonesInfo {
         position: absolute;  /* Cambio de fixed a absolute */
-        top: 6%;  /* Ubica el timer justo debajo del div board */
-        right: 65%;  /* Centrar horizontalmente respecto al div board */
+        top: 6%;  /* Ubica estado de los botones antes del div board */
+        right: 62%;  /* Centrar horizontalmente respecto al div board */
         transform: translateX(-50%); /* Ajuste para centrar exactamente */
         background-color: rgba(0, 0, 0, 0.5);
         color: #FFF;
-        padding: 15px 30px;
+        padding: 15px 20px;
         border-radius: 5px;
-        margin-top: 20px;  /* Añade un margen superior para separar del div board */
+        margin-top: 23px;  /* Añade un margen superior para separar del div board */
         font-weight: bold;
         font-size: 30px;
     }
 
     /*========Reglas de pago========*/
     .reglasPago {
-        top: 200;
+        top: 200px;
         left: 100px;
         height: 300vh;
         flex-direction: column;

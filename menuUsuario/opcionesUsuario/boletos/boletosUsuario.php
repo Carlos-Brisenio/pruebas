@@ -19,6 +19,16 @@
     while ($row = $stmtStatus2->fetch(PDO::FETCH_ASSOC)) {
         $boletosStatus2[] = $row['numero_boleto'];
     }
+
+    $boletosStatus4 = [];
+
+    $queryStatus4 = "SELECT numero_boleto FROM Boletos WHERE status = 4";
+    $stmtStatus4 = $conn->prepare($queryStatus4);
+    $stmtStatus4->execute();
+
+    while ($row = $stmtStatus4->fetch(PDO::FETCH_ASSOC)) {
+        $boletosStatus4[] = $row['numero_boleto'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -103,6 +113,7 @@
             <script>
                 // Pasar la información de PHP a JavaScript
                 var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
+                var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
             </script>
             <div class="botonesInfo">
                 <!-- Tabla de estados -->
@@ -118,6 +129,10 @@
                     <tr>
                         <td><button style="background-color: red;"></button></td>
                         <td>Vendido</td>
+                    </tr>
+                    <tr>
+                        <td><button style="background-color: #2e055d;"></button></td>
+                        <td>Deshabilitado</td>
                     </tr>
                 </table>
             </div>

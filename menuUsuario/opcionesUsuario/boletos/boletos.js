@@ -36,7 +36,9 @@ function updateBoard() {
 
             if (boletosStatus2.includes(buttonNumber.toString())) {
                 boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" style="background-color: yellow;" onclick="showAlert(' + buttonNumber + ')" disabled>' + buttonNumber + '</button>';
-            } else{
+            } else if (boletosStatus4.includes(buttonNumber.toString())) {
+                        boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" style="background-color: #2e055d;" onclick="showAlert(' + buttonNumber + ')" disabled>' + buttonNumber + '</button>';
+            }else{
                 boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" onclick="showAlert(' + buttonNumber + ')">' + buttonNumber + '</button>';
             }
         }
