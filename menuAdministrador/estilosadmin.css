@@ -1,0 +1,67 @@
+/* Estilos para los cuadros */
+.dashboard-card {
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative; /* Para posicionar el icono dentro del cuadro */
+    transition: background-color 0.3s; /* Transición de color al pasar el puntero */
+}
+
+/* Estilos para los iconos */
+.dashboard-card .icon {
+    font-size: 48px;
+    position: absolute;
+    top: 50px;
+    left: 250px;
+    transition: color 0.3s; /* Transición de color al pasar el puntero */
+}
+
+/* Estilos para el cuadro de Ventas */
+.sales-card {
+    background-color: #007bff;
+}
+
+/* Estilos para el cuadro de Boletos Apartados */
+.apartados-card {
+    background-color: #28a745;
+}
+
+/* Estilos para el cuadro de Boletos por Vencer */
+.por-vencer-card {
+    background-color: #8d0281;
+}
+.users-card {
+    background-color: #ffc107; /* Color de fondo para el cuadro de Usuarios */
+}
+
+/* Estilos para resaltar el cuadro y el icono al pasar el puntero */
+.dashboard-card:hover {
+    background-color: #333; /* Color de fondo cuando se pasa el puntero */
+}
+
+.dashboard-card:hover .icon {
+    color: #fff; /* Color del icono cuando se pasa el puntero */
+}
+
+/* Estilos para resaltar el texto en rojo si hay boletos por vencerse */
+.text-danger {
+    color: #ffffff !important; /* Color rojo */
+}
+
+
+/* Estilos para el contenedor de la gráfica */
+#pieChartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(168, 236, 79); /* Cambia este color al verde claro deseado */
+    text-align: center; /* Para centrar el texto */
+    width: 200%; /* Hace que el contenedor ocupe todo el ancho de la pantalla */
+    height: auto;
+    margin-left:60%;
+}
+
+
+
+
