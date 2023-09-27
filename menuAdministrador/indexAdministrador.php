@@ -231,30 +231,26 @@
         </div>
     </div>
 </div>
-
-
-
     </section>
-
-        <script>
+    <script>
         // Datos para la gráfica de pastel
-var ctx = document.getElementById('pieChart').getContext('2d');
-var pieData = {
-    labels: ['Vendidos', 'Disponibles', 'Apartados'],
-    datasets: [{
-        data: [<?php echo $porcentajeVendidos; ?>, <?php echo $porcentajeDisponibles; ?>, <?php echo $porcentajeApartados; ?>],
-        backgroundColor: ['green', 'blue', 'orange']
-    }]
-};
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var pieData = {
+            labels: ['Vendidos', 'Disponibles', 'Apartados'],
+            datasets: [{
+                data: [<?php echo $porcentajeVendidos; ?>, <?php echo $porcentajeDisponibles; ?>, <?php echo $porcentajeApartados; ?>],
+                backgroundColor: ['green', 'blue', 'orange']
+            }]
+        };
 
-// Configuración de la gráfica de pastel
-var pieChart = new Chart(ctx, {
-    type: 'pie',
-    data: pieData,
-    options: {
-        responsive: true
-    }
-});
+        // Configuración de la gráfica de pastel
+        var pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: pieData,
+            options: {
+                responsive: true
+            }
+        });
 
     </script>
 
