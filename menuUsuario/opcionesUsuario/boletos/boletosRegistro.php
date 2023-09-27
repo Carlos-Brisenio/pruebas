@@ -156,7 +156,7 @@
                 <!-- Ciudad -->
                 <div class="form-group">
                     <label for="ciudad">Ciudad:</label>
-                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" required readonly>
+                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" readonly>
                 </div>
 
                 <!-- Código Postal -->
