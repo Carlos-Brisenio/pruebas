@@ -1,9 +1,9 @@
 <?php
 // Establecer la conexión a la base de datos (asegúrate de tener las credenciales adecuadas)
     $host = "localhost";
-    $db_name = "u833492021_dbMayordomia";
-    $username = "u833492021_root";
-    $password = "#kDbV9r>9UJ5";
+    $db_name = "dbMayordomia";
+    $username = "root";
+    $password = "";
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);

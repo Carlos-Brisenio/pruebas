@@ -1,7 +1,7 @@
 <?php
     // Conexión a la base de datos
     $host = "localhost";
-    $db_name = "dbmayordomia";
+    $db_name = "dbMayordomia";
     $username = "root";
     $password = "";
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
@@ -9,7 +9,7 @@
     // Consulta para obtener el total de boletos por vencerse
     $queryTotalPorVencer = "
     SELECT COUNT(*) as total_por_vencer
-    FROM boletos
+    FROM Boletos
     WHERE fecha_Limite >= CURDATE()";
     $stmtTotalPorVencer = $conn->prepare($queryTotalPorVencer);
     $stmtTotalPorVencer->execute();
@@ -23,7 +23,7 @@
     // Consulta para obtener boletos apartados
     $queryBoletosApartados = "
     SELECT COUNT(*) as total_apartados
-    FROM boletos
+    FROM Boletos
     WHERE status = 2"; // Suponemos que 2 significa boletos apartados
     $stmtBoletosApartados = $conn->prepare($queryBoletosApartados);
     $stmtBoletosApartados->execute();
@@ -32,7 +32,7 @@
     // Consulta para obtener boletos vendidos
     $queryBoletosVendidos = "
     SELECT COUNT(*) as total_vendidos
-    FROM boletos
+    FROM Boletos
     WHERE status = 3"; // Suponemos que 3 significa boletos vendidos
     $stmtBoletosVendidos = $conn->prepare($queryBoletosVendidos);
     $stmtBoletosVendidos->execute();
@@ -41,7 +41,7 @@
     // Consulta para obtener boletos disponibles
     $queryBoletosDisponibles = "
     SELECT COUNT(*) as total_disponibles
-    FROM boletos
+    FROM Boletos
     WHERE status = 1"; // Cambia el valor 1 según corresponda al estado de boletos disponibles en tu base de datos
     $stmtBoletosDisponibles = $conn->prepare($queryBoletosDisponibles);
     $stmtBoletosDisponibles->execute();
@@ -58,7 +58,7 @@
     // Consulta para obtener el total de usuarios
     $queryTotalUsuarios = "
     SELECT COUNT(*) as total_usuarios
-    FROM usuarios";
+    FROM Usuarios";
     $stmtTotalUsuarios = $conn->prepare($queryTotalUsuarios);
     $stmtTotalUsuarios->execute();
     $totalUsuarios = $stmtTotalUsuarios->fetch(PDO::FETCH_ASSOC)['total_usuarios'];
@@ -90,7 +90,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
+                    <img src="/menuUsuario/logoTM.png" alt="">
                 </span>
 
                 <div class="text logo-text">
@@ -157,7 +157,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/pruebas/principal-Administracion.html">
+                    <a href="/pruebas/principal-Administracion.php">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>
@@ -231,8 +231,12 @@
         </div>
     </div>
 </div>
+
+
+
     </section>
-    <script>
+
+        <script>
         // Datos para la gráfica de pastel
         var ctx = document.getElementById('pieChart').getContext('2d');
         var pieData = {
@@ -242,7 +246,7 @@
                 backgroundColor: ['green', 'blue', 'orange']
             }]
         };
-
+        
         // Configuración de la gráfica de pastel
         var pieChart = new Chart(ctx, {
             type: 'pie',

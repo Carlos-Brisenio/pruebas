@@ -1,9 +1,9 @@
 <?php
 // Conexión a la base de datos
     $host = "localhost";
-    $db_name = "u833492021_dbMayordomia";
-    $username = "u833492021_root";
-    $password = "#kDbV9r>9UJ5";
+    $db_name = "dbMayordomia";
+    $username = "root";
+    $password = "";
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 
     // Consulta para obtener boletos apartados
@@ -61,7 +61,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!----======== CSS ======== -->
-    <link rel="stylesheet" href="/menuUsuario/styleMenu.css">
+    <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
     <link rel="stylesheet" href="estiloboletos.css">
     
     <!----===== Boxicons CSS ===== -->
@@ -79,7 +79,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="/menuUsuario/logoTM.png" alt="">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
                 </span>
 
                 <div class="text logo-text">
@@ -101,21 +101,21 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="/menuAdministrador/indexAdministrador.php">
+                        <a href="/pruebas/menuAdministrador/indexAdministrador.php">
                             <i class='bx bx-home-alt icon' ></i>
                             <span class="text nav-text">Inicio</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="/menuAdministrador/datos/misDatos.html">
+                        <a href="/pruebas/menuAdministrador/datos/misDatos.html">
                             <i class='bx bx-data icon'></i>
                             <span class="text nav-text">Mis datos</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="/menuAdministrador/usuarios/Usuarios.php">
+                        <a href="/pruebas/menuAdministrador/usuarios/Usuarios.php">
                             <i class='bx bx-user icon'></i>
                             <span class="text nav-text">Usuarios</span>
                         </a>
@@ -129,14 +129,14 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="/menuAdministrador/estadisticas/estadisticas.php">
+                        <a href="/pruebas/menuAdministrador/estadisticas/estadisticas.php">
                             <i class='bx bx-bar-chart-square icon'></i>
                             <span class="text nav-text">Estadisticas</span>
                         </a>
                     </li>
 
                     <li class="nav-link">
-                        <a href="/menuAdministrador/ajustes/moduloAjustes.html">
+                        <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.html">
                             <i class='bx bx-cog icon' ></i>
                             <span class="text nav-text">Ajustes</span>
                         </a>
@@ -146,7 +146,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/principal-Administracion.php">
+                    <a href="/pruebas/principal-Administracion.php">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>
@@ -273,7 +273,7 @@
 </script>
 
 
-    <script src="/menuUsuario/script.js"></script>
+    <script src="/pruebas/menuUsuario/script.js"></script>
 
 </body>
 </html>

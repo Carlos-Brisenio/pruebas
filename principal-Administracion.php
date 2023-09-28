@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($tipoUsuario != "") {
         if ($tipoUsuario == 1) { // Modificado aquí para permitir solo idTipoUsuario 1
             // Redirigir al usuario con permisos
-            header("Location: menuAdministrador/indexAdministrador.html");
+            header("Location: menuAdministrador/indexAdministrador.php");
             exit();
         } else {
             // Mostrar mensaje de falta de permisos
