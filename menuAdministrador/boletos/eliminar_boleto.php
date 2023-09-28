@@ -1,9 +1,9 @@
 <?php
 // Establecer la conexión a la base de datos (asegúrate de tener las credenciales adecuadas)
-$host = "localhost";
-$db_name = "dbmayordomia";
-$username = "root";
-$password = "";
+    $host = "localhost";
+    $db_name = "u833492021_dbMayordomia";
+    $username = "u833492021_root";
+    $password = "#kDbV9r>9UJ5";
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
@@ -13,7 +13,7 @@ try {
     $numero_boleto = $_POST['numero_boleto'];
 
     // Actualizar el estado del boleto a "Disponible" (status 1) y eliminar datos de infoBoletos
-    $stmt = $conn->prepare("UPDATE boletos SET status = 1, fecha_Compra = NULL, fecha_Limite = NULL WHERE numero_boleto = :numero_boleto");
+    $stmt = $conn->prepare("UPDATE Boletos SET status = 1, fecha_Compra = NULL, fecha_Limite = NULL WHERE numero_boleto = :numero_boleto");
     $stmt->bindParam(':numero_boleto', $numero_boleto);
     $stmt->execute();
 
