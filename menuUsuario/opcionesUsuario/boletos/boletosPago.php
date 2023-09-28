@@ -157,7 +157,7 @@
 
                     doc.setFontSize(16);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Forma de pago ', 87, 10);
+                    doc.text('Orden de pago ', 87, 10);
 
                     const img = document.getElementById('imagenParaPdf');
                     const canvas = document.createElement('canvas');
@@ -174,68 +174,81 @@
                     doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);
                     doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Diocesis De Ciudad Gúzman', 80, 17);
+                    doc.text('Diócesis De Ciudad Gúzman', 80, 17);
                     doc.text('Mayordomía 2024', 90, 23);
 
                     doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
                     doc.text('Número de Boleto: ' + data.idBoleto, 130, 40);
-                    doc.text('Fecha de apartado: ', 130, 47);
-                    doc.text('Fecha limite de pago: ', 130, 54);
+                    doc.text('Fecha de apartado: ' + data.fecha_Compra, 130, 47);
+                    doc.text('Fecha límite de pago: ' + data.fecha_Limite, 130, 54);
                     doc.text('Nombre del Boleto: ' + data.nombre, 10, 80);
                     doc.setFont("helvetica", "bold");
                     doc.text('Formas de pago: ', 10, 95);
-                    doc.text('Directamente en la Santa Iglesia Catedral', 10, 105);
+                    doc.text('1. Directamente en la Santa Iglesia Catedral', 10, 105);
                     doc.setFont("helvetica", "normal");
-                    doc.rect(10, 108, 160, 17);
+                    doc.setFillColor(32, 77, 12); // RGB para verde
+                    doc.rect(20, 108, 150, 17);//Rectangulo principal
+                    doc.rect(20, 108, 150, 8, 'F');
 
-                    doc.text('Número de boleto',10,113);
-                    doc.text('Fecha Limite',70,113);
-                    doc.text('Costo',110,113);
-                    doc.text(''+data.idBoleto,10,120);
-                    doc.text('FL',70,120);
-                    doc.text('$170',110,120);
+                    doc.setTextColor(255, 255, 255); // RGB para blanco
+                    doc.text('Número de boleto',20,113);
+                    doc.text('Fecha Límite',80,113);
+                    doc.text('Costo',120,113);
+                    doc.setTextColor(0, 0, 0); // RGB para negro
+                    doc.text(data.idBoleto,20,120);
+                    doc.text(data.fecha_Limite,80,120);
+                    doc.text('$170',120,120);
 
                     doc.setFont("helvetica", "bold");
-                    doc.text('Instrucciones de pago: ', 10, 130);
+                    doc.text('Instrucciones de pago: ', 20, 130);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 137);
-                    doc.text('Lunes a domingo', 10, 144);
-                    doc.text('11:30 hrs a 14:00 hrs', 10, 151);
-                    doc.text('17:30 hrs a 20:00 hrs', 10, 158);
+                    doc.text('Acude a rectoría de catedral en los horarios de atención.', 20, 137);
 
                     //Pago en BBVA Bancomer
                     doc.setFont("helvetica", "bold");
-                    doc.rect(10, 173, 180, 15);
-                    doc.rect(10, 173, 180, 7);
-                    doc.rect(10, 173, 60, 15);
-                    doc.rect(10, 173, 120, 15);
                     // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
-                    doc.text('BBVA Bancomer', 10, 170);
+                    doc.rect(20, 146, 150, 17);
+                    doc.setFillColor(255, 255, 0); // RGB para amarillo
+                    doc.rect(20, 146, 149, 7,'F');
+                    // Mover los siguientes campos hacia donde estaban los primeros campos
+                    doc.text('2. BBVA Bancomer', 10, 144);
+                    doc.text('Concepto',20,151);
+                    doc.text('Fecha Límite',80,151);
+                    doc.text('Costo',120,151);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Concepto',20,177);
-                    doc.text('Fecha Limite',80,177);
-                    doc.text('Costo',130,177);
-                    doc.text(''+data.idBoleto+'-Mayordomia2024',20,184);
-                    doc.text('FL',80,184);
-                    doc.text('$170',130,184);
+                    doc.text(''+data.idBoleto+'-Mayordomia2024',20,158);
+                    doc.text(data.fecha_Limite,80,158);
+                    doc.text('$170',120,158);
 
-                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',10,194);
-                    doc.text('de BBVA Bancomer a BBVA Bancomer.',10,201);
-                    doc.text('El concepto de pago sera el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',10,208);
-                    doc.text('Como se muestra en la tabla de arriba',10,215);
-                    doc.text('Los datos de la cuenta son:',10,222);
-                    doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',10,229);
-                    doc.text('Cuenta: 0110330213',10,236);
-                    doc.text('Clave interbancaria: 012320001103302136',10,243);
-                    
+                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
+                    doc.text('de BBVA Bancomer a BBVA Bancomer.',20,175);
+                    doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',20,182);
+                    doc.text('Como se muestra en la tabla de arriba',20,189);
+                    doc.text('Los datos de la cuenta son:',20,196);
+                    doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',20,203);
+                    doc.text('Cuenta: 0110330213',20,210);
+                    doc.text('Clave interbancaria: 01 2320 0011 0330 2136',20,217);
+
                     doc.setFont("helvetica", "bold");
-                    doc.text('IMPORTANTE.',10,260);
+                    doc.text('IMPORTANTE.',10,234);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,267);
-                    doc.text('realizado transferencia.',10,274)
-                    
-                    doc.save('OrdenPago.pdf');
+                    doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,241);
+                    doc.text('realizado transferencia.',10,248);
+
+                    // Mover los campos "Lunes a domingo" al final del documento
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Horarios de atención:',10,258);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Lunes a domingo', 10, 265);
+                    doc.text('11:30 hrs a 14:00 hrs', 10, 272);
+                    doc.text('17:30 hrs a 20:00 hrs', 10, 279);
+
+                    doc.text('Catedral De Ciudad Guzmán', 70, 265);
+                    doc.text('Prisciliano Sánchez #19', 70, 272);
+                    doc.text('Teléfono: 341-412-0132', 70, 279);
+    
+                    doc.save('OrdenPago_' + data.idBoleto + '.pdf');
                 }
             })
             .catch(error => {
