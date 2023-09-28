@@ -187,10 +187,12 @@
                     doc.text('Formas de pago: ', 10, 95);
                     doc.text('Directamente en la Santa Iglesia Catedral', 10, 105);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Concepto',10,113);
+                    doc.rect(10, 108, 160, 17);
+
+                    doc.text('Número de boleto',10,113);
                     doc.text('Fecha Limite',70,113);
                     doc.text('Costo',110,113);
-                    doc.text(''+data.idBoleto+'-Mayordomía2024',10,120);
+                    doc.text(''+data.idBoleto,10,120);
                     doc.text('FL',70,120);
                     doc.text('$170',110,120);
 

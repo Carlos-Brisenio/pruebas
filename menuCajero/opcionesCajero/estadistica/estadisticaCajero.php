@@ -295,10 +295,9 @@
                     if (detallesBoleto) {
                 //--> Aqui inicia boleto Original
                         doc.setFontSize(12);
-                        doc.text(75, 20, 'Mayordomía Señor San José 2024');
-                        doc.text(90, 30, 'Comprobante de pago');
+                        doc.text(75, 15, 'Mayordomía Señor San José 2024');  
+                        doc.text(90, 25, 'Comprobante de pago');  
 
-                        // Aquí se importa la imagen, se crea el canvas para poder mostrarla y colocarla
                         const img = document.getElementById('imagenParaPdf');
                         const canvas = document.createElement('canvas');
                         canvas.width = img.width;
@@ -308,46 +307,45 @@
                         ctx.drawImage(img, 0, 0);
 
                         const imgData = canvas.toDataURL('image/png', 1.0);
-                        doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);// Estas son las coordenadas de la imagen
-                        //F=Fila C=Columna            F   C   X    Y
+                        doc.addImage(imgData, 'JPEG', 20, 15, 55, 50);  
 
-                        // Aquí puedes agregar toda la información que quieras acerca del boleto utilizando los detalles obtenidos
-                        doc.text(130, 50, 'Número de boleto: ' + numero_boleto);
-                        doc.text(130, 60, 'Fecha: ' + fechaFormateada);
-                        doc.text(20, 80, 'Nombre: ' + detallesBoleto.nombre);
-                        doc.text(20, 90, 'Calle: ' + detallesBoleto.calle);
-                        doc.text(120, 90, 'Número: ' + detallesBoleto.numero);
-                        doc.text(20, 100, 'Ciudad: ' + detallesBoleto.ciudad);
-                        doc.text(120, 100, 'Colonia: ' + detallesBoleto.colonia);
-                        doc.text(20, 110, 'Telefono: ' + detallesBoleto.telefono1);
-                        
-                        doc.text(20, 120, '$170.00 (ciento setenta pesos 00/100 m.n.)');
-                        doc.text(70, 130, '50% para el culto de Señor San José');
-                        doc.text(72, 140, '50% para gastos de la mayordomía');
-                        doc.text(180, 140, 'Original');
-                        doc.rect(10, 10, 190, 135); // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
+                        doc.text(130, 45, 'Número de boleto: ' + numero_boleto);  
+                        doc.text(130, 55, 'Fecha: ' + fechaFormateada);  
+                        doc.text(20, 75, 'Nombre: ' + detallesBoleto.nombre);  
+                        doc.text(20, 85, 'Calle: ' + detallesBoleto.calle);  
+                        doc.text(120, 85, 'Número: ' + detallesBoleto.numero);  
+                        doc.text(20, 95, 'Ciudad: ' + detallesBoleto.ciudad);  
+                        doc.text(120, 95, 'Colonia: ' + detallesBoleto.colonia);  
+                        doc.text(20, 105, 'Telefono: ' + detallesBoleto.telefono1);  
+
+                        doc.text(20, 115, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
+                        doc.text(70, 125, '50% para el culto de Señor San José');  
+                        doc.text(72, 135, '50% para gastos de la mayordomía');  
+                        doc.text(180, 135, 'Original');  
+                        doc.rect(10, 5, 190, 135);  
                 //--> Aqui termina boleto Original
-                        doc.text(0,153,'_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _')
-                //--> Aqui Inicia boleto Copia
-                        doc.rect(10, 160, 190, 135);
-                        doc.addImage(imgData, 'JPEG', 20, 170, 55, 50);// Estas son las coordenadas de la imagen
-                        //F=Fila C=Columna            F   C   X    Y
-                        doc.text(75, 170, 'Mayordomía Señor San José 2024');
-                        doc.text(90, 180, 'Comprobante de pago');
-                        // Aquí puedes agregar toda la información que quieras acerca del boleto utilizando los detalles obtenidos
-                        doc.text(130, 200, 'Número de boleto: ' + numero_boleto);
-                        doc.text(130, 210, 'Fecha: ' + fechaFormateada);
-                        doc.text(20, 230, 'Nombre: ' + detallesBoleto.nombre);
-                        doc.text(20, 240, 'Calle: ' + detallesBoleto.calle);
-                        doc.text(120, 240, 'Número: ' + detallesBoleto.numero);
-                        doc.text(20, 250, 'Ciudad: ' + detallesBoleto.ciudad);
-                        doc.text(120, 250, 'Colonia: ' + detallesBoleto.colonia);
-                        doc.text(20, 260, 'Telefono: ' + detallesBoleto.telefono1);
-                        
-                        doc.text(20, 270, '$170.00 (ciento setenta pesos 00/100 m.n.)');
-                        doc.text(70, 280, '50% para el culto de Señor San José');
-                        doc.text(72, 290, '50% para gastos de la mayordomía');
-                        doc.text(180, 290, 'Copia');
+                        doc.text(0,148,'_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _');  
+                //--> Aqui inicia boleto Copia
+                        doc.rect(10, 155, 190, 135);  
+                        doc.addImage(imgData, 'JPEG', 20, 165, 55, 50);  
+
+                        doc.text(75, 165, 'Mayordomía Señor San José 2024');  
+                        doc.text(90, 175, 'Comprobante de pago');  
+
+                        doc.text(130, 195, 'Número de boleto: ' + numero_boleto);  
+                        doc.text(130, 205, 'Fecha: ' + fechaFormateada);  
+                        doc.text(20, 225, 'Nombre: ' + detallesBoleto.nombre);  
+                        doc.text(20, 235, 'Calle: ' + detallesBoleto.calle);  
+                        doc.text(120, 235, 'Número: ' + detallesBoleto.numero);  
+                        doc.text(20, 245, 'Ciudad: ' + detallesBoleto.ciudad);  
+                        doc.text(120, 245, 'Colonia: ' + detallesBoleto.colonia);  
+                        doc.text(20, 255, 'Telefono: ' + detallesBoleto.telefono1);  
+
+                        doc.text(20, 265, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
+                        doc.text(70, 275, '50% para el culto de Señor San José');  
+                        doc.text(72, 285, '50% para gastos de la mayordomía');  
+                        doc.text(180, 285, 'Copia');  
+
                 //--> Aqui termina boleto Copia
 
                         // Guardar el PDF con el nombre que quieras
