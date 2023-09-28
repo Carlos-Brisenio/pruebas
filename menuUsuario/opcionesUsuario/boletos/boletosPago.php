@@ -157,7 +157,7 @@
 
                     doc.setFontSize(16);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Forma de pago ', 10, 10);
+                    doc.text('Forma de pago ', 87, 10);
 
                     const img = document.getElementById('imagenParaPdf');
                     const canvas = document.createElement('canvas');
@@ -171,34 +171,68 @@
 
                     // Agregar imagen al PDF
                     // Ajusta las coordenadas y dimensiones según lo necesites
-                    doc.addImage(imgData, 'JPEG', 20, 20, 40, 40);
-                    doc.setFontSize(14);
+                    doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);
+                    doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Diosesis De Ciudad Gúzman', 70, 30);
-                    doc.text('Mayordomía 2024', 70, 40);
+                    doc.text('Diocesis De Ciudad Gúzman', 80, 17);
+                    doc.text('Mayordomía 2024', 90, 23);
 
-                    doc.setFontSize(14);
+                    doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Número de Boleto: ' + data.idBoleto, 150, 60);
-                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 70);
-                    doc.text('Ciudad: ' + data.ciudad, 10, 80);
-                    doc.text('Colonia: ' + data.colonia, 90, 80);
-                    doc.text('Callle: ' + data.calle, 10, 90);
-                    doc.text('Número: ' + data.numero, 70, 90);
-                    doc.text('Entre las calles: ' + data.colinda1 + ' y ' + data.colinda2, 10, 100);
+                    doc.text('Número de Boleto: ' + data.idBoleto, 130, 40);
+                    doc.text('Fecha de apartado: ', 130, 47);
+                    doc.text('Fecha limite de pago: ', 130, 54);
+                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 80);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Datos de contacto: ', 10, 120);
+                    doc.text('Formas de pago: ', 10, 95);
+                    doc.text('Directamente en la Santa Iglesia Catedral', 10, 105);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Telefono de casa: ' + data.telefono1, 10, 130);
-                    doc.text('Telefono de celular: ' + data.telefono2, 100, 140);
-                    doc.setFont("helvetica", "bold");
-                    doc.text('Instrucciones de pago: ', 10, 150);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 160);
-                    doc.text('Lunes a domingo', 10, 170);
-                    doc.text('11:30 hrs a 14:00 hrs', 10, 180);
-                    doc.text('17:30 hrs a 20:00 hrs', 10, 190);
+                    doc.text('Concepto',10,113);
+                    doc.text('Fecha Limite',70,113);
+                    doc.text('Costo',110,113);
+                    doc.text(''+data.idBoleto+'-Mayordomía2024',10,120);
+                    doc.text('FL',70,120);
+                    doc.text('$170',110,120);
 
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Instrucciones de pago: ', 10, 130);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 137);
+                    doc.text('Lunes a domingo', 10, 144);
+                    doc.text('11:30 hrs a 14:00 hrs', 10, 151);
+                    doc.text('17:30 hrs a 20:00 hrs', 10, 158);
+
+                    //Pago en BBVA Bancomer
+                    doc.setFont("helvetica", "bold");
+                    doc.rect(10, 173, 180, 15);
+                    doc.rect(10, 173, 180, 7);
+                    doc.rect(10, 173, 60, 15);
+                    doc.rect(10, 173, 120, 15);
+                    // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
+                    doc.text('BBVA Bancomer', 10, 170);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Concepto',20,177);
+                    doc.text('Fecha Limite',80,177);
+                    doc.text('Costo',130,177);
+                    doc.text(''+data.idBoleto+'-Mayordomia2024',20,184);
+                    doc.text('FL',80,184);
+                    doc.text('$170',130,184);
+
+                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',10,194);
+                    doc.text('de BBVA Bancomer a BBVA Bancomer.',10,201);
+                    doc.text('El concepto de pago sera el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',10,208);
+                    doc.text('Como se muestra en la tabla de arriba',10,215);
+                    doc.text('Los datos de la cuenta son:',10,222);
+                    doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',10,229);
+                    doc.text('Cuenta: 0110330213',10,236);
+                    doc.text('Clave interbancaria: 012320001103302136',10,243);
+                    
+                    doc.setFont("helvetica", "bold");
+                    doc.text('IMPORTANTE.',10,260);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,267);
+                    doc.text('realizado transferencia.',10,274)
+                    
                     doc.save('OrdenPago.pdf');
                 }
             })
