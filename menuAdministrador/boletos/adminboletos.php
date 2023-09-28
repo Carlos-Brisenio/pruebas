@@ -62,7 +62,7 @@
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
-    <link rel="stylesheet" href="estiloboletos.css">
+    <link rel="stylesheet" href="/pruebas/menuAdmistrador/boletos/estiloboletos.css">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>

@@ -79,7 +79,10 @@
     
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+        <!-- Asegúrate de que la ruta de la imagen sea la correcta -->
+        <img id="imagenParaPdf" src="/pruebas/bannerV2.png" style="display: none;">
         
         
         <title>Ticket-Mayordomía®/Boletos</title> 
@@ -141,8 +144,8 @@
             </div>
     
                 <div class="bottom-content">
-                    <li class="">
-                        <a href="/pruebas/principal-Cajero.php">
+                    <li class="nav-link">
+                        <a href="/pruebas/principal-Cajeros.php">
                             <i class='bx bx-log-out icon' ></i>
                             <span class="text nav-text">Salir</span>
                         </a>
@@ -214,7 +217,7 @@
 
                 <h2>Boletos Vendidos</h2>
         
-                <table id="boletosTable" class="table table-striped table-bordered">
+                <table id="boletosVendidosTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Número de Boleto</th>
@@ -228,7 +231,7 @@
                                 <td><?= $boleto['numero_boleto'] ?></td>
                                 <td><?= $boleto['nombre'] ?></td>
                                 <td>
-                                    <button onclick="payTicket(<?= $boleto['numero_boleto'] ?>)">Pagar</button>
+                                    <button class="button" id="generarBoletos" name="generarBoletos" onclick="imprimirBoletos(<?= $boleto['numero_boleto'] ?>)">Imprimir boleto</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -272,10 +275,69 @@
                 }
             });
         }
-    
+
+        function imprimirBoletos(numero_boleto) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Realizar una nueva consulta para obtener los detalles del boleto desde la tabla InfoBoletos
+            $.ajax({
+                url: 'obtenerDetallesBoleto.php', // Crea este archivo para realizar la consulta SQL
+                type: 'POST',
+                data: { numero_boleto: numero_boleto },
+                success: function(response) {
+                    const detallesBoleto = JSON.parse(response);
+                    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                    const fechaActual = new Date();
+                    const nombreMes = meses[fechaActual.getMonth()];
+                    const fechaFormateada = fechaActual.getDate() + " de " + nombreMes + " de " + fechaActual.getFullYear();
+
+                    if (detallesBoleto) {
+                        doc.setFontSize(12);
+                        doc.text(75, 20, 'Mayordomía Señor San José 2024');
+                        doc.text(90, 30, 'Comprobante de pago');
+
+                        // Aquí se importa la imagen, se crea el canvas para poder mostrarla y colocarla
+                        const img = document.getElementById('imagenParaPdf');
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+
+                        const imgData = canvas.toDataURL('image/png', 1.0);
+                        doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);// Estas son las coordenadas de la imagen
+                        //F=Fila C=Columna            F   C   X    Y
+
+                        // Aquí puedes agregar toda la información que quieras acerca del boleto utilizando los detalles obtenidos
+                        doc.text(140, 50, 'Número de boleto: ' + numero_boleto);
+                        doc.text(140, 60, 'Fecha: ' + fechaFormateada);
+                        doc.text(20, 80, 'Nombre: ' + detallesBoleto.nombre);
+                        doc.text(20, 90, 'Calle: ' + detallesBoleto.calle);
+                        doc.text(120, 90, 'Número: ' + detallesBoleto.numero);
+                        doc.text(20, 100, 'Ciudad: ' + detallesBoleto.ciudad);
+                        doc.text(120, 100, 'Colonia: ' + detallesBoleto.colonia);
+                        doc.text(20, 110, 'Telefono: ' + detallesBoleto.telefono1);
+                        
+                        doc.text(20, 120, '$170.00 (ciento setenta pesos 00/100 m.n.)');
+                        doc.text(70, 130, '50% para el culto de Señor San José');
+                        doc.text(72, 140, '50% para gastos de la mayordomía');
+
+                        // Guardar el PDF con el nombre que quieras
+                        doc.save('Boleto_' + numero_boleto + '.pdf');
+                    } else {
+                        alert('No se encontraron detalles para el boleto.');
+                    }
+                },
+                error: function(error) {
+                    alert('Error al obtener los detalles del boleto.');
+                }
+            });
+        }
+
+
     </script>
-    
-    
         <script src="/pruebas/menuUsuario/script.js"></script>
     
     </body>

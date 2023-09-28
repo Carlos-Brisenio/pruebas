@@ -1,46 +1,43 @@
 <?php
-// Conexión a la base de datos
-$host = "localhost";
-$db_name = "dbmayordomia";
-$username = "root";
-$password = "";
+    // Conexión a la base de datos
+    $host = "localhost";
+    $db_name = "dbMayordomia";
+    $username = "root";
+    $password = "";
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Error de conexión: " . $e->getMessage();
-}
+    try {
+        $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo "Error de conexión: " . $e->getMessage();
+    }
 
-// Consulta para obtener boletos apartados por fecha
-$queryBoletosApartados = "
-SELECT DATE(boletos.fecha_Compra) as fecha, COUNT(*) as total_apartados
-FROM boletos
-INNER JOIN infoBoletos ON boletos.numero_boleto = infoboletos.idBoleto
-GROUP BY DATE(boletos.fecha_Compra)";
+    // Consulta para obtener boletos apartados por fecha
+    $queryBoletosApartados = "
+    SELECT DATE(Boletos.fecha_Compra) as fecha, COUNT(*) as total_apartados
+    FROM Boletos
+    INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
+    GROUP BY DATE(Boletos.fecha_Compra)";
 
-$stmtBoletosApartados = $conn->prepare($queryBoletosApartados);
-$stmtBoletosApartados->execute();
-$boletosApartados = $stmtBoletosApartados->fetchAll(PDO::FETCH_ASSOC);
+    $stmtBoletosApartados = $conn->prepare($queryBoletosApartados);
+    $stmtBoletosApartados->execute();
+    $boletosApartados = $stmtBoletosApartados->fetchAll(PDO::FETCH_ASSOC);
 
-// Consulta para obtener boletos vendidos por fecha (de manera similar a la anterior)
-$queryBoletosVendidos = "
-SELECT DATE(boletos.fecha_Compra) as fecha, COUNT(*) as total_Vendidos
-FROM boletos
-INNER JOIN infoBoletos ON boletos.numero_boleto = infoboletos.idBoleto
-WHERE boletos.status = 3
-GROUP BY DATE(boletos.fecha_Compra)";
+    // Consulta para obtener boletos vendidos por fecha (de manera similar a la anterior)
+    $queryBoletosVendidos = "
+    SELECT DATE(Boletos.fecha_Compra) as fecha, COUNT(*) as total_Vendidos
+    FROM Boletos
+    INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
+    WHERE Boletos.status = 3
+    GROUP BY DATE(Boletos.fecha_Compra)";
 
-$stmtBoletosVendidos = $conn->prepare($queryBoletosVendidos);
-$stmtBoletosVendidos->execute();
-$boletosVendidos = $stmtBoletosVendidos->fetchAll(PDO::FETCH_ASSOC);
+    $stmtBoletosVendidos = $conn->prepare($queryBoletosVendidos);
+    $stmtBoletosVendidos->execute();
+    $boletosVendidos = $stmtBoletosVendidos->fetchAll(PDO::FETCH_ASSOC);
 
-// Cerrar la conexión a la base de datos
-$conn = null;
+    // Cerrar la conexión a la base de datos
+    $conn = null;
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
