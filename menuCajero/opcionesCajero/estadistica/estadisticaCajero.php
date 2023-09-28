@@ -293,6 +293,7 @@
                     const fechaFormateada = fechaActual.getDate() + " de " + nombreMes + " de " + fechaActual.getFullYear();
 
                     if (detallesBoleto) {
+                //--> Aqui inicia boleto Original
                         doc.setFontSize(12);
                         doc.text(75, 20, 'Mayordomía Señor San José 2024');
                         doc.text(90, 30, 'Comprobante de pago');
@@ -311,8 +312,8 @@
                         //F=Fila C=Columna            F   C   X    Y
 
                         // Aquí puedes agregar toda la información que quieras acerca del boleto utilizando los detalles obtenidos
-                        doc.text(140, 50, 'Número de boleto: ' + numero_boleto);
-                        doc.text(140, 60, 'Fecha: ' + fechaFormateada);
+                        doc.text(130, 50, 'Número de boleto: ' + numero_boleto);
+                        doc.text(130, 60, 'Fecha: ' + fechaFormateada);
                         doc.text(20, 80, 'Nombre: ' + detallesBoleto.nombre);
                         doc.text(20, 90, 'Calle: ' + detallesBoleto.calle);
                         doc.text(120, 90, 'Número: ' + detallesBoleto.numero);
@@ -323,6 +324,31 @@
                         doc.text(20, 120, '$170.00 (ciento setenta pesos 00/100 m.n.)');
                         doc.text(70, 130, '50% para el culto de Señor San José');
                         doc.text(72, 140, '50% para gastos de la mayordomía');
+                        doc.text(180, 140, 'Original');
+                        doc.rect(10, 10, 190, 135); // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
+                //--> Aqui termina boleto Original
+                        doc.text(0,153,'_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _')
+                //--> Aqui Inicia boleto Copia
+                        doc.rect(10, 160, 190, 135);
+                        doc.addImage(imgData, 'JPEG', 20, 170, 55, 50);// Estas son las coordenadas de la imagen
+                        //F=Fila C=Columna            F   C   X    Y
+                        doc.text(75, 170, 'Mayordomía Señor San José 2024');
+                        doc.text(90, 180, 'Comprobante de pago');
+                        // Aquí puedes agregar toda la información que quieras acerca del boleto utilizando los detalles obtenidos
+                        doc.text(130, 200, 'Número de boleto: ' + numero_boleto);
+                        doc.text(130, 210, 'Fecha: ' + fechaFormateada);
+                        doc.text(20, 230, 'Nombre: ' + detallesBoleto.nombre);
+                        doc.text(20, 240, 'Calle: ' + detallesBoleto.calle);
+                        doc.text(120, 240, 'Número: ' + detallesBoleto.numero);
+                        doc.text(20, 250, 'Ciudad: ' + detallesBoleto.ciudad);
+                        doc.text(120, 250, 'Colonia: ' + detallesBoleto.colonia);
+                        doc.text(20, 260, 'Telefono: ' + detallesBoleto.telefono1);
+                        
+                        doc.text(20, 270, '$170.00 (ciento setenta pesos 00/100 m.n.)');
+                        doc.text(70, 280, '50% para el culto de Señor San José');
+                        doc.text(72, 290, '50% para gastos de la mayordomía');
+                        doc.text(180, 290, 'Copia');
+                //--> Aqui termina boleto Copia
 
                         // Guardar el PDF con el nombre que quieras
                         doc.save('Boleto_' + numero_boleto + '.pdf');
