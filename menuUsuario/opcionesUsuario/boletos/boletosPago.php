@@ -199,7 +199,6 @@
                     doc.text('11:30 hrs a 14:00 hrs', 10, 180);
                     doc.text('17:30 hrs a 20:00 hrs', 10, 190);
 
-
                     doc.save('OrdenPago.pdf');
                 }
             })

@@ -260,7 +260,7 @@
     
         function payTicket(numero_boleto) {
             $.ajax({
-                url: 'pagar_boleto.php',
+                url: 'pagarBoleto.php',
                 type: 'POST',
                 data: { numero_boleto: numero_boleto },
                 success: function(response) {
