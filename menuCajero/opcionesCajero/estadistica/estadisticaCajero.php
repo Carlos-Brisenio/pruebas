@@ -316,7 +316,7 @@
                         doc.text(120, 85, 'Número: ' + detallesBoleto.numero);  
                         doc.text(20, 95, 'Ciudad: ' + detallesBoleto.ciudad);  
                         doc.text(120, 95, 'Colonia: ' + detallesBoleto.colonia);  
-                        doc.text(20, 105, 'Telefono: ' + detallesBoleto.telefono1);  
+                        doc.text(20, 105, 'Télefono: ' + detallesBoleto.telefono1);  
 
                         doc.text(20, 115, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
                         doc.text(70, 125, '50% para el culto de Señor San José');  
@@ -339,7 +339,7 @@
                         doc.text(120, 235, 'Número: ' + detallesBoleto.numero);  
                         doc.text(20, 245, 'Ciudad: ' + detallesBoleto.ciudad);  
                         doc.text(120, 245, 'Colonia: ' + detallesBoleto.colonia);  
-                        doc.text(20, 255, 'Telefono: ' + detallesBoleto.telefono1);  
+                        doc.text(20, 255, 'Télefono: ' + detallesBoleto.telefono1);  
 
                         doc.text(20, 265, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
                         doc.text(70, 275, '50% para el culto de Señor San José');  

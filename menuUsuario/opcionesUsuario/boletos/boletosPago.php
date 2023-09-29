@@ -154,6 +154,7 @@
                 } else {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
+                    const fechaFormateada = formatDateToSpanish(data.fecha_Limite);
 
                     doc.setFontSize(16);
                     doc.setFont("helvetica", "bold");
@@ -210,7 +211,7 @@
                     // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
                     doc.rect(20, 146, 150, 17);
                     doc.setFillColor(255, 255, 0); // RGB para amarillo
-                    doc.rect(20, 146, 149, 7,'F');
+                    doc.rect(20, 146, 150, 7,'F');
                     // Mover los siguientes campos hacia donde estaban los primeros campos
                     doc.text('2. BBVA Bancomer', 10, 144);
                     doc.text('Concepto',20,151);
@@ -218,7 +219,7 @@
                     doc.text('Costo',120,151);
                     doc.setFont("helvetica", "normal");
                     doc.text(''+data.idBoleto+'-Mayordomia2024',20,158);
-                    doc.text(data.fecha_Limite,80,158);
+                    doc.text(''+data.fecha_Limite,80,158);
                     doc.text('$170',120,158);
 
                     doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
@@ -234,7 +235,7 @@
                     doc.text('IMPORTANTE.',10,234);
                     doc.setFont("helvetica", "normal");
                     doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,241);
-                    doc.text('realizado transferencia.',10,248);
+                    doc.text('realizado transferencia, antes del '+ fechaFormateada+'.',10,248);
 
                     // Mover los campos "Lunes a domingo" al final del documento
                     doc.setFont("helvetica", "bold");
@@ -254,6 +255,14 @@
             .catch(error => {
                 console.error('Hubo un problema con la petición Fetch:', error);
             });
+        }
+
+        function formatDateToSpanish(dateString) {
+            const date = new Date(dateString);
+            date.setDate(date.getDate() + 1); // Suma un día a la fecha
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('es-MX', options);
         }
     </script> 
 </body>
