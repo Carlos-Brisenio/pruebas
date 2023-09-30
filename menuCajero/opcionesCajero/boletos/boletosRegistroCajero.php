@@ -20,9 +20,10 @@
 
 
     $numeroBoleto = "";
-    if(isset($_GET['numero-boleto'])) {
-        $numeroBoleto = $_GET['numero-boleto'];
+    if(isset($_GET['token'])) {
+        $numeroBoleto = base64_decode($_GET['token']);
     }
+    
 
     if(isset($_POST['apartar_boleto'])) {
         $idBoleto = $_POST['numero-boleto'];

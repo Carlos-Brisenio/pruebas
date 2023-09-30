@@ -154,8 +154,6 @@
         //numeros = boletosStatus2.slile();
         var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
 
-
-
         function showAlert(buttonNumber) {
             // Cambiar el color del botón seleccionado a amarillo
             var selectedButton = document.getElementById('button-' + buttonNumber);
@@ -163,7 +161,8 @@
 
             // Redirigir a boletosRegistro.php con el número de boleto
             setTimeout(function () {
-                window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?numero-boleto=' + buttonNumber;
+                var encodedBoleto = btoa(buttonNumber);
+                window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
             }, 1000);
         }
 
