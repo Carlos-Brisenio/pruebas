@@ -19,6 +19,26 @@
     while ($row = $stmtStatus2->fetch(PDO::FETCH_ASSOC)) {
         $boletosStatus2[] = $row['numero_boleto'];
     }
+
+    $boletosStatus3 = [];
+
+    $queryStatus3 = "SELECT numero_boleto FROM Boletos WHERE status = 3";
+    $stmtStatus3 = $conn->prepare($queryStatus3);
+    $stmtStatus3->execute();
+
+    while ($row = $stmtStatus3->fetch(PDO::FETCH_ASSOC)) {
+        $boletosStatus3[] = $row['numero_boleto'];
+    }
+
+    $boletosStatus4 = [];
+
+    $queryStatus4 = "SELECT numero_boleto FROM Boletos WHERE status = 4";
+    $stmtStatus4 = $conn->prepare($queryStatus4);
+    $stmtStatus4->execute();
+
+    while ($row = $stmtStatus4->fetch(PDO::FETCH_ASSOC)) {
+        $boletosStatus4[] = $row['numero_boleto'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -149,10 +169,10 @@
     <script>
         var currentBoard = 1;
         var totalBoards = 15;  // Cambiar esto para agregar más tableros
-        //let numeros = new Array(1, 2, 3, 4, 5);
-        //let numeros = [];
-        //numeros = boletosStatus2.slile();
+
         var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
+        var boletosStatus3 = <?php echo json_encode($boletosStatus3); ?>;
+        var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
 
         function showAlert(buttonNumber) {
             // Cambiar el color del botón seleccionado a amarillo
@@ -190,6 +210,10 @@
 
                     if (boletosStatus2.includes(buttonNumber.toString())) {
                         boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" style="background-color: yellow;" onclick="showAlert(' + buttonNumber + ')" disabled>' + buttonNumber + '</button>';
+                    } else if (boletosStatus3.includes(buttonNumber.toString())) {
+                                boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" style="background-color: red;" onclick="showAlert(' + buttonNumber + ')" disabled>' + buttonNumber + '</button>';
+                    } else if (boletosStatus4.includes(buttonNumber.toString())) {
+                                boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" style="background-color: #2e055d;" onclick="showAlert(' + buttonNumber + ')" disabled>' + buttonNumber + '</button>';
                     } else{
                         boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" onclick="showAlert(' + buttonNumber + ')">' + buttonNumber + '</button>';
                     }
