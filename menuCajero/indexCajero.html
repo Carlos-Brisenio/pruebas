@@ -95,11 +95,102 @@
     </nav>
 
     <section class="home">
-        <div class="text">TM</div>
-        <div class="text"> Aqui va el contenido de cada apartado</div>
+        <div class="text">Bienvenido a Mayordomía Tickets©</div>
+        <h2 class="text">¿Qué deseas hacer?</h2>
+        <div class="card-container">
+            <div class="card">
+                <a href="/pruebas/menuCajero/opcionesCajero/estadistica/estadisticaCajero.php" class="card-link">
+                    <i class='bx bx-purchase-tag-alt icon'></i>
+                    <span>Estado de boletos</span>
+                </a>
+            </div>
+            <div class="card">
+                <a href="/pruebas/menuCajero/opcionesCajero/boletos/boletosCajero.php" class="card-link"> 
+                    <i class='bx bx-cart-alt icon'></i>
+                    <span>Vender boletos</span>
+                </a>
+            </div>
+            <div class="card">
+                <a href="#" class="card-link">
+                    <i class='bx bx-cog icon'></i>
+                    <span>Ajustes</span>
+                </a>
+            </div>
+        </div>
     </section>
 
-    <script src="/pruebas/menuUsuario/script.js"></script>
+    <style>
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; 
+        }
 
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            flex-basis: 20%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
+
+        .card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:nth-child(1) {
+            background-color: rgb(32, 77, 12);
+        }
+
+        .card:nth-child(2) {
+            background-color: rgb(255, 255, 0);
+        }
+
+        .card:nth-child(3) {
+            background-color: rgb(110, 13, 13);
+        }
+
+        .icon {
+            font-size: 48px; /* Tamaño incrementado para los íconos */
+        }
+
+        .card-link {
+            text-decoration: none; /* Eliminar subrayado */
+            color: inherit; /* Heredar el color del texto padre (negro por defecto) */
+        }
+
+        /* Estilos para los enlaces cuando están en estado activo (hover) o visitado */
+        .card-link:hover,
+        .card-link:visited {
+            color: inherit; /* Heredar el color del texto padre */
+        }
+
+        .card-container .card:nth-child(2) span {
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+
+        .card-container .card:nth-child(1) span,
+        .card-container .card:nth-child(1) .icon {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Estilo para el span y el ícono de la tarjeta 3 */
+        .card-container .card:nth-child(3) span,
+        .card-container .card:nth-child(3) .icon {
+            color: white;
+            font-weight: bold;
+        }
+
+    </style>
+
+    <script src="/pruebas/menuUsuario/script.js"></script>
 </body>
 </html>
