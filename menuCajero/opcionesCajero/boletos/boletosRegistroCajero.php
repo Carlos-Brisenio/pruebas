@@ -18,17 +18,15 @@
     $stmtColonia = $conn->prepare($queryColonia);
     $stmtColonia->execute();
 
-
     $numeroBoleto = "";
     if(isset($_GET['token'])) {
         $numeroBoleto = base64_decode($_GET['token']);
     }
-    
 
     if(isset($_POST['apartar_boleto'])) {
         $idBoleto = $_POST['numero-boleto'];
         $nombre = $_POST['nombre_boleto'];
-        $ciudad = "Ciudad Guzmán";  // Asignamos directamente el valor
+        $ciudad = $_POST['ciudad'];
         $colonia = $_POST['colonia'];
         $calle = $_POST['calle'];
         $numero = $_POST['numero'];
@@ -52,7 +50,8 @@
         $stmtBoleto->execute([$fechaCompra, $fechaLimite, $idBoleto]);
         
         // Redireccionar después de insertar
-        header("Location: /pruebas/menuCajero/opcionesCajero/boletos/boletosPagoCajero.html");
+        header("Location: /pruebas/menuCajero/opcionesCajero/boletos/boletosPagoCajero.php?token=".base64_encode($idBoleto));
+
     }
 ?>
 
@@ -96,14 +95,32 @@
                 </li>
 
                 <ul class="menu-links">
+                    <li class="nav-link">
+                            <a href="/pruebas/menuCajero/indexCajero.html">
+                                <i class='bx bx-home-alt icon' ></i>
+                                <span class="text nav-text">Inicio</span>
+                            </a>
+                    </li>
 
                     <li class="nav-link">
-                        <a href="/pruebas/menuUsuario/opcionesUsuario/boletos/boletosUsuario.html">
+                        <a href="#">
                             <i class='bx bx-purchase-tag-alt icon'></i>
                             <span class="text nav-text">Boletos</span>
                         </a>
                     </li>
 
+                    <li class="nav-link">
+                        <a href="/pruebas/menuCajero/opcionesCajero/boletos/boletosCajero.php">
+                            <i class='bx bx-cart-alt icon' ></i>
+                            <span class="text nav-text">Vender boletos</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-cog icon' ></i>
+                            <span class="text nav-text">Ajustes</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -156,7 +173,7 @@
                 <!-- Ciudad -->
                 <div class="form-group">
                     <label for="ciudad">Ciudad:</label>
-                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" required readonly>
+                    <input type="text" id="ciudad" name="ciudad" value="Ciudad Guzmán" readonly>
                 </div>
 
                 <!-- Código Postal -->
@@ -199,7 +216,7 @@
                 </div>
                 <div class="form-group">
                     <label for="referencia">Referencia:</label>
-                    <input type="text" id="referencia" name="referencia" placeholder="Ejemplo: A una calle esta un oxxo" required>
+                    <input type="text" id="referencia" name="referencia" placeholder="Ejemplo: A una calle esta un oxxo">
                 </div>
             </div>
           </div>
@@ -209,16 +226,16 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="telefono1">Teléfono de Casa:</label>
-                    <input type="text" id="telefono1" name="telefono1" placeholder="Ejemplo: 341-41-2-0000" required>
+                    <input type="text" id="telefono1" name="telefono1" placeholder="Ejemplo: 341-41-2-0000">
                 </div>
         
                 <div class="form-group">
                     <label for="telefono2">Celular:</label>
-                    <input type="text" id="telefono2" name="telefono2" placeholder="Ejemplo: 341-101-0000" required>
+                    <input type="text" id="telefono2" name="telefono2" placeholder="Ejemplo: 341-101-0000">
                 </div>
                 <div class="form-group">
                     <label for="correo">Correo Electrónico:</label>
-                    <input type="email" id="correo" name="correo" placeholder="Ejemplo: correo@correo.com"required>
+                    <input type="email" id="correo" name="correo" placeholder="Ejemplo: correo@correo.com">
                 </div>
           </div>
         </div>

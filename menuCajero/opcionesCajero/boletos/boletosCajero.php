@@ -39,6 +39,7 @@
     while ($row = $stmtStatus4->fetch(PDO::FETCH_ASSOC)) {
         $boletosStatus4[] = $row['numero_boleto'];
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -161,7 +162,6 @@
             <br/>
             <button class='bx bxs-left-arrow' onclick="previous()"></button>
             <button class='bx bxs-right-arrow'  onclick="next()"></button>
-            <!--<<i class='bx bx-left-arrow-circle' ></i>-->
         </div>
     </section>
 
@@ -175,16 +175,34 @@
         var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
 
         function showAlert(buttonNumber) {
-            // Cambiar el color del botón seleccionado a amarillo
-            var selectedButton = document.getElementById('button-' + buttonNumber);
-            selectedButton.style.backgroundColor = 'yellow';
+    // Realizar solicitud AJAX para cambiar el estado en la base de datos
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "cambiarEstado.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.responseText === "success") {
+                    // Cambiar el color del botón seleccionado a amarillo
+                    var selectedButton = document.getElementById('button-' + buttonNumber);
+                    selectedButton.style.backgroundColor = 'yellow';
 
-            // Redirigir a boletosRegistro.php con el número de boleto
-            setTimeout(function () {
-                var encodedBoleto = btoa(buttonNumber);
-                window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
-            }, 1000);
-        }
+                    // Redirigir a boletosRegistro.php con el número de boleto
+                    setTimeout(function() {
+                        var encodedBoleto = btoa(buttonNumber);
+                        window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
+                    }, 1000);
+                } else {
+                    alert("Ocurrió un error al cambiar el estado del boleto. Inténtelo nuevamente.");
+                }
+            }
+        };
+        
+        // Enviar el número de boleto como parámetro
+        var params = "numero_boleto=" + buttonNumber;
+        xhr.send(params);
+}
+
 
         function previous() {
             if (currentBoard > 1) {
@@ -221,9 +239,9 @@
                 boardDiv.innerHTML += '<br/>';
             }
         }
-
         // Llamar a updateBoard para generar el tablero inicial cuando se carga la página
         window.onload = updateBoard;
+
     </script>
 
 </body>
