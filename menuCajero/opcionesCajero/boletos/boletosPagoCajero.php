@@ -10,8 +10,8 @@
     // Recuperar el número de boleto desde la URL
     $numeroBoleto = "";
     $nombreBoleto = "";
-    if(isset($_GET['numeroBoleto'])) {
-        $numeroBoleto = $_GET['numeroBoleto'];
+    if(isset($_GET['token'])) {
+        $numeroBoleto = base64_decode($_GET['token']);
 
         // Realizar consulta a la base de datos
         $stmt = $conn->prepare("SELECT nombre FROM InfoBoletos WHERE idBoleto = ?");
@@ -48,7 +48,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="/menuUsuario/logoTM.png" alt="">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
                 </span>
 
                 <div class="text logo-text">
@@ -165,12 +165,12 @@
                 </div>
           </div>
     </section>
-    <script src="/menuUsuario/script.js"></script>
+    <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
-        function generarOrdenPago() {
+function generarOrdenPago() {
             const numeroBoleto = document.getElementById("numero-boleto").value;
 
-            fetch(`/pruebas/menuUsuario/opcionesUsuario/boletos/getBoletoInfo.php?numeroBoleto=${numeroBoleto}`)
+            fetch(`/pruebas/menuCajero/opcionesCajero/boletos/getBoletoInfo.php?numeroBoleto=${numeroBoleto}`)
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -178,10 +178,13 @@
                 } else {
                     const { jsPDF } = window.jspdf;
                     const doc = new jsPDF();
+                    const fechaFormateada = formatDateToSpanish(data.fecha_Limite);
+                    const fechaCompraFormateada = formatearFecha(data.fecha_Compra);
+                    const fechaLimiteFormateada = formatearFecha(data.fecha_Limite);
 
                     doc.setFontSize(16);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Forma de pago ', 10, 10);
+                    doc.text('Orden de pago ', 87, 10);
 
                     const img = document.getElementById('imagenParaPdf');
                     const canvas = document.createElement('canvas');
@@ -195,41 +198,108 @@
 
                     // Agregar imagen al PDF
                     // Ajusta las coordenadas y dimensiones según lo necesites
-                    doc.addImage(imgData, 'JPEG', 20, 20, 40, 40);
-                    doc.setFontSize(14);
+                    doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);
+                    doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Diosesis De Ciudad Gúzman', 70, 30);
-                    doc.text('Mayordomía 2024', 70, 40);
+                    doc.text('Diócesis De Ciudad Gúzman', 80, 17);
+                    doc.text('Mayordomía 2024', 90, 23);
 
-                    doc.setFontSize(14);
+                    doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Número de Boleto: ' + data.idBoleto, 150, 60);
-                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 70);
-                    doc.text('Ciudad: ' + data.ciudad, 10, 80);
-                    doc.text('Colonia: ' + data.colonia, 90, 80);
-                    doc.text('Callle: ' + data.calle, 10, 90);
-                    doc.text('Número: ' + data.numero, 70, 90);
-                    doc.text('Entre las calles: ' + data.colinda1 + ' y ' + data.colinda2, 10, 100);
+                    doc.text('Número de Boleto: ' + data.idBoleto, 130, 40);
+                    doc.text('Fecha de apartado: ' + fechaCompraFormateada, 130, 47);
+                    doc.text('Fecha límite de pago: ' + fechaLimiteFormateada, 130, 54);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Datos de contacto: ', 10, 120);
+                    doc.text('Nombre del Boleto: ', 10, 80);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Telefono de casa: ' + data.telefono1, 10, 130);
-                    doc.text('Telefono de celular: ' + data.telefono2, 100, 140);
+                    doc.text('' + data.nombre, 53, 80);
                     doc.setFont("helvetica", "bold");
-                    doc.text('Instrucciones de pago: ', 10, 150);
+                    doc.text('Formas de pago: ', 10, 95);
+                    doc.text('1. Directamente en la Santa Iglesia Catedral', 10, 105);
                     doc.setFont("helvetica", "normal");
-                    doc.text('Acude a rectoría de catedral en los siguientes horarios a pagar tu boleto: ', 10, 160);
-                    doc.text('Lunes a domingo', 10, 170);
-                    doc.text('11:30 hrs a 14:00 hrs', 10, 180);
-                    doc.text('17:30 hrs a 20:00 hrs', 10, 190);
+                    doc.setFillColor(32, 77, 12); // RGB para verde
+                    doc.rect(20, 108, 150, 17);//Rectangulo principal
+                    doc.rect(20, 108, 150, 8, 'F');
 
+                    doc.setTextColor(255, 255, 255); // RGB para blanco
+                    doc.text('Número de boleto',23,113);
+                    doc.text('Fecha Límite',80,113);
+                    doc.text('Costo',120,113);
+                    doc.setTextColor(0, 0, 0); // RGB para negro
+                    doc.text(''+data.idBoleto,23,120);
+                    doc.text(''+fechaLimiteFormateada,80,120);
+                    doc.text('$170',120,120);
 
-                    doc.save('OrdenPago.pdf');
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Instrucciones de pago: ', 20, 130);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Acude a rectoría de catedral en los horarios de atención.', 20, 137);
+
+                    //Pago en BBVA Bancomer
+                    doc.setFont("helvetica", "bold");
+                    // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
+                    doc.rect(20, 146, 150, 17);
+                    doc.setFillColor(255, 255, 0); // RGB para amarillo
+                    doc.rect(20, 146, 150, 7,'F');
+                    // Mover los siguientes campos hacia donde estaban los primeros campos
+                    doc.text('2. BBVA Bancomer', 10, 144);
+                    doc.text('Concepto',23,151);
+                    doc.text('Fecha Límite',80,151);
+                    doc.text('Costo',120,151);
+                    doc.setFont("helvetica", "normal");
+                    doc.text(''+data.idBoleto+'-Mayordomia2024',23,158);
+                    doc.text(''+fechaLimiteFormateada,80,158);
+                    doc.text('$170',120,158);
+
+                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
+                    doc.text('de BBVA Bancomer a BBVA Bancomer.',20,175);
+                    doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',20,182);
+                    doc.text('Como se muestra en la tabla de arriba',20,189);
+                    doc.text('Los datos de la cuenta son:',20,196);
+                    doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',20,203);
+                    doc.text('Cuenta: 0110330213',20,210);
+                    doc.text('Clave interbancaria: 01 2320 0011 0330 2136',20,217);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.text('IMPORTANTE.',10,234);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,241);
+                    doc.text('realizado transferencia, antes del '+ fechaFormateada+'.',10,248);
+
+                    // Mover los campos "Lunes a domingo" al final del documento
+                    doc.setFont("helvetica", "bold");
+                    doc.text('Horarios de atención:',10,258);
+                    doc.setFont("helvetica", "normal");
+                    doc.text('Lunes a domingo', 10, 265);
+                    doc.text('11:30 hrs a 14:00 hrs', 10, 272);
+                    doc.text('17:30 hrs a 20:00 hrs', 10, 279);
+
+                    doc.text('Catedral De Ciudad Guzmán', 70, 265);
+                    doc.text('Prisciliano Sánchez #19', 70, 272);
+                    doc.text('Teléfono: 341-412-0132', 70, 279);
+    
+                    doc.save('OrdenPago_' + data.idBoleto + '.pdf');
                 }
             })
             .catch(error => {
                 console.error('Hubo un problema con la petición Fetch:', error);
             });
+        }
+
+        function formatDateToSpanish(dateString) {
+            const date = new Date(dateString);
+            date.setDate(date.getDate() + 1); // Suma un día a la fecha
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('es-MX', options);
+        }
+        
+        function formatearFecha(fecha) {
+            const partes = fecha.split('-');
+            if (partes.length === 3) {
+                return `${partes[2]}-${partes[1]}-${partes[0]}`;
+            }
+            return fecha;
         }
     </script> 
 </body>
