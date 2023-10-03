@@ -242,6 +242,46 @@
         // Llamar a updateBoard para generar el tablero inicial cuando se carga la página
         window.onload = updateBoard;
 
+        function fetchAndUpdateBoard() {
+            fetch('/pruebas/menuCajero/opcionesCajero/boletos/getBoletoStatus.php')
+            .then(response => response.json())
+            .then(data => {
+                // Reinicia las listas de status
+                boletosStatus2 = [];
+                boletosStatus3 = [];
+                boletosStatus4 = [];
+
+                for (let numeroBoleto in data) {
+                    let status = data[numeroBoleto];
+
+                    switch (status) {
+                        case '2':
+                            boletosStatus2.push(numeroBoleto);
+                            break;
+                        case '3':
+                            boletosStatus3.push(numeroBoleto);
+                            break;
+                        case '4':
+                            boletosStatus4.push(numeroBoleto);
+                            break;
+                    }
+                }
+
+                // Actualiza el tablero con los nuevos datos
+                updateBoard();
+            })
+            .catch(error => {
+                console.error('Error fetching boleto status:', error);
+            });
+        }
+
+        // Llamar a fetchAndUpdateBoard() cada 5 segundos
+        setInterval(fetchAndUpdateBoard, 5000);
+
+        // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
+        window.onload = fetchAndUpdateBoard;
+
+
     </script>
 
 </body>
