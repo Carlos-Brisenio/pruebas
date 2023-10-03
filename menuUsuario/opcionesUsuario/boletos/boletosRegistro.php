@@ -20,8 +20,8 @@
 
 
     $numeroBoleto = "";
-    if(isset($_GET['numero-boleto'])) {
-        $numeroBoleto = $_GET['numero-boleto'];
+    if(isset($_GET['token'])) {
+        $numeroBoleto = base64_decode($_GET['token']);
     }
 
     if(isset($_POST['apartar_boleto'])) {
@@ -109,7 +109,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/pruebas/index.html">
+                    <a href="javascript:void(0);" onclick="exitAndUpdateStatus();">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>
@@ -227,10 +227,11 @@
             <button class="button" type="submit" name="apartar_boleto">Apartar Boleto</button>
         </div>
 
-          <div class="button-container">
-            <button class="button" onclick="window.location.href='/pruebas/index.html'">Cancelar</button>
-          </div>
     </form>
+        <br>
+        <div class="button-container">
+            <button class="button" onclick="updateStatus()">Cancelar</button>
+        </div>
     </section>
     
 
@@ -256,6 +257,51 @@
                         });
                     });
             }
+        }
+
+        function updateStatus() {
+            var numeroBoleto = "<?php echo $numeroBoleto; ?>"; // Obtén el número de boleto desde PHP
+            
+            // Realiza una solicitud AJAX para actualizar el estado del boleto
+            fetch('/pruebas/menuCajero/opcionesCajero/boletos/update2a1.php?numero_boleto=' + numeroBoleto, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //alert('Boleto cancelado exitosamente.');
+                    window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
+                } else {
+                    alert('Error al cancelar el boleto.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cancelar el boleto.');
+            });
+        }
+
+        function exitAndUpdateStatus() {
+            var numeroBoleto = "<?php echo $numeroBoleto; ?>"; // Obtén el número de boleto desde PHP
+
+            // Realiza una solicitud AJAX para actualizar el estado del boleto
+            fetch('/pruebas/menuCajero/opcionesCajero/boletos/update2a1.php?numero_boleto=' + numeroBoleto, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //alert('Cancelado...');
+                } else {
+                    alert('Error al cancelar el boleto.');
+                }
+                window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cancelar el boleto.');
+                window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
+            });
         }
     </script>
 
