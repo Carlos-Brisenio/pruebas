@@ -243,37 +243,56 @@
         <div class="button-container">
             <button class="button" type="submit" name="apartar_boleto">Apartar Boleto</button>
         </div>
-
-          <div class="button-container">
-            <button class="button" onclick="window.location.href='/pruebas/index.html'">Cancelar</button>
-          </div>
     </form>
+
+    <div class="button-container">
+        <button class="button" onclick="updateStatus()">Cancelar</button>
+    </div>
     </section>
     
-
-    
-
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
         function updateColonias() {
-    var cp = document.getElementById("codigo_postal").value;
+            var cp = document.getElementById("codigo_postal").value;
 
-    if (cp.length == 5) {  // Asume que los códigos postales tienen 5 dígitos
-        fetch('/pruebas/menuUsuario/opcionesUsuario/boletos/getColonias.php?codigo_postal=' + cp)
+            if (cp.length == 5) {  // Asume que los códigos postales tienen 5 dígitos
+                fetch('/pruebas/menuUsuario/opcionesUsuario/boletos/getColonias.php?codigo_postal=' + cp)
+                    .then(response => response.json())
+                    .then(data => {
+                        var coloniaSelect = document.getElementById("colonia");
+                        coloniaSelect.innerHTML = "";  // Limpiar las opciones existentes
+                        
+                        data.forEach(function(colonia) {
+                            var option = document.createElement("option");
+                            option.value = colonia;
+                            option.text = colonia;
+                            coloniaSelect.appendChild(option);
+                        });
+                    });
+            }
+        }
+
+        function updateStatus() {
+            var numeroBoleto = "<?php echo $numeroBoleto; ?>"; // Obtén el número de boleto desde PHP
+            
+            // Realiza una solicitud AJAX para actualizar el estado del boleto
+            fetch('/pruebas/menuCajero/opcionesCajero/boletos/update2a1.php?numero_boleto=' + numeroBoleto, {
+                method: 'POST',
+            })
             .then(response => response.json())
             .then(data => {
-                var coloniaSelect = document.getElementById("colonia");
-                coloniaSelect.innerHTML = "";  // Limpiar las opciones existentes
-                
-                data.forEach(function(colonia) {
-                    var option = document.createElement("option");
-                    option.value = colonia;
-                    option.text = colonia;
-                    coloniaSelect.appendChild(option);
-                });
+                if (data.success) {
+                    alert('Boleto cancelado exitosamente.');
+                    window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
+                } else {
+                    alert('Error al cancelar el boleto.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cancelar el boleto.');
             });
-    }
-}
+        }
     </script>
 
 </body>
