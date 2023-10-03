@@ -174,9 +174,9 @@
         var currentBoard = 1;
         var totalBoards = 15;  // Cambiar esto para agregar más tableros
 
-        var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
-        var boletosStatus3 = <?php echo json_encode($boletosStatus3); ?>;
-        var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
+        //var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
+        //var boletosStatus3 = <?php echo json_encode($boletosStatus3); ?>;
+        //var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
 
         function showAlert(buttonNumber) {
         // Realizar solicitud AJAX para cambiar el estado en la base de datos
@@ -280,12 +280,10 @@
         }
 
         // Llamar a fetchAndUpdateBoard() cada 5 segundos
-        setInterval(fetchAndUpdateBoard, 5000);
+        setInterval(fetchAndUpdateBoard, 3000);
 
         // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
         window.onload = fetchAndUpdateBoard;
-
-
     </script>
 
 </body>

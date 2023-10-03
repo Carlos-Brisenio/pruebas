@@ -103,7 +103,7 @@ function fetchAndUpdateBoard() {
 }
 
 // Llamar a fetchAndUpdateBoard() cada 5 segundos
-setInterval(fetchAndUpdateBoard, 5000);
+setInterval(fetchAndUpdateBoard, 3000);
 
 // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
 window.onload = fetchAndUpdateBoard;
