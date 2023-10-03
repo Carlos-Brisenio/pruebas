@@ -20,6 +20,16 @@
         $boletosStatus2[] = $row['numero_boleto'];
     }
 
+    $boletosStatus3 = [];
+
+    $queryStatus3 = "SELECT numero_boleto FROM Boletos WHERE status = 3";
+    $stmtStatus3 = $conn->prepare($queryStatus3);
+    $stmtStatus3->execute();
+
+    while ($row = $stmtStatus3->fetch(PDO::FETCH_ASSOC)) {
+        $boletosStatus3[] = $row['numero_boleto'];
+    }
+
     $boletosStatus4 = [];
 
     $queryStatus4 = "SELECT numero_boleto FROM Boletos WHERE status = 4";
@@ -113,6 +123,7 @@
             <script>
                 // Pasar la información de PHP a JavaScript
                 var boletosStatus2 = <?php echo json_encode($boletosStatus2); ?>;
+                var boletosStatus3 = <?php echo json_encode($boletosStatus3); ?>;
                 var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
             </script>
             <div class="botonesInfo">

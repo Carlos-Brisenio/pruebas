@@ -154,6 +154,10 @@
                         <td><button style="background-color: red;"></button></td>
                         <td>Vendido</td>
                     </tr>
+                    <tr>
+                        <td><button style="background-color: #2e055d;"></button></td>
+                        <td>Deshabilitado</td>
+                    </tr>
                 </table>
             </div>
             <div id="board">
@@ -175,33 +179,33 @@
         var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
 
         function showAlert(buttonNumber) {
-    // Realizar solicitud AJAX para cambiar el estado en la base de datos
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "cambiarEstado.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.responseText === "success") {
-                    // Cambiar el color del botón seleccionado a amarillo
-                    var selectedButton = document.getElementById('button-' + buttonNumber);
-                    selectedButton.style.backgroundColor = 'yellow';
+        // Realizar solicitud AJAX para cambiar el estado en la base de datos
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "cambiarEstado.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.responseText === "success") {
+                        // Cambiar el color del botón seleccionado a amarillo
+                        var selectedButton = document.getElementById('button-' + buttonNumber);
+                        selectedButton.style.backgroundColor = 'yellow';
 
-                    // Redirigir a boletosRegistro.php con el número de boleto
-                    setTimeout(function() {
-                        var encodedBoleto = btoa(buttonNumber);
-                        window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
-                    }, 1000);
-                } else {
-                    alert("Ocurrió un error al cambiar el estado del boleto. Inténtelo nuevamente.");
+                        // Redirigir a boletosRegistro.php con el número de boleto
+                        setTimeout(function() {
+                            var encodedBoleto = btoa(buttonNumber);
+                            window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
+                        }, 1000);
+                    } else {
+                        alert("Ocurrió un error al cambiar el estado del boleto. Inténtelo nuevamente.");
+                    }
                 }
-            }
-        };
-        
-        // Enviar el número de boleto como parámetro
-        var params = "numero_boleto=" + buttonNumber;
-        xhr.send(params);
-}
+            };
+            
+            // Enviar el número de boleto como parámetro
+            var params = "numero_boleto=" + buttonNumber;
+            xhr.send(params);
+        }
 
 
         function previous() {
