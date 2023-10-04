@@ -243,7 +243,7 @@
             labels: ['Vendidos', 'Disponibles', 'Apartados'],
             datasets: [{
                 data: [<?php echo $porcentajeVendidos; ?>, <?php echo $porcentajeDisponibles; ?>, <?php echo $porcentajeApartados; ?>],
-                backgroundColor: ['green', 'blue', 'orange']
+                backgroundColor: ['red', 'green', 'yellow']
             }]
         };
         

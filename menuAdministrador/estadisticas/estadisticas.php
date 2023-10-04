@@ -130,7 +130,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/pruebas/principal-Administracion.html">
+                    <a href="/pruebas/principal-Administracion.php">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>
