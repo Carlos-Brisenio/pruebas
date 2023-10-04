@@ -89,7 +89,7 @@
         button {
             padding: 10px 20px;
             font-size: 16px;
-            border: none;
+            border: 1p 1p 1p 1p;
             background-color: white;
             color: black;
             cursor: pointer;
