@@ -19,12 +19,12 @@
 
 /* Estilos para el cuadro de Ventas */
 .sales-card {
-    background-color: #007bff;
+    background-color: red;
 }
 
 /* Estilos para el cuadro de Boletos Apartados */
 .apartados-card {
-    background-color: #28a745;
+    background-color: orange;
 }
 
 /* Estilos para el cuadro de Boletos por Vencer */
@@ -32,7 +32,7 @@
     background-color: #8d0281;
 }
 .users-card {
-    background-color: #ffc107; /* Color de fondo para el cuadro de Usuarios */
+    background-color: blue; /* Color de fondo para el cuadro de Usuarios */
 }
 
 /* Estilos para resaltar el cuadro y el icono al pasar el puntero */
