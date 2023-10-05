@@ -8,7 +8,7 @@
 
         // Consulta para obtener boletos apartados
         $queryBoletosApartados = "
-        SELECT Boletos.numero_boleto, InfoBoletos.nombre, Boletos.fecha_Compra, Boletos.fecha_Limite 
+        SELECT Boletos.numero_boleto, InfoBoletos.nombre, InfoBoletos.telefono1, Boletos.fecha_Compra, Boletos.fecha_Limite 
         FROM Boletos 
         INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
         WHERE Boletos.status = 2";
@@ -177,6 +177,7 @@
                         <tr>
                             <th>Número de Boleto</th>
                             <th>Nombre del Boleto</th>
+                            <th>Télefono</th>
                             <th>Fecha de Apartado</th>
                             <th>Fecha límite de Pago</th>
                             <th>Acciones</th>
@@ -187,6 +188,7 @@
                             <tr>
                                 <td><?= $boleto['numero_boleto'] ?></td>
                                 <td><?= $boleto['nombre'] ?></td>
+                                <td><?= $boleto['telefono1'] ?></td>
                                 <td><?= $boleto['fecha_Compra'] ?></td>
                                 <td><?= $boleto['fecha_Limite'] ?></td>
                                 <td>
@@ -262,19 +264,26 @@
         });
     
         function payTicket(numero_boleto) {
-            $.ajax({
-                url: 'pagarBoleto.php',
-                type: 'POST',
-                data: { numero_boleto: numero_boleto },
-                success: function(response) {
-                    alert('Boleto pagado correctamente.');
-                    location.reload(); // Recargar la página para actualizar la lista de boletos
-                },
-                error: function(error) {
-                    alert('Error al pagar el boleto.');
-                }
-            });
+            var confirmation = confirm("¿Realmente deseas pagar el boleto "+numero_boleto+"?");
+            if (confirmation) {
+                $.ajax({
+                    url: 'pagarBoleto.php',
+                    type: 'POST',
+                    data: { numero_boleto: numero_boleto },
+                    success: function(response) {
+                        alert('Boleto pagado correctamente.');
+                        location.reload(); // Recargar la página para actualizar la lista de boletos
+                    },
+                    error: function(error) {
+                        alert('Error al pagar el boleto.');
+                    }
+                });
+            } else {
+                // El usuario decidió no continuar con el pago
+                console.log("Pago del boleto " + numero_boleto + " cancelado por el usuario.");
+            }
         }
+
 
         function imprimirBoletos(numero_boleto) {
             const { jsPDF } = window.jspdf;
