@@ -61,6 +61,14 @@
         $stmtTotalVendidos = $conn->prepare($queryTotalVendidos);
         $stmtTotalVendidos->execute();
         $totalVendidos = $stmtTotalVendidos->fetch(PDO::FETCH_ASSOC);
+
+        function formatPhoneNumber($number) {
+            if (strlen($number) == 10) {
+                return substr($number, 0, 3) . '-' . substr($number, 3, 3) . '-' . substr($number, 6, 4);
+            }
+            return $number;
+        }
+        
     ?>
     
     <!DOCTYPE html>
@@ -188,7 +196,7 @@
                             <tr>
                                 <td><?= $boleto['numero_boleto'] ?></td>
                                 <td><?= $boleto['nombre'] ?></td>
-                                <td><?= $boleto['telefono1'] ?></td>
+                                <td><?= formatPhoneNumber($boleto['telefono1']) ?></td>
                                 <td><?= $boleto['fecha_Compra'] ?></td>
                                 <td><?= $boleto['fecha_Limite'] ?></td>
                                 <td>

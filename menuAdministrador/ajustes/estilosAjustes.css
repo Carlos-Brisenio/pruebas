@@ -1,0 +1,39 @@
+.settings {
+    margin: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Asegura que los elementos estén centrados verticalmente */
+    background-color: darkgray;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 400px; /* Ajusta según tus necesidades */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.settings h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.settings button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.settings button:hover {
+    background-color: #45a049;
+}
+
+.settings p {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
