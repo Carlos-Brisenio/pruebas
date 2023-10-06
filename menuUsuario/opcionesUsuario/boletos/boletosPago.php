@@ -9,8 +9,8 @@
     // Recuperar el número de boleto desde la URL
     $numeroBoleto = "";
     $nombreBoleto = "";
-    if(isset($_GET['numeroBoleto'])) {
-        $numeroBoleto = $_GET['numeroBoleto'];
+    if(isset($_GET['token'])) {
+        $numeroBoleto = base64_decode($_GET['token']);
 
         // Realizar consulta a la base de datos
         $stmt = $conn->prepare("SELECT nombre FROM InfoBoletos WHERE idBoleto = ?");

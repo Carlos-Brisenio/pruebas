@@ -20,7 +20,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="/menuUsuario/logoTM.png" alt="">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
                 </span>
 
                 <div class="text logo-text">
@@ -137,6 +137,10 @@
             <br>
             <p>Advertencia: Eliminará todos los registros de la tabla Ventas.</p>
             <button onclick="showConfirmationModal('ventas')">Eliminar registros de la tabla Ventas</button>
+            <br>
+            <br>
+            <p>Advertencia: Eliminará los registros de la tabla Boletos que se encuenten en 2 y las fechas sean nulas.</p>
+            <button onclick="showConfirmationModal('cambio')">Eliminar registros de Boletos 2 y nulos</button>
         </div>
     </section>
 
@@ -168,6 +172,9 @@
             case 'ventas':
                 endpoint = 'eliminarVentas.php';
                 break;
+            case 'cambio':
+                endpoint = 'cambioStatus.php';
+            break;
         }
 
         fetch(endpoint, {

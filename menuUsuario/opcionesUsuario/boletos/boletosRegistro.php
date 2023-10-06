@@ -51,7 +51,7 @@
         $stmtBoleto->execute([$fechaCompra, $fechaLimite, $idBoleto]);
         
         // Redireccionar después de insertar
-        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?numeroBoleto=".$idBoleto);
+        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?numeroBoleto=".base64_encode($idBoleto));
 
     }
 ?>
@@ -133,7 +133,7 @@
     </nav>
     
     <section class="home">
-    <form action="" method="POST">
+    <form action="" method="POST" onsubmit="return validateForm();">
         <div class="text"> Registro de boleto</div>
         <div class="section">
             <h2 class="section-title">Datos del Boleto</h2>
