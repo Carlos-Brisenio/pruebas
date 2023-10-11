@@ -90,7 +90,7 @@
         <header>
             <div class="image-text">
                 <span class="image">
-                    <img src="/menuUsuario/logoTM.png" alt="">
+                    <img src="/pruebas/menuUsuario/logoTM.png" alt="">
                 </span>
 
                 <div class="text logo-text">

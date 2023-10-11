@@ -19,8 +19,12 @@
     $stmtColonia->execute();
 
     $numeroBoleto = "";
-    if(isset($_GET['token'])) {
-        $numeroBoleto = base64_decode($_GET['token']);
+    if (isset($_GET['token'])) {
+        // Verifica si el token contiene más de un boleto (separado por comas)
+        $decodedToken = base64_decode($_GET['token']);
+        $tokens = explode(',', $decodedToken);
+        $decodedTokens = array_map('base64_decode', $tokens);  // decodifica cada token
+        $numeroBoleto = implode(', ', $decodedTokens);  // une los boletos con comas
     }
 
     if(isset($_POST['apartar_boleto'])) {
@@ -155,11 +159,10 @@
         <div class="section">
             <h2 class="section-title">Datos del Boleto</h2>
             <div class="form-row">
-              <div class="form-group">
-                <label for="numero-boleto">Número(s) de Boleto(s):</label>
-                <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
-
-              </div>
+                <div class="form-group">
+                    <label for="numero-boleto">Número(s) de Boleto(s):</label>
+                    <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
+                </div>
               <div class="form-group">
                 <label for="nombre_boleto">Nombre del Boleto:</label>
                 <input type="text" id="nombre_boleto" name="nombre_boleto" placeholder="Ejemplos: Rafael Martinez, Familia Díaz" required>

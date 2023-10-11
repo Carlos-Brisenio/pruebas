@@ -160,7 +160,13 @@
                     </tr>
                 </table>
             </div>
+            <div class="multi-select">
+                    <label for="toggleSwitch">Selección múltiple:</label>
+                    <input type="checkbox" id="toggleSwitch">
+                    <button onclick="sendSelectedTickets()">Seleccionar boletos</button>
+                </div>
             <div id="board">
+
                 <!--Generar tablero de botones de 10x10-->
             </div>
             <br/>
@@ -178,34 +184,61 @@
         //var boletosStatus3 = <?php echo json_encode($boletosStatus3); ?>;
         //var boletosStatus4 = <?php echo json_encode($boletosStatus4); ?>;
 
-        function showAlert(buttonNumber) {
-        // Realizar solicitud AJAX para cambiar el estado en la base de datos
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "cambiarEstado.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.responseText === "success") {
-                        // Cambiar el color del botón seleccionado a amarillo
-                        var selectedButton = document.getElementById('button-' + buttonNumber);
-                        selectedButton.style.backgroundColor = 'yellow';
+        var selectedTickets = [];
 
-                        // Redirigir a boletosRegistro.php con el número de boleto
-                        setTimeout(function() {
-                            var encodedBoleto = btoa(buttonNumber);
-                            window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
-                        }, 1000);
-                    } else {
-                        alert("Ocurrió un error al cambiar el estado del boleto. Inténtelo nuevamente.");
-                    }
+        function showAlert(buttonNumber) {
+            var toggleSwitch = document.getElementById('toggleSwitch');
+            if (toggleSwitch.checked) { // Si el toggle-switch está activado
+                var selectedButton = document.getElementById('button-' + buttonNumber);
+                if (selectedTickets.includes(buttonNumber)) {
+                    // Si el boleto ya está seleccionado, deselecciónalo
+                    selectedTickets = selectedTickets.filter(item => item !== buttonNumber);
+                    selectedButton.style.backgroundColor = '#204d0c'; // Cambia a su color original
+                } else {
+                    // Si el boleto no está seleccionado, selecciónalo
+                    selectedTickets.push(buttonNumber);
+                    selectedButton.style.backgroundColor = 'yellow'; // Cambia a amarillo
                 }
-            };
-            
-            // Enviar el número de boleto como parámetro
-            var params = "numero_boleto=" + buttonNumber;
-            xhr.send(params);
+            } else {
+                // Realizar solicitud AJAX para cambiar el estado en la base de datos
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "cambiarEstado.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.responseText === "success") {
+                                // Cambiar el color del botón seleccionado a amarillo
+                                var selectedButton = document.getElementById('button-' + buttonNumber);
+                                selectedButton.style.backgroundColor = 'yellow';
+
+                                // Redirigir a boletosRegistro.php con el número de boleto
+                                setTimeout(function() {
+                                    var encodedBoleto = btoa(buttonNumber);
+                                    window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?token=' + encodedBoleto;
+                                }, 1000);
+                            } else {
+                                alert("Ocurrió un error al cambiar el estado del boleto. Inténtelo nuevamente.");
+                            }
+                        }
+                    };
+                    
+                    // Enviar el número de boleto como parámetro
+                    var params = "numero_boleto=" + buttonNumber;
+                    xhr.send(params);
+            }
         }
+
+        function sendSelectedTickets() {
+            if (selectedTickets.length > 0) {
+                // Enviar arreglo de boletos seleccionados a 'Registro boletos'
+                var encodedTickets = btoa(JSON.stringify(selectedTickets));
+                window.location.href = '/pruebas/menuCajero/opcionesCajero/boletos/boletosRegistroCajero.php?tokens=' + encodedTickets;
+            } else {
+                alert("Por favor, seleccione al menos un boleto.");
+            }
+        }
+
 
 
         function previous() {
@@ -280,7 +313,7 @@
         }
 
         // Llamar a fetchAndUpdateBoard() cada 5 segundos
-        setInterval(fetchAndUpdateBoard, 3000);
+        setInterval(fetchAndUpdateBoard, 10000);
 
         // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
         window.onload = fetchAndUpdateBoard;

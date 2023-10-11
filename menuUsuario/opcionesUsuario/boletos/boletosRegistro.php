@@ -51,7 +51,7 @@
         $stmtBoleto->execute([$fechaCompra, $fechaLimite, $idBoleto]);
         
         // Redireccionar después de insertar
-        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?numeroBoleto=".base64_encode($idBoleto));
+        header("Location: /pruebas/menuUsuario/opcionesUsuario/boletos/boletosPago.php?token=".base64_encode($idBoleto));
 
     }
 ?>
@@ -302,6 +302,17 @@
                 alert('Error al cancelar el boleto.');
                 window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
             });
+        }
+
+        function validateForm() {
+            var tel1 = document.getElementById("telefono1").value;
+            var tel2 = document.getElementById("telefono2").value;
+        
+            if (!tel1 && !tel2) {
+                alert("Por favor ingresa al menos un número de teléfono.");
+                return false; // Esto evita que el formulario se envíe.
+            }
+            return true; // Esto permite que el formulario se envíe.
         }
     </script>
 

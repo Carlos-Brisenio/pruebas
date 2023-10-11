@@ -18,7 +18,7 @@ try {
     $stmt->execute();
 
     // Eliminar datos de infoBoletos relacionados con el boleto
-    $stmtInfoBoletos = $conn->prepare("DELETE FROM infoBoletos WHERE idBoleto = :idBoleto");
+    $stmtInfoBoletos = $conn->prepare("DELETE FROM InfoBoletos WHERE idBoleto = :idBoleto");
     $stmtInfoBoletos->bindParam(':idBoleto', $numero_boleto);
     $stmtInfoBoletos->execute();
 
