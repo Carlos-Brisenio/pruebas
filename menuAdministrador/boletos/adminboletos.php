@@ -62,7 +62,7 @@
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
-    <link rel="stylesheet" href="/pruebas/menuAdmistrador/boletos/estiloboletos.css">
+    <link rel="stylesheet" href="estiloboletos.css">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -135,7 +135,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.html">
+                        <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.php">
                             <i class='bx bx-cog icon' ></i>
                             <span class="text nav-text">Ajustes</span>
                         </a>
@@ -270,9 +270,6 @@
     }
 
 </script>
-
-
     <script src="/pruebas/menuUsuario/script.js"></script>
-
 </body>
 </html>
