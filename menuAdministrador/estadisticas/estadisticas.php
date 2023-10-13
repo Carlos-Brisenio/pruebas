@@ -120,7 +120,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.html">
+                        <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.php">
                             <i class='bx bx-cog icon' ></i>
                             <span class="text nav-text">Ajustes</span>
                         </a>

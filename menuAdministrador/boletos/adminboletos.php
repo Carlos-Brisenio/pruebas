@@ -71,7 +71,6 @@
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
     
-    
     <title>Ticket-Mayordomía®/Boletos</title> 
 </head>
 <body>
