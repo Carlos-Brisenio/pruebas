@@ -1,3 +1,7 @@
+#myChart {
+    margin-left: 20px;
+  }
+
 #ventasContainer, #boletosContainer {
     margin-top: 50px;
   }
@@ -9,6 +13,10 @@
   }
   h2{
     margin-left: 20px;
+  }
+
+  h1{
+    font-size: 30px;
   }
   
   .reporteBtn {
@@ -52,3 +60,37 @@
   #boletosReporteContainer {
     margin-top: 20px;
   }
+  /*Código para las tarjetas de lac colonias con más boletos vendidos*/
+  .top-colonias {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .card-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+  }
+
+  .card {
+      width: 150px;
+      padding: 10px;
+      border: 2px solid #e31a1a;
+      border-radius: 5px;
+      text-align: center;
+      margin: 10px;
+  }
+
+  .card h4 {
+      margin-top: 0;
+  }
+
+  .card p {
+      margin-bottom: 0;
+  }
+
+    /*Código para las tarjetas de lac colonias con más boletos vendidos*/
+    .top-calles {
+      margin-top: 20px;
+      text-align: center;
+    }

@@ -35,8 +35,34 @@
     $stmtBoletosVendidos->execute();
     $boletosVendidos = $stmtBoletosVendidos->fetchAll(PDO::FETCH_ASSOC);
 
+    //Consulta para obterner el top 5 de las colonias con más boletos vendidos
+    $queryTopColonias = "
+    SELECT colonia, COUNT(idBoleto) as cantidad_boletos
+    FROM InfoBoletos
+    GROUP BY colonia
+    ORDER BY cantidad_boletos DESC
+    LIMIT 5";
+
+    $stmtTopColonias = $conn->prepare($queryTopColonias);
+    $stmtTopColonias->execute();
+    $topColonias = $stmtTopColonias->fetchAll(PDO::FETCH_ASSOC);
+
+    //Consulta para obterner el top 5 de los domicilios con más boletos vendidos
+    $queryTopCalles = "
+    SELECT calle, numero, COUNT(idBoleto) as cantidad_boletos
+    FROM InfoBoletos
+    GROUP BY calle, numero
+    ORDER BY cantidad_boletos DESC
+    LIMIT 5";
+
+    $stmtTopCalles = $conn->prepare($queryTopCalles);
+    $stmtTopCalles->execute();
+    $topCalles = $stmtTopCalles->fetchAll(PDO::FETCH_ASSOC);
+
+
     // Cerrar la conexión a la base de datos
     $conn = null;
+
 ?>
 
 <!DOCTYPE html>
@@ -154,8 +180,33 @@
     </nav>
 
     <section class="home">
-    <div class="text">Estadisticas de boletos apartados</div>
-
+        <!-- Aquí es donde deberías insertar las tarjetas -->
+        <section class="top-colonias">
+        <h1>Estadisticas</h1>
+            <h3>Top 5 Colonias con más Boletos Registrados</h3>
+            <div class="card-container">
+                <?php foreach ($topColonias as $colonia): ?>
+                <div class="card">
+                    <h4><?php echo $colonia['colonia']; ?></h4>
+                    <p><?php echo $colonia['cantidad_boletos']; ?> boletos</p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        <!-- Aquí es donde deberías insertar las tarjetas para el top calles -->
+        <section class="top-calles">
+            <h3>Top 5 Domicilios con más Boletos Registrados</h3>
+            <div class="card-container">
+                <?php foreach ($topCalles as $calle): ?>
+                <div class="card">
+                    <h4><?php echo $calle['calle'] ?></h4>
+                    <p><?php echo $calle['cantidad_boletos']; ?> boletos</p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <br>
+            <h2>Estadisticas de boletos apartados y vendidos<h2>
+        </section>
         <!-- Agrega un elemento canvas para el gráfico -->
         <canvas id="myChart" width="400" height="200"></canvas>
     </section>
@@ -176,15 +227,15 @@ var data = {
         {
             label: 'Boletos Apartados',
             data: boletosApartados,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)' ,
+            borderColor: 'rgba(75, 192, 192, 1)' ,
             borderWidth: 1
         },
         {
             label: 'Boletos Vendidos',
             data: boletosVendidos, // Agrega los datos de boletos vendidos aquí
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1
         }
     ]
