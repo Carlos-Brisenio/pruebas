@@ -35,7 +35,7 @@
     <!--===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     
-    <title>Ticket-M®</title> 
+    <title>Panel Boletos</title> 
     <style>
 
         :root{
@@ -68,12 +68,15 @@
             background-color: var(--body-color);
             transition: var(--tran-05);
         }
+
         .home .text{
             font-size: 30px;
             font-weight: 500;
             color: var(--text-color);
             padding: 12px 60px;
+            text-align: center; // Si también quieres que el texto dentro del div esté centrado
         }
+
         .container {
             margin-left: 0;
             text-align: left;
@@ -104,15 +107,15 @@
 </head>
 <body>
     <section class="home">
-        <div class="text">Boletos disponibles</div>
+        <div class="text">BOLETOS DISPONIBLES</div>
         <div class="container">
             <div id="board">
                 <!--Generar tablero de botones de 10x10-->
             </div>
-            <br/>
-            <button class='bx bxs-left-arrow' onclick="previous()"></button>
-            <button class='bx bxs-right-arrow'  onclick="next()"></button>
+            <!--<button class='bx bxs-left-arrow' onclick="previous()"></button>
+            <button class='bx bxs-right-arrow'  onclick="next()"></button>-->
         </div>
+        <div class="text">BOLETOS.MAYORDOMIATICKETS.COM</div>
     </section>
 
     <script src="/pruebas/menuUsuario/script.js"></script>
@@ -130,12 +133,14 @@
         function next() {
             if (currentBoard < totalBoards) {
                 currentBoard++;
-                updateBoard();
+            } else {
+                currentBoard = 1; // Vuelve al primer tablero
             }
+            updateBoard();
         }
 
         var boletosStatus1 = <?php echo json_encode($boletosStatus1); ?>;
-        var buttonsPerPage = 264; // 20x10
+        var buttonsPerPage = 242; // 20x10
 
         function updateBoard() {
             var boardDiv = document.getElementById("board");
@@ -144,18 +149,26 @@
             var startIndex = (currentBoard - 1) * buttonsPerPage;
             var endIndex = startIndex + buttonsPerPage;
 
+            // Comprobar si estamos más allá de los boletos disponibles y reiniciar a la primera página si es necesario
+            if (startIndex >= boletosStatus1.length) {
+                currentBoard = 1;
+                startIndex = 0;
+                endIndex = buttonsPerPage;
+            }
+
             for (var i = startIndex; i < endIndex; i++) {
                 if (i < boletosStatus1.length) {
                     var buttonNumber = boletosStatus1[i];
                     boardDiv.innerHTML += '<button id="button-' + buttonNumber + '" class="button" onclick="showAlert(' + buttonNumber + ')">' + buttonNumber + '</button>';
 
-                    // Crea un salto de línea después de cada 20 botones
+                    // Crea un salto de línea después de cada 22 botones
                     if ((i - startIndex + 1) % 22 === 0) {
                         boardDiv.innerHTML += '<br/>';
                     }
                 }
             }
         }
+
 
         // Llamar a updateBoard para generar el tablero inicial cuando se carga la página
         window.onload = updateBoard;
@@ -187,6 +200,9 @@
 
         // Llamar a fetchAndUpdateBoard() cada 5 segundos
         setInterval(fetchAndUpdateBoard, 3000);
+        // Cambia el tablero automáticamente cada 10 segundos
+        setInterval(next, 3000);
+
 
         // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
         window.onload = fetchAndUpdateBoard;
