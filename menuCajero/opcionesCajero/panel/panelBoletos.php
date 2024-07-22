@@ -201,7 +201,7 @@
         // Llamar a fetchAndUpdateBoard() cada 5 segundos
         setInterval(fetchAndUpdateBoard, 3000);
         // Cambia el tablero automáticamente cada 10 segundos
-        setInterval(next, 3000);
+        setInterval(next, 10000);
 
 
         // Llamar a fetchAndUpdateBoard para generar el tablero inicial cuando se carga la página
