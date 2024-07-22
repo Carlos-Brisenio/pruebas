@@ -146,6 +146,13 @@
                     </li>
 
                     <li class="nav-link">
+                        <a href="/pruebas/menuAdministrador/cartas/cartas.php">
+                            <i class='bx bx-envelope icon' ></i>
+                            <span class="text nav-text">Cartas</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
                         <a href="/pruebas/menuAdministrador/ajustes/moduloAjustes.php">
                             <i class='bx bx-cog icon' ></i>
                             <span class="text nav-text">Ajustes</span>
