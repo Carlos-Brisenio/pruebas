@@ -1,0 +1,96 @@
+#myChart {
+    margin-left: 20px;
+  }
+
+#ventasContainer, #boletosContainer {
+    margin-top: 50px;
+  }
+  
+  #ventasMenu, #boletosMenu {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  h2{
+    margin-left: 20px;
+  }
+
+  h1{
+    font-size: 30px;
+  }
+  
+  .reporteBtn {
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .verde {
+    background: linear-gradient(to bottom right, #00cc00, #009900);
+  }
+  
+  .amarillo {
+    background: linear-gradient(to bottom right, #ffff00, #ffcc00);
+  }
+  
+  .reporteBtn:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  
+  #ventasReporteContainer, #boletosReporteContainer {
+    margin-top: 20px;
+  }
+  
+  .reporteBtn i {
+    margin-right: 5px;
+  }
+  
+  #ventasReporteContainer,
+  #boletosReporteContainer {
+    margin-top: 20px;
+  }
+  /*Código para las tarjetas de lac colonias con más boletos vendidos*/
+  .top-colonias {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .card-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+  }
+
+  .card {
+      width: 150px;
+      padding: 10px;
+      border: 2px solid #e31a1a;
+      border-radius: 5px;
+      text-align: center;
+      margin: 10px;
+  }
+
+  .card h4 {
+      margin-top: 0;
+  }
+
+  .card p {
+      margin-bottom: 0;
+  }
+
+    /*Código para las tarjetas de lac colonias con más boletos vendidos*/
+    .top-calles {
+      margin-top: 20px;
+      text-align: center;
+    }
