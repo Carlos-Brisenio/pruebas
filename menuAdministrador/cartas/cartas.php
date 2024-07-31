@@ -30,7 +30,10 @@
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <!-- Agrega un elemento canvas para el gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     
+    
+
     <title>Ticket-Mayordomía®/MisDatos</title> 
 </head>
 <body>
@@ -178,127 +181,132 @@
     </section>
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
-        function generarOrdenPago() {
-            const numeroBoleto = document.getElementById("numero-boleto").value;
+        function generarPreInvitacion() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-            fetch(`/pruebas/menuUsuario/opcionesUsuario/boletos/getBoletoInfo.php?numeroBoleto=${numeroBoleto}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-                    const fechaFormateada = formatDateToSpanish(data.fecha_Limite);
+            const mensaje = `Es un honor para nosotros extenderle una cordial bienvenida e invitarlo a participar en la rifa para la "Mayordomía a Señor San José Octubre 2025".
 
-                    doc.setFontSize(16);
-                    doc.setFont("helvetica", "bold");
-                    doc.text('Orden de pago ', 87, 10);
+Octubre 2025 tiene como objetivo principal presentar y difundir los datos técnicos del sistema Mayordomía Tickets así como su uso y las fechas de operación previstas.`;
 
-                    const img = document.getElementById('imagenParaPdf');
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+            const img = new Image();
+            const imgDM = new Image();
+            const imgTM = new Image();
+            img.src = '/pruebas/menuAdministrador/cartas/Back-HojaMembretada.jpg';//Back
+            imgDM.src = '/pruebas/menuAdministrador/cartas/diocesisCatedral.jpg';//DC
+            imgTM.src = '/pruebas/menuAdministrador/cartas/ticketMayordomia.png';//TM
 
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
+            img.onload = function() {
+                doc.addImage(img, 'PNG', 1, 1, 207, 295);
+                doc.addImage(imgDM, 'PNG', 15, 3, 75, 30);
+                doc.addImage(imgTM, 'PNG', 130, 7, 70, 25);
+                // Línea de saludo
+                doc.setFontSize(14);
+                doc.setFont("times", "bold");
+                doc.setTextColor(41, 74, 48); // Color verde olivo RGB
+                doc.text('Estimado Devoto', 15, 40);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(0, 0, 0); // Color negro RGB
+                doc.text('Familia Fuentes Martinez', 15, 47);
 
-                    const imgData = canvas.toDataURL('image/png', 1.0);
+                // Mensaje de bienvenida
+                doc.setFontSize(14);
+                doc.setFont("times", "bold");
+                doc.setTextColor(41, 74, 48); // Color verde olivo RGB
+                doc.text('Mensaje de bienvenida', 15, 57);
 
-                    // Agregar imagen al PDF
-                    // Ajusta las coordenadas y dimensiones según lo necesites
-                    doc.addImage(imgData, 'JPEG', 20, 20, 55, 50);
-                    doc.setFontSize(12);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Diócesis De Ciudad Gúzman', 80, 17);
-                    doc.text('Mayordomía 2024', 90, 23);
+                // Cuerpo del mensaje
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0); // Color negro RGB
+                doc.setFont("helvetica", "normal");
+                doc.text(mensaje, 15, 63, { maxWidth: 185 });
 
-                    doc.setFontSize(12);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Número de Boleto: ' + data.idBoleto, 130, 40);
-                    doc.text('Fecha de apartado: ' + data.fecha_Compra, 130, 47);
-                    doc.text('Fecha límite de pago: ' + data.fecha_Limite, 130, 54);
-                    doc.text('Nombre del Boleto: ' + data.nombre, 10, 80);
-                    doc.setFont("helvetica", "bold");
-                    doc.text('Formas de pago: ', 10, 95);
-                    doc.text('1. Directamente en la Santa Iglesia Catedral', 10, 105);
-                    doc.setFont("helvetica", "normal");
-                    doc.setFillColor(32, 77, 12); // RGB para verde
-                    doc.rect(20, 108, 150, 17);//Rectangulo principal
-                    doc.rect(20, 108, 150, 8, 'F');
+                // Fechas importantes del sistema
+                doc.setFontSize(14);
+                doc.setFont("times", "bold");
+                doc.setTextColor(41, 74, 48); // Color verde olivo RGB
+                doc.text('Fechas importantes del sistema', 15, 93);
 
-                    doc.setTextColor(255, 255, 255); // RGB para blanco
-                    doc.text('Número de boleto',20,113);
-                    doc.text('Fecha Límite',80,113);
-                    doc.text('Costo',120,113);
-                    doc.setTextColor(0, 0, 0); // RGB para negro
-                    doc.text(data.idBoleto,20,120);
-                    doc.text(data.fecha_Limite,80,120);
-                    doc.text('$170',120,120);
+                // Parrafos
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0); // Color negro RGB
+                const parrafos = [
+                    'Fecha de Inicio de Preventa:',
+                    'Venta al Público en General:',
+                    'Fecha de finalización:',
+                    'Periodo de apartado de boletos:'
+                ];
+                let yPosition = 100;
+                parrafos.forEach(parrafos => {
+                    doc.text(parrafos, 15, yPosition);
+                    yPosition += 8;
+                });
 
-                    doc.setFont("helvetica", "bold");
-                    doc.text('Instrucciones de pago: ', 20, 130);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Acude a rectoría de catedral en los horarios de atención.', 20, 137);
+                // Fechas en lista
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(12);
+                const fechas = [
+                    '22/Septiembre/2024',
+                    '01/Octubre/2024',
+                    '24/Octubre/2024',
+                    '22/Septiembre/2024 - 17/Octubre/2024'
+                ];
+                let yxPosition = 100;
+                fechas.forEach(fecha => {
+                    doc.text(fecha, 100, yxPosition);
+                    yxPosition += 8;
+                });
 
-                    //Pago en BBVA Bancomer
-                    doc.setFont("helvetica", "bold");
-                    // Las coordenadas iniciales son 10, 15 y el rectángulo tiene un ancho de 180 y un alto de 130
-                    doc.rect(20, 146, 150, 17);
-                    doc.setFillColor(255, 255, 0); // RGB para amarillo
-                    doc.rect(20, 146, 150, 7,'F');
-                    // Mover los siguientes campos hacia donde estaban los primeros campos
-                    doc.text('2. BBVA Bancomer', 10, 144);
-                    doc.text('Concepto',20,151);
-                    doc.text('Fecha Límite',80,151);
-                    doc.text('Costo',120,151);
-                    doc.setFont("helvetica", "normal");
-                    doc.text(''+data.idBoleto+'-Mayordomia2024',20,158);
-                    doc.text(''+data.fecha_Limite,80,158);
-                    doc.text('$170',120,158);
+                // Lugar y venta de boletos
+                doc.setFont("times", "bold");
+                doc.setFontSize(12);
+                doc.text('Lugar y venta de boletos:', 15, yPosition);
+                yPosition += 7;
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.text('• Notaría de la Santa Iglesia Catedral.', 15, yPosition);
+                yPosition += 7;
+                doc.text('• A través del portal: https://boletos.mayordomiatickets.com', 15, yPosition);
+                yPosition += 7;
 
-                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
-                    doc.text('de BBVA Bancomer a BBVA Bancomer.',20,175);
-                    doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',20,182);
-                    doc.text('Como se muestra en la tabla de arriba',20,189);
-                    doc.text('Los datos de la cuenta son:',20,196);
-                    doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',20,203);
-                    doc.text('Cuenta: 0110330213',20,210);
-                    doc.text('Clave interbancaria: 01 2320 0011 0330 2136',20,217);
+                // Fechas de operación
+                doc.setFontSize(14);
+                doc.setFont("times", "bold");
+                doc.setTextColor(41, 74, 48); // Color verde olivo RGB
+                doc.text('Fechas de operación', 15, yPosition+3);
+                yPosition += 10;
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(0, 0, 0); // Color negro RGB
+                const operacion = `El sistema Mayordomía Tickets está programado para iniciar operaciones el día domingo 22 de septiembre en su fase de preventa para todos aquellos feligreses que compraron boletos en "Octubre 2024". La etapa de preventa terminará el martes 01 de octubre, comenzando así la venta al público en general.
 
-                    doc.setFont("helvetica", "bold");
-                    doc.text('IMPORTANTE.',10,234);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Presenta en catedral tu comprobante de depósito o captura de pantalla en caso de haber',10,241);
-                    doc.text('realizado transferencia, antes del '+ fechaFormateada+'.',10,248);
+Agradecemos de antemano su atención y esperamos verlos pronto en el "Proceso Octubre 2025". Quedamos a su disposición para cualquier duda, aclaración o información adicional que pueda requerir. en los siguientes medios de comunicación.`;
+                doc.text(operacion, 15, yPosition, { maxWidth: 180 });
+                yPosition += 45;
 
-                    // Mover los campos "Lunes a domingo" al final del documento
-                    doc.setFont("helvetica", "bold");
-                    doc.text('Horarios de atención:',10,258);
-                    doc.setFont("helvetica", "normal");
-                    doc.text('Lunes a domingo', 10, 265);
-                    doc.text('11:30 hrs a 14:00 hrs', 10, 272);
-                    doc.text('17:30 hrs a 20:00 hrs', 10, 279);
+                // Redes sociales
+                doc.text('Facebook: Mayordomía Tickets', 15, yPosition);
+                yPosition += 5;
+                doc.text('WhatsApp: Canal Mayordomía Tickets', 15, yPosition);
+                yPosition += 20;
 
-                    doc.text('Catedral De Ciudad Guzmán', 70, 265);
-                    doc.text('Prisciliano Sánchez #19', 70, 272);
-                    doc.text('Teléfono: 341-412-0132', 70, 279);
-    
-                    doc.save('OrdenPago_' + data.idBoleto + '.pdf');
-                }
-            })
-            .catch(error => {
-                console.error('Hubo un problema con la petición Fetch:', error);
-            });
-        }
+                // Despedida
+                doc.setFont("times", "bold");
+                doc.setFontSize(14);
+                doc.setTextColor(41, 74, 48); // Color verde olivo RGB
+                doc.text('Atentamente,', 98, yPosition);
+                doc.setTextColor(0, 0, 0); // Color negro RGB
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(12);
+                yPosition += 8;
+                doc.text('El Equipo de Mayordomía Tickets.', 81, yPosition+3);
+                yPosition += 8;
+                doc.text('31 de Julio 2024 en Ciudad Guzmán, Mpio Zapotlán El Grande, Jalisco.', 45, yPosition+3);
 
-        function formatDateToSpanish(dateString) {
-            const date = new Date(dateString);
-            date.setDate(date.getDate() + 1); // Suma un día a la fecha
-
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('es-MX', options);
-        }
+                doc.save('Pre-Invitacion.pdf');
+            };
+        }            
     </script>
 
 </body>
