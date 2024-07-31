@@ -12,57 +12,6 @@
         echo "Error de conexión: " . $e->getMessage();
     }
 
-    // Consulta para obtener boletos apartados por fecha
-    $queryBoletosApartados = "
-    SELECT DATE(Boletos.fecha_Compra) as fecha, COUNT(*) as total_apartados
-    FROM Boletos
-    INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
-    GROUP BY DATE(Boletos.fecha_Compra)";
-
-    $stmtBoletosApartados = $conn->prepare($queryBoletosApartados);
-    $stmtBoletosApartados->execute();
-    $boletosApartados = $stmtBoletosApartados->fetchAll(PDO::FETCH_ASSOC);
-
-    // Consulta para obtener boletos vendidos por fecha (de manera similar a la anterior)
-    $queryBoletosVendidos = "
-    SELECT DATE(Boletos.fecha_Compra) as fecha, COUNT(*) as total_Vendidos
-    FROM Boletos
-    INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
-    WHERE Boletos.status = 3
-    GROUP BY DATE(Boletos.fecha_Compra)";
-
-    $stmtBoletosVendidos = $conn->prepare($queryBoletosVendidos);
-    $stmtBoletosVendidos->execute();
-    $boletosVendidos = $stmtBoletosVendidos->fetchAll(PDO::FETCH_ASSOC);
-
-    //Consulta para obterner el top 5 de las colonias con más boletos vendidos
-    $queryTopColonias = "
-    SELECT colonia, COUNT(idBoleto) as cantidad_boletos
-    FROM InfoBoletos
-    GROUP BY colonia
-    ORDER BY cantidad_boletos DESC
-    LIMIT 5";
-
-    $stmtTopColonias = $conn->prepare($queryTopColonias);
-    $stmtTopColonias->execute();
-    $topColonias = $stmtTopColonias->fetchAll(PDO::FETCH_ASSOC);
-
-    //Consulta para obterner el top 5 de los domicilios con más boletos vendidos
-    $queryTopCalles = "
-    SELECT calle, numero, COUNT(idBoleto) as cantidad_boletos
-    FROM InfoBoletos
-    GROUP BY calle, numero
-    ORDER BY cantidad_boletos DESC
-    LIMIT 5";
-
-    $stmtTopCalles = $conn->prepare($queryTopCalles);
-    $stmtTopCalles->execute();
-    $topCalles = $stmtTopCalles->fetchAll(PDO::FETCH_ASSOC);
-
-
-    // Cerrar la conexión a la base de datos
-    $conn = null;
-
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +23,7 @@
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
-    <link rel="stylesheet" href="/stylesCar.css">
+    <link rel="stylesheet" href="stylesCar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     
     <!----===== Boxicons CSS ===== -->
@@ -187,86 +136,47 @@
     </nav>
 
     <section class="home">
-        <!-- Aquí es donde deberías insertar las tarjetas -->
-        <section class="top-colonias">
-        <h1>Cartas</h1>
-            <h3>Top 5 Colonias con más Boletos Registrados</h3>
-            <div class="card-container">
-                <?php foreach ($topColonias as $colonia): ?>
-                <div class="card">
-                    <h4><?php echo $colonia['colonia']; ?></h4>
-                    <p><?php echo $colonia['cantidad_boletos']; ?> boletos</p>
-                </div>
-                <?php endforeach; ?>
-            </div>
+        <section class="cartas">
+            <h1>Cartas</h1>
+            <h3>Impresi&oacute;n de cartas</h3>
         </section>
-        <!-- Aquí es donde deberías insertar las tarjetas para el top calles -->
-        <section class="top-calles">
-            <h3>Top 5 Domicilios con más Boletos Registrados</h3>
-            <div class="card-container">
-                <?php foreach ($topCalles as $calle): ?>
-                <div class="card">
-                    <h4><?php echo $calle['calle'] ?></h4>
-                    <p><?php echo $calle['cantidad_boletos']; ?> boletos</p>
-                </div>
-                <?php endforeach; ?>
+        <div class="section">
+            <div class="card">
+                <h2>Mensaje de bienvenida</h2>
+                <p>Es un honor para nosotros extenderle una cordial bienvenida e invitarlo a participar en la Mayordomía Señor San José “Octubre Proceso 2025”.</p>
+                <p>Octubre Proceso 2025 tiene como objetivo principal presentar y difundir los datos técnicos del sistema Mayordomía Tickets así como su uso y las fechas de operación previstas.</p>
+                <br>
+                <h2>Fechas importantes</h2>
+                <ul>
+                    <li><strong>Fecha de Inicio:</strong> 22/Septiembre/2024 (Preventa)</li>
+                    <li><strong>Fecha de Finalización:</strong> 24/Octubre/2024</li>
+                    <li><strong>Fecha de apartado de boletos:</strong> 22/Septiembre/2024 – 17/Octubre/2024</li>
+                    <li><strong>Lugar y venta de boletos:</strong></li>
+                    <ul>
+                        <li class="lugares">Rectoría de la Santa Iglesia Catedral con domicilio en Prisciliano Sánchez #19.</li>
+                        <li class="lugares">A través del portal: <a href="https://boletos.mayordomiatickets.com">https://boletos.mayordomiatickets.com</a></li>
+                    </ul>
+                </ul>
+                <br>
+                <h2>Fechas de operación</h2>
+                <p>El sistema Mayordomía Tickets está programado para iniciar operaciones el día domingo 22 de septiembre en su fase de preventa para todos aquellos feligreses que compraron boletos en “Octubre Proceso 2024”. La fase de implementación se extenderá hasta el martes 1 de octubre, comenzando así la venta al público en general.</p>
+                <p>Quedamos a su disposición para cualquier duda, aclaración o información adicional que pueda requerir.</p>
+                <p>Agradecemos de antemano su atención y esperamos verlos pronto en el “Proceso octubre 2025”.</p>
+                <br>
+                <p><strong>Atentamente,</strong></p>
+                <p>Con cariño y muchas ganas de ver lo que viene,<br>
+                El Equipo de Mayordomía Tickets.</p>
+                <p>31 de agosto 2024 en Ciudad Guzmán, Mpio Zapotlán El Grande, Jalisco.</p>
             </div>
-            <br>
-            <h2>Estadisticas de boletos apartados y vendidos<h2>
-        </section>
-        <!-- Agrega un elemento canvas para el gráfico -->
-        <canvas id="myChart" width="400" height="200"></canvas>
+            <div class="buttons">
+                <button class="pre-invitacion">Imprimir Pre-invitaciónes</button>
+                <button class="editar">Editar</button>
+                <button class="guardar">Guardar</button>
+            </div>
+
+        </div>
     </section>
-
     <script src="/pruebas/menuUsuario/script.js"></script>
-    
-    <script>
-        // Procesa los datos obtenidos de PHP
-var fechas = <?php echo json_encode(array_column($boletosApartados, 'fecha')); ?>;
-var boletosApartados = <?php echo json_encode(array_column($boletosApartados, 'total_apartados')); ?>;
-var boletosVendidos = <?php echo json_encode(array_column($boletosVendidos, 'total_Vendidos')); ?>;
-
-// Datos para el gráfico
-var ctx = document.getElementById('myChart').getContext('2d');
-var data = {
-    labels: fechas,
-    datasets: [
-        {
-            label: 'Boletos Apartados',
-            data: boletosApartados,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)' ,
-            borderColor: 'rgba(75, 192, 192, 1)' ,
-            borderWidth: 1
-        },
-        {
-            label: 'Boletos Vendidos',
-            data: boletosVendidos, // Agrega los datos de boletos vendidos aquí
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-        }
-    ]
-};
-
-// Resto del código de configuración del gráfico...
-
-
-        // Configuración del gráfico
-        var options = {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        };
-
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: options
-            
-        });
-    </script>
 
 </body>
 </html>

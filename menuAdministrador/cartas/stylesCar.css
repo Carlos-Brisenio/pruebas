@@ -1,96 +1,142 @@
-#myChart {
-    margin-left: 20px;
-  }
-
-#ventasContainer, #boletosContainer {
-    margin-top: 50px;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
   }
   
-  #ventasMenu, #boletosMenu {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  .section {
+    
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 60px;
+    margin-right: 30px;
   }
-  h2{
-    margin-left: 20px;
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .form-group input {
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 30px;
+  }
+  
+  .button:hover {
+    background-color: #45a049;
+  }
+  
+  .button-container {
+    text-align: right;
+  }
+
+  .form-row {
+    display: flex;
+  }
+  .form-row .form-group {
+    margin-right: 30px;
+  }
+
+  .cartas {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .lugares {
+    list-style: disc; 
+    margin-left: 40px;
   }
 
   h1{
     font-size: 30px;
   }
-  
-  .reporteBtn {
-    border: none;
-    color: white;
-    padding: 15px 30px;
-    margin: 0 10px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .verde {
-    background: linear-gradient(to bottom right, #00cc00, #009900);
-  }
-  
-  .amarillo {
-    background: linear-gradient(to bottom right, #ffff00, #ffcc00);
-  }
-  
-  .reporteBtn:hover {
-    opacity: 0.8;
-    cursor: pointer;
-  }
-  
-  #ventasReporteContainer, #boletosReporteContainer {
-    margin-top: 20px;
-  }
-  
-  .reporteBtn i {
-    margin-right: 5px;
-  }
-  
-  #ventasReporteContainer,
-  #boletosReporteContainer {
-    margin-top: 20px;
-  }
-  /*Código para las tarjetas de lac colonias con más boletos vendidos*/
-  .top-colonias {
-    margin-top: 20px;
-    text-align: center;
-  }
-
-  .card-container {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-  }
 
   .card {
-      width: 150px;
-      padding: 10px;
-      border: 2px solid #e31a1a;
-      border-radius: 5px;
-      text-align: center;
-      margin: 10px;
-  }
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
 
-  .card h4 {
-      margin-top: 0;
-  }
+.card h2 {
+    margin-top: 0;
+    font-size: 20px;
 
-  .card p {
-      margin-bottom: 0;
-  }
+}
 
-    /*Código para las tarjetas de lac colonias con más boletos vendidos*/
-    .top-calles {
-      margin-top: 20px;
-      text-align: center;
-    }
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+
+.card ul li {
+    margin-bottom: 10px;
+}
+
+.card ul li strong {
+    display: inline-flex;
+    width: 300px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.buttons button {
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.buttons .pre-invitacion {
+    background: #244D0C;
+}
+
+.buttons .pre-invitacion:hover {
+    background: #398914; /* Un verde más claro para el hover */
+}
+
+.buttons .editar {
+    background: #D2CB27;
+}
+
+.buttons .editar:hover {
+    background: #fff82f; /* Un amarillo más claro para el hover */
+}
+
+.buttons .guardar {
+    background: #000;
+    color: #fff;
+}
+
+.buttons .guardar:hover {
+    background: #3d3c3c; /* Gris para el hover */
+}
