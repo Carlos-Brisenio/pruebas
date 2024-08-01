@@ -12,6 +12,16 @@
         echo "Error de conexión: " . $e->getMessage();
     }
 
+    // Consulta SQL para encontrar los registros duplicados
+    $query = "SELECT nombre, calle, numero, COUNT(*) AS repetidos
+    FROM InfoBoletos
+    GROUP BY nombre, calle, numero
+    HAVING COUNT(*) > 1";
+
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $duplicatedRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -184,6 +194,7 @@
         function generarPreInvitacion() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            const registrosDuplicados = <?php echo json_encode($duplicatedRecords); ?>;
 
             const mensaje = `Es un honor para nosotros extenderle una cordial bienvenida e invitarlo a participar en la rifa para la "Mayordomía a Señor San José Octubre 2025".
 
@@ -196,7 +207,17 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
             imgDM.src = '/pruebas/menuAdministrador/cartas/diocesisCatedral.jpg';//DC
             imgTM.src = '/pruebas/menuAdministrador/cartas/ticketMayordomia.png';//TM
 
+            
+
             img.onload = function() {
+
+                registrosDuplicados.forEach((registro, index) => {
+                if (index > 0) {
+                    doc.addPage();
+                }
+                doc.setFontSize(12);
+                
+
                 doc.addImage(img, 'PNG', 1, 1, 207, 295);
                 doc.addImage(imgDM, 'PNG', 15, 3, 75, 30);
                 doc.addImage(imgTM, 'PNG', 130, 7, 70, 25);
@@ -204,40 +225,41 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 doc.setFontSize(14);
                 doc.setFont("times", "bold");
                 doc.setTextColor(41, 74, 48); // Color verde olivo RGB
-                doc.text('Estimado Devoto', 15, 40);
+                doc.text('Estimado Devoto', 15, 45);
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(0, 0, 0); // Color negro RGB
-                doc.text('Familia Fuentes Martinez', 15, 47);
+                doc.text(`${registro.nombre}`, 15, 52);
+                //doc.text('Familia Fuentes Martinez', 15, 52);
 
                 // Mensaje de bienvenida
                 doc.setFontSize(14);
                 doc.setFont("times", "bold");
                 doc.setTextColor(41, 74, 48); // Color verde olivo RGB
-                doc.text('Mensaje de bienvenida', 15, 57);
+                doc.text('Mensaje de bienvenida', 15, 62);
 
                 // Cuerpo del mensaje
                 doc.setFontSize(12);
                 doc.setTextColor(0, 0, 0); // Color negro RGB
                 doc.setFont("helvetica", "normal");
-                doc.text(mensaje, 15, 63, { maxWidth: 185 });
+                doc.text(mensaje, 15, 68, { maxWidth: 185 });
 
                 // Fechas importantes del sistema
                 doc.setFontSize(14);
                 doc.setFont("times", "bold");
                 doc.setTextColor(41, 74, 48); // Color verde olivo RGB
-                doc.text('Fechas importantes del sistema', 15, 93);
+                doc.text('Fechas importantes del sistema', 15, 98);
 
                 // Parrafos
                 doc.setFontSize(12);
                 doc.setTextColor(0, 0, 0); // Color negro RGB
                 const parrafos = [
-                    'Fecha de Inicio de Preventa:',
-                    'Venta al Público en General:',
+                    'Inicio de Preventa:',
+                    'Venta Público en General:',
                     'Fecha de finalización:',
                     'Periodo de apartado de boletos:'
                 ];
-                let yPosition = 100;
+                let yPosition = 105;
                 parrafos.forEach(parrafos => {
                     doc.text(parrafos, 15, yPosition);
                     yPosition += 8;
@@ -252,7 +274,7 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                     '24/Octubre/2024',
                     '22/Septiembre/2024 - 17/Octubre/2024'
                 ];
-                let yxPosition = 100;
+                let yxPosition = 105;
                 fechas.forEach(fecha => {
                     doc.text(fecha, 100, yxPosition);
                     yxPosition += 8;
@@ -261,13 +283,18 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 // Lugar y venta de boletos
                 doc.setFont("times", "bold");
                 doc.setFontSize(12);
-                doc.text('Lugar y venta de boletos:', 15, yPosition);
-                yPosition += 7;
+                doc.text('Lugar y venta de boletos:', 15, yPosition+3);
+                yPosition += 10;
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "normal");
                 doc.text('• Notaría de la Santa Iglesia Catedral.', 15, yPosition);
                 yPosition += 7;
-                doc.text('• A través del portal: https://boletos.mayordomiatickets.com', 15, yPosition);
+
+                // Vínculo de Boletos con link y linkText
+                const linkBoletos = 'https://boletos.mayordomiatickets.com';
+                const linkTextBoletos = 'https://boletos.mayordomiatickets.com';
+                doc.textWithLink(linkTextBoletos, 55, yPosition, { url: linkBoletos });//Área del enlace a Boletos
+                doc.text('• A través del portal: ', 15, yPosition);
                 yPosition += 7;
 
                 // Fechas de operación
@@ -286,16 +313,29 @@ Agradecemos de antemano su atención y esperamos verlos pronto en el "Proceso Oc
                 yPosition += 45;
 
                 // Redes sociales
-                doc.text('Facebook: Mayordomía Tickets', 15, yPosition);
+                // Vínculo de facebook con link y linkText
+                const linkFacebook = 'https://www.facebook.com/MayordomiaTickets';
+                const linkTextFacebook = 'Mayordomía Tickets';
+                doc.textWithLink(linkTextFacebook, 37, yPosition, { url: linkFacebook });//Área del enlace
+                doc.setFont("helvetica", "bold");
+                doc.text('Facebook: ', 15, yPosition);
+                doc.setFont("helvetica", "normal");
                 yPosition += 5;
-                doc.text('WhatsApp: Canal Mayordomía Tickets', 15, yPosition);
+
+                // Vínculo de WhatsApp con link y linkText
+                const linkWhatsApp = 'https://whatsapp.com/channel/0029VajTTeO3QxS62tm1e02w';
+                const linkTextWhatsApp = 'Canal Mayordomía Tickets';
+                doc.textWithLink(linkTextWhatsApp, 39, yPosition, { url: linkWhatsApp });//Área del enlace WhatsApp
+                doc.setFont("helvetica", "bold");
+                doc.text('WhatsApp: ', 15, yPosition);
+                doc.setFont("helvetica", "normal");
                 yPosition += 20;
 
                 // Despedida
                 doc.setFont("times", "bold");
                 doc.setFontSize(14);
                 doc.setTextColor(41, 74, 48); // Color verde olivo RGB
-                doc.text('Atentamente,', 98, yPosition);
+                doc.text('Atentamente,', 98, yPosition+2);
                 doc.setTextColor(0, 0, 0); // Color negro RGB
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(12);
@@ -304,6 +344,9 @@ Agradecemos de antemano su atención y esperamos verlos pronto en el "Proceso Oc
                 yPosition += 8;
                 doc.text('31 de Julio 2024 en Ciudad Guzmán, Mpio Zapotlán El Grande, Jalisco.', 45, yPosition+3);
 
+            });
+
+                
                 doc.save('Pre-Invitacion.pdf');
             };
         }            
