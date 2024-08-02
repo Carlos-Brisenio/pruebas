@@ -28,7 +28,7 @@
         GROUP_CONCAT(DISTINCT telefono1 ORDER BY telefono1 SEPARATOR ', ') AS telefonos1,
         GROUP_CONCAT(DISTINCT telefono2 ORDER BY telefono2 SEPARATOR ', ') AS telefonos2,
         GROUP_CONCAT(DISTINCT correo_Electronico ORDER BY correo_Electronico SEPARATOR ', ') AS correos_Electronicos
-    FROM InfoBoletos
+    FROM Historico
     GROUP BY calle, numero;";
 
     $stmt = $conn->prepare($query);
