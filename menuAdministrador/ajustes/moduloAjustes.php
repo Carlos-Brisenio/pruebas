@@ -12,7 +12,6 @@
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
-    
     <title>Mayordomía Tickets®/Ajustes</title> 
 </head>
 <body>
@@ -34,20 +33,22 @@
         
         <div id="confirmationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
             <div style="background-color: white; padding: 20px; width: 300px; border-radius: 10px;">
-                <h3>Confirmar Eliminación</h3>
+                <h3>Confirmar Acción</h3>
                 <label>Usuario:</label>
                 <input type="text" id="userInput">
                 <label>Contraseña:</label>
                 <input type="password" id="passwordInput">
+                <div id="procesoField" style="display: none;">
+                    <label>Proceso:</label>
+                    <input type="number" id="procesoInput">
+                </div>
                 <button onclick="confirmDelete()">Confirmar</button>
                 <button onclick="closeModal()">Cancelar</button>
             </div>
         </div>
 
-
         <div class="menu-bar">
             <div class="menu">
-
                 <li class="search-box">
                     <i class='bx bx-search icon'></i>
                     <input type="text" placeholder="Buscar...">
@@ -141,14 +142,25 @@
             <br>
             <p>Advertencia: Eliminará los registros de la tabla Boletos que se encuenten en 2 y las fechas sean nulas.</p>
             <button onclick="showConfirmationModal('cambio')">Eliminar registros de Boletos 2 y nulos</button>
+            <br>
+            <br>
+            <br>
+            <br>
+            <p>Advertencia: Traspasará todos los datos de tabla InfoBoletos que pasarán al Histórico.</p>
+            <button onclick="showConfirmationModal('traspasar')">Traspasar a histórico todos los registros</button>
         </div>
     </section>
 
-    
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script>
     function showConfirmationModal(action) {
         document.getElementById("confirmationModal").setAttribute("data-action", action);
+        const procesoField = document.getElementById("procesoField");
+        if (action === 'traspasar') {
+            procesoField.style.display = "block";
+        } else {
+            procesoField.style.display = "none";
+        }
         document.getElementById("confirmationModal").style.display = "flex";
     }
 
@@ -160,39 +172,77 @@
         const user = document.getElementById("userInput").value;
         const password = document.getElementById("passwordInput").value;
         const action = document.getElementById("confirmationModal").getAttribute("data-action");
-        
-        let endpoint;
-        switch (action) {
-            case 'boletos':
-                endpoint = 'eliminarRegistros.php';
-                break;
-            case 'infoboletos':
-                endpoint = 'eliminarInfoBoletos.php';
-                break;
-            case 'ventas':
-                endpoint = 'eliminarVentas.php';
-                break;
-            case 'cambio':
-                endpoint = 'cambioStatus.php';
-            break;
-        }
+        const proceso = action === 'traspasar' ? document.getElementById("procesoInput").value : null;
 
-        fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `user=${user}&password=${password}`
-        })
-        .then(response => response.text())
-        .then(data => {
-            alert(data);
-            closeModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Hubo un error al intentar eliminar los registros.');
-        });
+        if (action === 'traspasar' && proceso) {
+            // Validar si el proceso ya existe
+            fetch('checkProceso.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `proceso=${proceso}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes("El proceso ya se encuentra registrado")) {
+                    alert(data);
+                } else {
+                    // Si el proceso es válido, continuar con la solicitud de traspaso
+                    fetch('traspasarInfoBoletos.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `user=${user}&password=${password}&proceso=${proceso}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        alert(data);
+                        closeModal();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un error al intentar realizar la acción.');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al validar el proceso.');
+            });
+        } else {
+            let endpoint;
+            let body = `user=${user}&password=${password}`;
+
+            switch (action) {
+                case 'boletos':
+                    endpoint = 'eliminarRegistros.php';
+                    break;
+                case 'infoboletos':
+                    endpoint = 'eliminarInfoBoletos.php';
+                    break;
+                case 'ventas':
+                    endpoint = 'eliminarVentas.php';
+                    break;
+                case 'cambio':
+                    endpoint = 'cambioStatus.php';
+                    break;
+            }
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                closeModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al intentar realizar la acción.');
+            });
+        }
     }
-</script>
+    </script>
     <script src="/pruebas/menuAdministrador/autologout.js"></script>
 </body>
 </html>

@@ -13,10 +13,23 @@
     }
 
     // Consulta SQL para encontrar los registros duplicados
-    $query = "SELECT nombre, calle, numero, COUNT(*) AS repetidos
+    /*$query = "SELECT nombre, calle, numero, COUNT(*) AS repetidos
     FROM InfoBoletos
     GROUP BY nombre, calle, numero
-    HAVING COUNT(*) > 1";
+    HAVING COUNT(*) > 1";*/
+
+    $query = "SELECT calle, numero,
+        GROUP_CONCAT(DISTINCT nombre ORDER BY nombre SEPARATOR ', ') AS nombres,
+        GROUP_CONCAT(DISTINCT ciudad ORDER BY ciudad SEPARATOR ', ') AS ciudades,
+        GROUP_CONCAT(DISTINCT colonia ORDER BY colonia SEPARATOR ', ') AS colonias,
+        GROUP_CONCAT(DISTINCT colinda1 ORDER BY colinda1 SEPARATOR ', ') AS colindas1,
+        GROUP_CONCAT(DISTINCT colinda2 ORDER BY colinda2 SEPARATOR ', ') AS colindas2,
+        GROUP_CONCAT(DISTINCT referencia ORDER BY referencia SEPARATOR ', ') AS referencias,
+        GROUP_CONCAT(DISTINCT telefono1 ORDER BY telefono1 SEPARATOR ', ') AS telefonos1,
+        GROUP_CONCAT(DISTINCT telefono2 ORDER BY telefono2 SEPARATOR ', ') AS telefonos2,
+        GROUP_CONCAT(DISTINCT correo_Electronico ORDER BY correo_Electronico SEPARATOR ', ') AS correos_Electronicos
+    FROM InfoBoletos
+    GROUP BY calle, numero;";
 
     $stmt = $conn->prepare($query);
     $stmt->execute();
@@ -229,7 +242,8 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(0, 0, 0); // Color negro RGB
-                doc.text(`${registro.nombre}`, 15, 52);
+                doc.text(`${registro.nombres}`, 15, 52);
+                doc.text(`${registro.calle}`+` `+`${registro.numero}`, 15, 57);
                 //doc.text('Familia Fuentes Martinez', 15, 52);
 
                 // Mensaje de bienvenida
