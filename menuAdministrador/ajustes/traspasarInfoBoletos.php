@@ -25,20 +25,25 @@ $proceso = isset($_POST['proceso']) ? intval($_POST['proceso']) : 0; // Obtener 
 if ($user === $authorizedUser && $password === $authorizedPassword) {
     // Verifica que el campo proceso no esté vacío y sea un número positivo
     if ($proceso > 0) {
-        // Preparar la consulta para insertar datos en la tabla Historico
-        $stmt = $conn->prepare("
-            INSERT INTO Historico (
-                idInfoBoletos, idBoleto, nombre, ciudad, colonia, calle, numero, colinda1, colinda2, referencia, telefono1, telefono2, correo_Electronico, proceso
-            )
-            SELECT
-                idInfoBoletos, idBoleto, nombre, ciudad, colonia, calle, numero, colinda1, colinda2, referencia, telefono1, telefono2, correo_Electronico, :proceso
-            FROM
-                InfoBoletos
-        ");
-        $stmt->bindParam(':proceso', $proceso, PDO::PARAM_INT);
-        $stmt->execute();
+        try {
+            // Preparar la consulta para insertar datos en la tabla Historico
+            $stmt = $conn->prepare("
+                INSERT INTO Historico (
+                    idInfoBoletos, idBoleto, nombre, ciudad, colonia, calle, numero, colinda1, colinda2, referencia, telefono1, telefono2, correo_Electronico, proceso
+                )
+                SELECT
+                    CONCAT(idInfoBoletos, '-', :proceso) AS idInfoBoletos, 
+                    idBoleto, nombre, ciudad, colonia, calle, numero, colinda1, colinda2, referencia, telefono1, telefono2, correo_Electronico, :proceso
+                FROM
+                    InfoBoletos
+            ");
+            $stmt->bindParam(':proceso', $proceso, PDO::PARAM_INT);
+            $stmt->execute();
 
-        echo "El traspaso a Historico se ha ejecutado correctamente.";
+            echo "El traspaso a Historico se ha ejecutado correctamente.";
+        } catch (PDOException $e) {
+            echo "Error al insertar datos: " . $e->getMessage();
+        }
     } else {
         echo "El valor del campo proceso debe ser un número positivo.";
     }
