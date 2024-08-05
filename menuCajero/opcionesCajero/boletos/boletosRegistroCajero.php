@@ -319,6 +319,39 @@
                 window.location.href = '/pruebas/index.html'; // Redirecciona al usuario a la página principal
             });
         }
+
+        //autocomplete rellena los capos de clientes registrados anteriormente
+        $(function() {
+            $("#nombre_boleto").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "/pruebas/menuCajero/opcionesCajero/boletos/historialClientes.php", // apunta hacia un archivo php para hacer la consulta de datos
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    if (ui.item.data) {
+                        var data = ui.item.data;
+                        $("#colonia").val(data.colonia);
+                        $("#calle").val(data.calle);
+                        $("#numero").val(data.numero);
+                        $("#colinda1").val(data.colinda1);
+                        $("#colinda2").val(data.colinda2);
+                        $("#referencia").val(data.referencia);
+                        $("#telefono1").val(data.telefono1);
+                        $("#telefono2").val(data.telefono2);
+                        $("#correo").val(data.correo_Electronico);
+                    }
+                }
+            });
+        });
     </script>
 
 </body>

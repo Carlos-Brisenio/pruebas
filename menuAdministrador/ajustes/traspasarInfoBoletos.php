@@ -37,8 +37,39 @@ if ($user === $authorizedUser && $password === $authorizedPassword) {
                 FROM
                     InfoBoletos
             ");
+
             $stmt->bindParam(':proceso', $proceso, PDO::PARAM_INT);
             $stmt->execute();
+
+            //Inserción de Ventas a historicoVentas
+            $stmtV = $conn->prepare("
+                INSERT INTO HistoricoVentas (
+                    idVenta, idBoletos, idUsuario, fecha_Venta, proceso
+                )
+                SELECT
+                    CONCAT(idVenta, '-', :proceso) AS idVenta, 
+                    idBoletos, idUsuario, fecha_Venta, :proceso
+                FROM
+                    Ventas
+            ");
+
+            $stmtV->bindParam(':proceso', $proceso, PDO::PARAM_INT);
+            $stmtV->execute();
+
+            //Inserción de Boletos a HistoricoBoletos
+            $stmtB = $conn->prepare("
+                INSERT INTO HistoricoBoletos (
+                    idBoleto, numero_boleto, status, fecha_Compra, fecha_Limite, proceso
+                )
+                SELECT
+                    CONCAT(idBoleto, '-', :proceso) AS idBoleto, 
+                    numero_boleto, status, fecha_Compra, fecha_Limite, :proceso
+                FROM
+                    Boletos
+            ");
+
+            $stmtB->bindParam(':proceso', $proceso, PDO::PARAM_INT);
+            $stmtB->execute();
 
             echo "El traspaso a Historico se ha ejecutado correctamente.";
         } catch (PDOException $e) {
