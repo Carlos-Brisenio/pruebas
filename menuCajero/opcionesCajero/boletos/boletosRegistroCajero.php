@@ -70,6 +70,9 @@
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Link para los jQuerys de la funcion autocompletar-->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     
     <title>Ticket-Mayordomía®</title> 
 </head>
@@ -163,7 +166,7 @@
                     <label for="numero-boleto">Número(s) de Boleto(s):</label>
                     <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
                 </div>
-              <div class="form-group">
+                <div class="form-group">
                 <label for="nombre_boleto">Nombre del Boleto:</label>
                 <input type="text" id="nombre_boleto" name="nombre_boleto" placeholder="Ejemplos: Rafael Martinez, Familia Díaz" required>
               </div>
@@ -254,6 +257,13 @@
     </section>
     
     <script src="/pruebas/menuUsuario/script.js"></script>
+    
+    <!-- Links para los jQuerys de la funcion autocompletar-->
+    <!-- Incluye jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Incluye jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
     <script>
         function updateColonias() {
             var cp = document.getElementById("codigo_postal").value;
