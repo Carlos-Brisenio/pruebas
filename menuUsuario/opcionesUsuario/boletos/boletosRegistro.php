@@ -234,10 +234,8 @@
         </div>
     </section>
     
-
-    
-
     <script src="/pruebas/menuUsuario/script.js"></script>
+    
     <script>
         function updateColonias() {
             var cp = document.getElementById("codigo_postal").value;

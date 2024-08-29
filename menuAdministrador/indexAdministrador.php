@@ -119,9 +119,9 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="/pruebas/menuAdministrador/datos/misDatos.html">
+                        <a href="/pruebas/menuAdministrador/datos/datosBoletos.php">
                             <i class='bx bx-data icon'></i>
-                            <span class="text nav-text">Mis datos</span>
+                            <span class="text nav-text">Datos</span>
                         </a>
                     </li>
 

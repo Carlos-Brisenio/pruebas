@@ -1,0 +1,50 @@
+.tickets-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.tickets-container h2 {
+    margin-bottom: 10px;
+}
+
+.tickets-container table {
+    margin: 0 auto;
+    width: 80%;
+    border-collapse: collapse;
+}
+
+.tickets-container th,
+.tickets-container td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.tickets-container th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.print-button {
+    margin-top: 20px;
+}
+
+/*contenedor de botones */
+.boton-pagar-eliminar {
+    display: flex; /*alinear los botones horizontalmente */
+    justify-content: space-between; /* Distribuye los botones de forma equitativa en la fila */
+    align-items: center; /* Centra verticalmente los botones en la fila */
+}
+
+/* Estilos para los botones Pagar y Eliminar */
+.btn-pagar,
+.btn-eliminar {
+    padding: 5px 10px; /* Espacio interior del botón */
+}
+
+.btn-pagar {
+    flex-grow: 1; /* Expande el botón Pagar para ocupar el espacio disponible */
+}
+
+.btn-eliminar {
+    margin-left: 5%; /* Separación del 5% a la derecha del botón Pagar */
+}
