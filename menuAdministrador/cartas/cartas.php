@@ -29,6 +29,36 @@
     $stmt->execute();
     $duplicatedRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+    // Función para truncar el campo nombres
+    function truncarNombres($nombre, $maxLength = 52) {
+        if (mb_strlen($nombre) > $maxLength) {
+            return mb_substr($nombre, 0, $maxLength) . '...';
+        }
+        return $nombre;
+    }
+
+    // Consulta para obtener rutas
+    $queryRutasTable = "
+        SELECT 
+            ruta,
+            recorrido,
+            nombres,
+            domicilio,
+            numeroBoletos
+        FROM Rutas";
+    
+    $stmtRutasTable = $conn->prepare($queryRutasTable);
+    $stmtRutasTable->execute();
+    $rutasTable = $stmtRutasTable->fetchAll(PDO::FETCH_ASSOC);
+
+
+    // Aplicar la función de truncado a cada nombre en los resultados
+    $rutasTable = array_map(function($row) {
+        $row['nombres'] = truncarNombres($row['nombres']);
+        return $row;
+    }, $rutasTable);
+
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +71,8 @@
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
     <link rel="stylesheet" href="stylesCar.css">
+    <link rel="stylesheet" href="/pruebas/menuAdministrador/ajustes/estilosAjustes.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     
     <!----===== Boxicons CSS ===== -->
@@ -48,6 +80,15 @@
     <!-- Agrega un elemento canvas para el gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <!-- Tabla de rutas -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+    <!-- Creadores del pdf con jspdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
     
     
 
@@ -70,6 +111,22 @@
             <i class='bx bx-chevron-right toggle'></i>
         </header>
 
+        <div id="confirmationModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+            <div style="background-color: white; padding: 20px; width: 300px; border-radius: 10px;">
+                <h3>Confirmar Acción</h3>
+                <label>Usuario:</label>
+                <input type="text" id="userInput">
+                <label>Contraseña:</label>
+                <input type="password" id="passwordInput">
+                <div id="procesoField" style="display: none;">
+                    <label>Proceso:</label>
+                    <input type="number" id="procesoInput">
+                </div>
+                <button onclick="confirmDelete()">Confirmar</button>
+                <button onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+
         <div class="menu-bar">
             <div class="menu">
 
@@ -87,9 +144,9 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="/pruebas/menuAdministrador/datos/misDatos.html">
+                        <a href="/pruebas/menuAdministrador/datos/datosBoletos.php">
                             <i class='bx bx-data icon'></i>
-                            <span class="text nav-text">Mis datos</span>
+                            <span class="text nav-text">Datos</span>
                         </a>
                     </li>
 
@@ -116,8 +173,8 @@
 
                     <li class="nav-link">
                         <a href="/pruebas/menuAdministrador/cartas/cartas.php">
-                            <i class='bx bx-envelope icon' ></i>
-                            <span class="text nav-text">Cartas</span>
+                            <i class='bx bx-globe icon' ></i>
+                            <span class="text nav-text">Logistica</span>
                         </a>
                     </li>
 
@@ -157,7 +214,7 @@
 
     <section class="home">
         <section class="cartas">
-            <h1>Cartas</h1>
+            <h1>Administraci&oacute;n de Cartas y log&iacute;stica</h1>
             <h3>Impresi&oacute;n de cartas</h3>
         </section>
         <div class="section">
@@ -178,7 +235,7 @@
                     </ul>
                 </ul>
                 <br>
-                <h2>Fechas de operación</h2>
+                <!--<h2>Fechas de operación</h2>
                 <p>El sistema Mayordomía Tickets está programado para iniciar operaciones el día domingo 22 de septiembre en su fase de preventa para todos aquellos feligreses que compraron boletos en “Octubre Proceso 2024”. La fase de implementación se extenderá hasta el martes 1 de octubre, comenzando así la venta al público en general.</p>
                 <p>Quedamos a su disposición para cualquier duda, aclaración o información adicional que pueda requerir.</p>
                 <p>Agradecemos de antemano su atención y esperamos verlos pronto en el “Proceso octubre 2025”.</p>
@@ -186,17 +243,131 @@
                 <p><strong>Atentamente,</strong></p>
                 <p>Con cariño y muchas ganas de ver lo que viene,<br>
                 El Equipo de Mayordomía Tickets.</p>
-                <p>31 de agosto 2024 en Ciudad Guzmán, Mpio Zapotlán El Grande, Jalisco.</p>
+                <p>31 de agosto 2024 en Ciudad Guzmán, Mpio Zapotlán El Grande, Jalisco.</p>-->
             </div>
             <div class="buttons">
                 <button class="pre-invitacion" id="preInvitacion" name="preInvitacion" onclick="generarPreInvitacion()">Imprimir Pre-invitaciónes</button>
                 <button class="editar">Editar</button>
                 <button class="guardar">Guardar</button>
             </div>
+            <br>
+            <br>
+            <section class="logistica">
+                <h1>Logística de entrega de cartas y décimas</h1>
+                <br>
+            </section>
+                <div class="container">
+                    <h2>Edita la tabla según tus consideraciones</h2>
+                    <br>
+                    <h3>Crear conjuncion de datos para usarla en la creación de las rutas</h3>
+                    <button class="conjuncion" onclick="showConfirmationModal('conjuncion')">Crear conjunción de datos</button><br><br>
+                    <table id="rutasTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>RUTAS<i class='bx bx-cycling icon'></i></th>
+                                <th>RECORRIDO <i class='bx bx-trip icon'></th>
+                                <th>NOMBRES</th>
+                                <th>DOMICILIO</th>
+                                <th>N° BOLETOS COMPRADOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($rutasTable as $ruta): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($ruta['ruta']) ?></td>
+                                    <td><?= htmlspecialchars($ruta['recorrido']) ?></td>
+                                    <td><?= htmlspecialchars($ruta['nombres']) ?></td>
+                                    <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
+                                    <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                        
+                    </table>
+                    <div class="botones">
+                        <tr>
+                        <td>
+                            <button class="rutas">Editar
+                                <i class='bx bx-cycling icon'></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="recorrido">Editar
+                                <i class='bx bx-trip icon'></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="guardarRuta">Guardar
+                                <i class='bx bx-save icon'></i>
+                            </button>
+                        </td>
+                        </tr>
+                    </div>
+                </div>
 
         </div>
     </section>
     <script src="/pruebas/menuUsuario/script.js"></script>
+    <script>
+        function showConfirmationModal(action) {
+            document.getElementById("confirmationModal").setAttribute("data-action", action);
+            const procesoField = document.getElementById("procesoField");
+            if (action === 'conjuncion') {
+                procesoField.style.display = "block";
+            } else {
+                procesoField.style.display = "none";
+            }
+            document.getElementById("confirmationModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("confirmationModal").style.display = "none";
+        }
+
+        function confirmDelete() {
+        const user = document.getElementById("userInput").value;
+        const password = document.getElementById("passwordInput").value;
+        const action = document.getElementById("confirmationModal").getAttribute("data-action");
+        const proceso = action === 'conjuncion' ? document.getElementById("procesoInput").value : null;
+
+        if (action === 'conjuncion' && proceso) {
+            // Validar si el proceso ya existe
+            fetch('checkProcesoRutas.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `proceso=${proceso}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes("El proceso ya se encuentra registrado")) {
+                    alert(data);
+                } else {
+                    // Si el proceso es válido, continuar con la solicitud de traspaso
+                    fetch('conjuncion.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `user=${user}&password=${password}&proceso=${proceso}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        alert(data);
+                        closeModal();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Hubo un error al intentar realizar la acción.');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Hubo un error al validar el proceso.');
+            });
+        }
+    }
+
+    </script>
+    
     <script>
         async function generarPreInvitacion() {
             const { jsPDF } = window.jspdf;
@@ -352,6 +523,21 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 }
             };
         }
+
+        //Configuración de la tabla de rutas
+        $(document).ready(function() {
+            
+            // Configuración de DataTables para la tabla de boletos vendidos
+            var rutasTable = $('#rutasTable').DataTable({
+                "searching": true,
+                "searchMinLength": 1,
+            });
+        
+            // Agregar funcionalidad de búsqueda personalizada para boletos vendidos
+            $('#searchVendidos').on('keyup', function() {
+                rutasTable.search(this.value).draw();
+            });
+        });
     </script>
 
 </body>
