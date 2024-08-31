@@ -60,6 +60,13 @@
         return $row;
     }, $rutasTable);
 
+    // Consulta para obtener las rutas
+    //$queryRutasExisten = "SELECT ruta FROM Rutas";
+    $queryRutasExisten = "SELECT DISTINCT ruta FROM Rutas ORDER BY ruta ASC";
+    $stmtRutasExisten = $conn->prepare($queryRutasExisten);
+    $stmtRutasExisten->execute();
+    $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);
+
 ?>
 
 <!DOCTYPE html>
@@ -90,10 +97,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
 
-    
-    
-
-    <title>Ticket-Mayordomía®/MisDatos</title> 
+    <title>Ticket-Mayordomía®/Datos</title> 
 </head>
 <body>
     <nav class="sidebar close">
@@ -105,7 +109,7 @@
 
                 <div class="text logo-text">
                     <span class="name">ADMINISTRADOR</span>
-                    <span class="profession">M-2024</span>
+                    <span class="profession" id="proceso-span">PROCESO</span>
                 </div>
             </div>
 
@@ -262,6 +266,20 @@
                     <br>
                     <h3>Crear conjuncion de datos para usarla en la creación de las rutas</h3>
                     <button class="conjuncion" onclick="showConfirmationModal('conjuncion')">Crear conjunción de datos</button><br><br>
+
+                    <!-- Nuevo select y botón -->
+                    <div class="form-group-select">
+                        <label for="rutaSelect">Selecciona una ruta:</label>
+                        <select id="rutaSelect" class="form-control">
+                            <option value="">Selecciona una ruta</option>
+                            <?php foreach ($rutas as $ruta): ?>
+                                <option value="<?= htmlspecialchars($ruta) ?>"><?= htmlspecialchars($ruta) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button id="printRutaButton" class="buttonSelectImprimir">Imprimir ruta</button>
+                    </div>
+
+
                     <table id="rutasTable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -559,6 +577,16 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
             }
         });
     }
+
+
+    function actualizarProceso() {
+        const spanProceso = document.getElementById('proceso-span');
+        const añoActual = new Date().getFullYear();
+        spanProceso.textContent = `PROCESO ${añoActual + 1}`;
+    }
+
+    // Llama a la función cuando la página se carga
+    document.addEventListener('DOMContentLoaded', actualizarProceso);
 
     </script>
 

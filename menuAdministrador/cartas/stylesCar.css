@@ -217,5 +217,33 @@ body {
     background-color: #02638d;
   }
 
-  /* Select */
-  
+  /* Estilo para el contenedor del select y el botón */
+  .form-group-select {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .form-group-select label {
+    margin-right: 10px;
+  }
+
+  .form-group-select .form-control {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+
+  .buttonSelectImprimir {
+    padding: 10px 20px;
+    background-color: #272727;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .buttonSelectImprimir:hover {
+    background-color: #050505;
+  }
