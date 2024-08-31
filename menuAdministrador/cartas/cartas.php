@@ -40,7 +40,8 @@
 
     // Consulta para obtener rutas
     $queryRutasTable = "
-        SELECT 
+        SELECT
+            idRutas, 
             ruta,
             recorrido,
             nombres,
@@ -264,6 +265,7 @@
                     <table id="rutasTable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th style="display:none;">idRutas</th>
                                 <th>RUTAS<i class='bx bx-cycling icon'></i></th>
                                 <th>RECORRIDO <i class='bx bx-trip icon'></th>
                                 <th>NOMBRES</th>
@@ -272,10 +274,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($rutasTable as $ruta): ?>
+                            <?php foreach ($rutasTable as $ruta): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($ruta['ruta']) ?></td>
-                                    <td><?= htmlspecialchars($ruta['recorrido']) ?></td>
+                                    <td class="idRutas" style="display:none;"><?= htmlspecialchars($ruta['idRutas']) ?></td>
+                                    <td><input type="text" name="ruta" value="<?= htmlspecialchars($ruta['ruta']) ?>" style="width: 100px;" disabled></td>
+                                    <td><input type="text" name="recorrido" value="<?= htmlspecialchars($ruta['recorrido']) ?>" style="width: 100px;" disabled></td>
                                     <td><?= htmlspecialchars($ruta['nombres']) ?></td>
                                     <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                     <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
@@ -285,23 +288,9 @@
                         
                     </table>
                     <div class="botones">
-                        <tr>
-                        <td>
-                            <button class="rutas">Editar
-                                <i class='bx bx-cycling icon'></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="recorrido">Editar
-                                <i class='bx bx-trip icon'></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="guardarRuta">Guardar
-                                <i class='bx bx-save icon'></i>
-                            </button>
-                        </td>
-                        </tr>
+                        <button class="rutas" onclick="habilitarEdicion('ruta')">Editar Rutas</button>
+                        <button class="recorrido" onclick="habilitarEdicion('recorrido')">Editar Recorridos</button>
+                        <button class="guardarRuta" onclick="guardarCambios()">Guardar</button>
                     </div>
                 </div>
 
@@ -527,17 +516,50 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
         //Configuración de la tabla de rutas
         $(document).ready(function() {
             
-            // Configuración de DataTables para la tabla de boletos vendidos
+            // Configuración de DataTables para la tabla rutasTable
             var rutasTable = $('#rutasTable').DataTable({
                 "searching": true,
                 "searchMinLength": 1,
             });
         
-            // Agregar funcionalidad de búsqueda personalizada para boletos vendidos
+            // Agregar funcionalidad de búsqueda personalizada para rutasTable
             $('#searchVendidos').on('keyup', function() {
                 rutasTable.search(this.value).draw();
             });
         });
+    </script>
+
+<script>
+        function habilitarEdicion(campo) {
+    // Seleccionar todas las filas
+    $('#rutasTable tbody tr').each(function() {
+        $(this).find('input[name="' + campo + '"]').prop('disabled', false);
+    });
+}
+
+    function guardarCambios() {
+        const rutas = [];
+        $('#rutasTable tbody tr').each(function() {
+            const idRutas = $(this).find('.idRutas').text().trim();
+            const ruta = $(this).find('input[name="ruta"]').val().trim();
+            const recorrido = $(this).find('input[name="recorrido"]').val().trim();
+
+            rutas.push({ idRutas, ruta, recorrido });
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "guardarCambios.php",
+            data: { rutas },
+            success: function(response) {
+                alert(response);
+            },
+            error: function() {
+                alert("Error al guardar los cambios.");
+            }
+        });
+    }
+
     </script>
 
 </body>
