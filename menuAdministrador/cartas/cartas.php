@@ -66,7 +66,6 @@
     $stmtRutasExisten = $conn->prepare($queryRutasExisten);
     $stmtRutasExisten->execute();
     $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);
-
 ?>
 
 <!DOCTYPE html>
@@ -276,7 +275,7 @@
                                 <option value="<?= htmlspecialchars($ruta) ?>"><?= htmlspecialchars($ruta) ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <button id="printRutaButton" class="buttonSelectImprimir">Imprimir ruta</button>
+                        <button id="printRutaButton" class="buttonSelectImprimir" onclick="ImprimirRuta()">Imprimir ruta</button>
                     </div>
 
 
@@ -578,7 +577,7 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
         });
     }
 
-
+    // script de actualizacion de año automatico
     function actualizarProceso() {
         const spanProceso = document.getElementById('proceso-span');
         const añoActual = new Date().getFullYear();
@@ -588,7 +587,105 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
     // Llama a la función cuando la página se carga
     document.addEventListener('DOMContentLoaded', actualizarProceso);
 
-    </script>
+    // script imprimir las rutas
+    function ImprimirRuta() {
+        var rutaSeleccionada = document.getElementById("rutaSelect").value;
 
+        if (rutaSeleccionada === "") {
+            alert("Por favor selecciona una ruta.");
+            return;
+        }
+
+        // Realizar la solicitud AJAX
+        $.ajax({
+            url: 'obtenerRutas.php', // El archivo PHP que manejará la solicitud
+            type: 'POST',
+            data: { ruta: rutaSeleccionada },
+            success: function(data) {
+                var registros = JSON.parse(data);
+
+                // Generar PDF con los registros
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                const imgParteA = new Image();
+                const imgParteB = new Image();
+                imgParteA.src = '/pruebas/menuAdministrador/cartas/reciboParteA.png'; // Parte A
+                imgParteB.src = '/pruebas/menuAdministrador/cartas/reciboParteB.png'; // Parte B
+
+
+                // Agregar contenido al PDF
+                /*doc.setFontSize(12);
+                registros.forEach(function(registro, index) {
+                    doc.text(`Registro ${index + 1}`, 10, 10 + (index * 10));
+                    doc.text(`Ruta: ${registro.ruta}`, 10, 20 + (index * 10));
+                    doc.text(`Recorrido: ${registro.recorrido}`, 10, 30 + (index * 10));
+                    doc.text(`Nombres: ${registro.nombres}`, 10, 40 + (index * 10));
+                    doc.text(`Domicilio: ${registro.domicilio}`, 10, 50 + (index * 10));
+                    doc.text(`Número de Boletos: ${registro.numeroBoletos}`, 10, 60 + (index * 10));
+                    doc.addPage();
+                });*/
+                // Dibujar el borde principal
+                    doc.setLineWidth(1.5);
+                    doc.rect(5, 5, 200, 80); // Rectángulo alrededor de todo el diseño
+
+                    // Dibujar la línea de separación en el centro
+                    doc.setLineWidth(0.5);
+                    doc.line(120, 5, 120, 85); // Línea en el medio
+
+                    // Primer ticket (izquierda)
+                    doc.setFontSize(12);
+                    doc.addImage(imgParteA, 'PNG', 10, 10, 70, 17);
+                    doc.text("Decima(s)", 90, 15);
+                    doc.text("Carta(s)", 90, 24);
+
+                    doc.setFontSize(12);
+                    doc.text("Domicilio:", 10, 35);
+                    doc.line(30, 35, 110, 35); // Línea para el domicilio
+
+                    doc.text("Nombre(s) de boleto(s):", 10, 40);
+                    doc.line(10, 45, 110, 45); // Línea para los nombres
+
+                    doc.text("Recibe:", 10, 50);
+                    doc.line(25, 50, 110, 50); // Línea para el domicilio
+                    doc.text("Parentesco: [Hij@] [Madre] [Padre] [Niet@] [Espos@]", 10, 55);
+                    doc.text("[Otro]:", 10, 63);
+                    doc.line(23, 63, 80, 63); // Línea para especificar otro
+
+                    doc.text("Especifique", 40, 67);
+
+                    doc.line(70, 75, 110, 75); // Línea para la firma
+                    doc.text("Firma recibe", 78, 80);
+
+                    // Segundo ticket (derecha)
+                    doc.setFontSize(12);
+                    doc.addImage(imgParteB, 'PNG', 125, 10, 50, 17);
+                    doc.text("Decima(s)", 175, 15);
+                    doc.text("Carta(s)", 175, 24);
+
+                    doc.text("Domicilio:", 125, 35);
+                    doc.line(145, 35, 200, 35); // Línea para el domicilio
+                    doc.line(125, 43, 200, 43); // Línea para el domicilio
+
+                    doc.text("Nombre(s) de boleto(s):", 125, 50);
+                    doc.line(125, 55, 200, 55); // Línea para los nombres
+                    doc.line(125, 60, 200, 60); // Línea para los nombres
+
+                    doc.text("Entrego:", 125, 65);
+                    doc.line(145, 65, 200, 65); // Línea para la firma
+
+                    doc.line(160, 75, 200, 75); // Línea para la firma entrega
+                    doc.text("Firma entrega", 167, 80);
+
+                doc.save(`Ruta_${rutaSeleccionada}.pdf`);
+            },
+            error: function(error) {
+                console.log(error);
+                alert("Ocurrió un error al obtener los datos.");
+            }
+        });
+    }
+
+    </script>
 </body>
 </html>
