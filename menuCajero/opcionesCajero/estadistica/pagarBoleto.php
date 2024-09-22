@@ -16,7 +16,13 @@ try {
     $idUsuario = 1; // Reemplaza con la lógica para obtener el ID del usuario de la sesión
 
     // Obtener la fecha actual
-    $fechaVenta = date("Y-m-d H:i:s");
+    date_default_timezone_set('America/Mexico_City');
+    $fechaVenta = date("Y-m-d H:i:s", strtotime("-1 hour"));
+    //strtotime("-1 hour")); funciona para que el registro de venta se guarde de manera correcta en el sistema
+    //$fechaVenta = date("Y-m-d H:i:s"); //tiene como funcion de obtener la hora y fecha de méxico
+
+
+
 
     // Actualizar el estado del boleto a "Vendido" (status 3)
     $stmt = $conn->prepare("UPDATE Boletos SET status = 3 WHERE numero_boleto = :numero_boleto");

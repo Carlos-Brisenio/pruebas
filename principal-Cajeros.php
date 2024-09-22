@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="bannerV2.png" alt="Login" class="max-w-full">
             <br>
             <p class="text-center text-xs">
-                <a target="_blank">Mayordomía Señor San José 2024®</a><br>Todos los derechos reservados © 2023.
+                <a target="_blank">Mayordomía Señor San José 2025®</a><br>Todos los derechos reservados © 2023-2024.
                 <br>Un producto de DreamCreators</a>.
             </p>
         </div>
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="flex flex-col text-center text-xs flex md:hidden">
                         <img src="banderinLogo.png" alt="MindBox" class="w-32 mx-auto">
                     </a>
-                    Todos los derechos reservados © 2023.
+                    Todos los derechos reservados © 2023-2024.
                 </p>
             </div>
         </div>

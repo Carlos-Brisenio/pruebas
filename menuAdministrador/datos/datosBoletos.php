@@ -19,6 +19,16 @@
     $stmtBoletosVendidos->execute();
     $boletosVendidos = $stmtBoletosVendidos->fetchAll(PDO::FETCH_ASSOC);
 
+    // Consulta para obtener boletos apartados
+    $queryBoletosApartados = "
+    SELECT Boletos.numero_boleto, InfoBoletos.nombre, InfoBoletos.telefono1, InfoBoletos.telefono2, InfoBoletos.colonia, InfoBoletos.calle, InfoBoletos.numero, Boletos.fecha_Compra, Boletos.fecha_Limite 
+    FROM Boletos 
+    INNER JOIN InfoBoletos ON Boletos.numero_boleto = InfoBoletos.idBoleto
+    WHERE Boletos.status = 2";
+    $stmtBoletosApartados = $conn->prepare($queryBoletosApartados);
+    $stmtBoletosApartados->execute();
+    $boletosApartados = $stmtBoletosApartados->fetchAll(PDO::FETCH_ASSOC);
+
     
     function formatPhoneNumber($number) {
         if (strlen($number) == 10) {
@@ -219,6 +229,38 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+
+                <br>
+                <h2>Información boletos Apartados</h2>
+        
+                <table id="boletosTable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="ocultar-columna">Fecha de apartado</th>
+                            <th>Número de Boleto</th>
+                            <th>Nombre del Boleto</th>
+                            <th>Fecha de apartado</th>
+                            <th>Teléfono 1</th>
+                            <th>Teléfono 2</th>
+                            <th>Domicilio</th>
+                            <th>Colonia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($boletosApartados as $boleto): ?>
+                            <tr>
+                                <td class="ocultar-columna"><?= formatearFecha($boleto['fecha_Compra']) ?></td>
+                                <td><?= $boleto['numero_boleto'] ?></td>
+                                <td><?= $boleto['nombre'] ?></td>
+                                <td><?= formatearFecha($boleto['fecha_Compra']) ?></td>
+                                <td><?= formatPhoneNumber($boleto['telefono1']) ?></td>
+                                <td><?= formatPhoneNumber($boleto['telefono2']) ?></td>
+                                <td><?= $boleto['calle'] ?> #<?= $boleto['numero'] ?></td>
+                                <td><?= $boleto['colonia'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
         </div>
 
     </section>
@@ -237,6 +279,25 @@
                     boletosVendidosTable.search(this.value).draw();
                 });
             });
+
+            $(document).ready(function() {
+            $("#menu-toggle").click(function() {
+                $("#sidebar").toggleClass("active");
+            });
+            var boletosTable = $('#boletosTable').DataTable({
+                "searching": true,
+                "searchMinLength": 1,
+            });
+
+            var boletosDisponiblesTable = $('#boletosDisponiblesTable').DataTable({
+                "searching": false, // Deshabilita la búsqueda en esta tabla
+            });
+
+            // Agregar funcionalidad de búsqueda personalizada para boletos apartados
+            $('#search').on('keyup', function() {
+                boletosTable.search(this.value).draw();
+         });
+    });
             
             document.getElementById('generateReport').addEventListener('click', function() {
                 let startDate = document.getElementById('startDate').value;

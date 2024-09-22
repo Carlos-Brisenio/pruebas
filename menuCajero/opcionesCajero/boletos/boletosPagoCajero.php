@@ -202,7 +202,7 @@ function generarOrdenPago() {
                     doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
                     doc.text('Diócesis De Ciudad Gúzman', 80, 17);
-                    doc.text('Mayordomía 2024', 90, 23);
+                    doc.text('Mayordomía 2025', 90, 23);
 
                     doc.setFontSize(12);
                     doc.setFont("helvetica", "normal");
@@ -228,7 +228,7 @@ function generarOrdenPago() {
                     doc.setTextColor(0, 0, 0); // RGB para negro
                     doc.text(''+data.idBoleto,23,120);
                     doc.text(''+fechaLimiteFormateada,80,120);
-                    doc.text('$170',120,120);
+                    doc.text('$180',120,120);
 
                     doc.setFont("helvetica", "bold");
                     doc.text('Instrucciones de pago: ', 20, 130);
@@ -247,13 +247,13 @@ function generarOrdenPago() {
                     doc.text('Fecha Límite',80,151);
                     doc.text('Costo',120,151);
                     doc.setFont("helvetica", "normal");
-                    doc.text(''+data.idBoleto+'-Mayordomia2024',23,158);
+                    doc.text(''+data.idBoleto+'-Mayordomia2025',23,158);
                     doc.text(''+fechaLimiteFormateada,80,158);
-                    doc.text('$170',120,158);
+                    doc.text('$180',120,158);
 
                     doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
                     doc.text('de BBVA Bancomer a BBVA Bancomer.',20,175);
-                    doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2024"',20,182);
+                    doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2025"',20,182);
                     doc.text('Como se muestra en la tabla de arriba',20,189);
                     doc.text('Los datos de la cuenta son:',20,196);
                     doc.text('Nombre: Diócesis de Ciudad Guzmán A.R.',20,203);

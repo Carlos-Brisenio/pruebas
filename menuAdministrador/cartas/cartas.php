@@ -612,14 +612,31 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
 
             // Función para dividir el domicilio en dos líneas
             function dividirDomicilio(domicilio) {
-                const primeraParte = domicilio.substring(0, 29);
-                const segundaParte = domicilio.substring(29);
+                const primeraParte = domicilio.substring(0, 25);
+                const segundaParte = domicilio.substring(25);
                 return { primeraParte, segundaParte };
             }
 
+            // Función para dividir el domicilio en dos líneas
+            function dividirNombres(nombres) {
+                const primeraParteNombres = nombres.substring(0, 35);
+                const segundaParteNombres = nombres.substring(35,70);
+                return { primeraParteNombres, segundaParteNombres };
+            }
+
+            // Función para poner en mayúscula la primera letra de cada palabra
+            function capitalizarNombres(nombres) {
+                return nombres
+                    .toLowerCase()
+                    .split(' ')
+                    .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+                    .join(' ');
+            }
+
+            // Función para truncar el nombre a un máximo de 49 caracteres
             function maximoNombre(nombres) {
-                const corto = nombres.substring(0, 49);
-                return corto ;
+                const corto = nombres.substring(0, 46);
+                return corto;
             }
 
             // Generar PDF con los registros
@@ -649,11 +666,12 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 // Primer ticket (izquierda)
                 doc.setFontSize(12);
                 doc.addImage(imgParteA, 'PNG', 10, 10 + offsetY, 70, 17);
-                doc.text("Decima(s):", 90, 15 + offsetY);
-                doc.text(`${registro.numeroBoletos}`, 113, 15 + offsetY);
-                doc.line(112, 16 + offsetY, 117, 16 + offsetY); // Línea para decimas
-                doc.text("Carta(s):", 90, 24 + offsetY);
-                doc.text(`${registro.ruta}`, 113, 24 + offsetY);
+                doc.text("Ruta: "+ `${registro.ruta}`, 90, 15 + offsetY);
+                //doc.text(`${registro.ruta}`, 113, 15 + offsetY);
+                //doc.line(112, 16 + offsetY, 117, 16 + offsetY); // Línea para decimas
+                doc.text("Decima(s):", 90, 24 + offsetY);
+                doc.text(`${registro.numeroBoletos}`, 113, 24 + offsetY);
+                doc.line(112, 25 + offsetY, 117, 25 + offsetY); // Línea para decimas
 
 
                 doc.text("Domicilio:", 10, 35 + offsetY);
@@ -661,9 +679,9 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
                 doc.line(30, 36 + offsetY, 110, 36 + offsetY); // Línea para el domicilio
 
                 doc.text("Nombre(s) de boleto(s):", 10, 40 + offsetY);
-                const corto = maximoNombre(registro.nombres)
+                const nombreCapitalizado = capitalizarNombres(registro.nombres); // Capitalizar nombres
+                const corto = maximoNombre(nombreCapitalizado);
                 doc.text(corto + "...", 10, 45 + offsetY);
-                //doc.text(`${registro.nombres}`, 10, 45 + offsetY);
                 doc.line(10, 46 + offsetY, 110, 46 + offsetY); // Línea para los nombres
 
                 doc.text("Recibe:", 10, 53 + offsetY);
@@ -679,26 +697,33 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
 
                 // Segundo ticket (derecha)
                 const { primeraParte, segundaParte } = dividirDomicilio(registro.domicilio);
+                const { primeraParteNombres, segundaParteNombres } = dividirNombres(nombreCapitalizado);
+
 
                 doc.setFontSize(12);
                 doc.addImage(imgParteB, 'PNG', 125, 10 + offsetY, 50, 17);
-                doc.text("Decima(s):", 175, 15 + offsetY);
-                doc.text(`${registro.numeroBoletos}`, 198, 15 + offsetY);
-                doc.line(197, 16 + offsetY, 202, 16 + offsetY); // Línea para decimas
-                doc.text("Carta(s)", 175, 24 + offsetY);
+                doc.text("Ruta: " + `${registro.ruta}`, 175, 15 + offsetY);
+                //doc.text(`${registro.numeroBoletos}`, 198, 15 + offsetY);
+                //doc.line(197, 16 + offsetY, 202, 16 + offsetY); // Línea para decimas
+                doc.text("Decima(s):", 175, 24 + offsetY);
+                doc.text(`${registro.numeroBoletos}`, 198, 24 + offsetY);
+                doc.line(197, 26 + offsetY, 202, 26 + offsetY); // Línea para decimas
 
                 doc.text("Domicilio:", 125, 35 + offsetY);
-                doc.text(primeraParte, 145, 35 + offsetY);
+                doc.text(primeraParte+" - ", 145, 35 + offsetY);
                 doc.text(segundaParte, 125, 42 + offsetY); // Segunda línea del domicilio
                 doc.line(145, 36 + offsetY, 200, 36 + offsetY); // Línea para el domicilio
                 doc.line(125, 43 + offsetY, 200, 43 + offsetY); // Línea para el domicilio 2
 
                 doc.text("Nombre(s) de boleto(s):", 125, 50 + offsetY);
-                doc.text(`${registro.nombres}`, 125, 55 + offsetY);
+                doc.text(primeraParteNombres+" - ", 125, 55 + offsetY);
+                doc.text(segundaParteNombres+"...", 125, 60 + offsetY);
                 doc.line(125, 56 + offsetY, 200, 56 + offsetY); // Línea para los nombres
+                doc.line(125, 61 + offsetY, 200, 61 + offsetY); // Línea para los nombres 2
 
-                doc.text("Entrego:", 125, 65 + offsetY);
-                doc.line(145, 65 + offsetY, 200, 65 + offsetY); // Línea para la firma
+
+                doc.text("Entrego:", 125, 68 + offsetY);
+                doc.line(145, 68 + offsetY, 200, 68 + offsetY); // Línea para la firma
 
                 doc.line(160, 75 + offsetY, 200, 75 + offsetY); // Línea para la firma entrega
                 doc.text("Firma entrega", 167, 80 + offsetY);
@@ -712,6 +737,8 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
         }
     });
 }
+
+
 
     </script>
 </body>

@@ -160,19 +160,29 @@
     <form action="" method="POST">
         <div class="text"> Registro de boleto</div>
         <div class="section">
-            <h2 class="section-title">Datos del Boleto</h2>
+            <div class="form-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <h2 class="section-title">Datos del Boleto</h2>
+                <div class="form-group" style="display: flex; align-items: center; text-align: right;">
+                    <label for="BuscarRegistro" style="font-weight: bold; margin-right: 10px;">Buscar registro:</label>
+                    <input type="text" id="BuscarRegistro" name="BuscarRegistro" placeholder="Ejemplos: C. Federico Del Toro">
+                </div>
+            </div>
+            <p style="font-size: 0.9em; margin-top: 5px; text-align: right; magin-rigth: 20px;">
+                <strong>Nota:</strong> La búsqueda se basa en la información recopilada<br> de la venta del año pasado, mediante el domicilio.
+            </p>
+
             <div class="form-row">
                 <div class="form-group">
-                    <label for="numero-boleto">Número(s) de Boleto(s):</label>
+                    <label for="numero-boleto" style="font-weight: bold;">Número(s) de Boleto(s):</label>
                     <input type="text" id="numero-boleto" name="numero-boleto" value="<?php echo $numeroBoleto; ?>" readonly>
                 </div>
                 <div class="form-group">
-                <label for="nombre_boleto">Nombre del Boleto:</label>
-                <input type="text" id="nombre_boleto" name="nombre_boleto" placeholder="Ejemplos: Rafael Martinez, Familia Díaz" required>
-              </div>
+                    <label for="nombre_boleto" style="font-weight: bold;">Nombre del Boleto:</label>
+                    <input type="text" id="nombre_boleto" name="nombre_boleto" placeholder="Ejemplos: Rafael Martinez, Familia Díaz" required>
+                </div>
             </div>
-          </div>
-          
+        </div>
+
           <div class="section">
             <h2 class="section-title">Datos Domiciliarios</h2>
             <div class="form-row">
@@ -349,6 +359,41 @@
                 select: function(event, ui) {
                     if (ui.item.data) {
                         var data = ui.item.data;
+                        $("#colonia").val(data.colonia);
+                        $("#calle").val(data.calle);
+                        $("#numero").val(data.numero);
+                        $("#colinda1").val(data.colinda1);
+                        $("#colinda2").val(data.colinda2);
+                        $("#referencia").val(data.referencia);
+                        $("#telefono1").val(data.telefono1);
+                        $("#telefono2").val(data.telefono2);
+                        $("#correo").val(data.correo_Electronico);
+                    }
+                }
+            });
+        });
+
+
+        //autocomplete rellena los capos de clientes registrados anteriormente mediante domicilio
+        $(function() {
+            $("#BuscarRegistro").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "/pruebas/menuCajero/opcionesCajero/boletos/historialClientesDomicilio.php", // apunta hacia un archivo php para hacer la consulta de datos
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    if (ui.item.data) {
+                        var data = ui.item.data;
+                        $("#nombre_boleto").val(data.nombre);
                         $("#colonia").val(data.colonia);
                         $("#calle").val(data.calle);
                         $("#numero").val(data.numero);

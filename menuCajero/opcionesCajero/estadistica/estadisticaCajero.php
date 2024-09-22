@@ -312,8 +312,9 @@
                     if (detallesBoleto) {
                 //--> Aqui inicia boleto Original
                         doc.setFontSize(12);
-                        doc.text(75, 15, 'Mayordomía Señor San José 2024');  
-                        doc.text(90, 25, 'Comprobante de pago');  
+                        doc.text(78, 15, 'Mayordomía Señor San José 2025');
+                        doc.text(92, 21, 'Mayordomía Tickets');     
+                        doc.text(90, 27, 'Comprobante de pago');  
 
                         const img = document.getElementById('imagenParaPdf');
                         const canvas = document.createElement('canvas');
@@ -327,17 +328,19 @@
                         doc.addImage(imgData, 'JPEG', 20, 15, 55, 50);  
 
                         doc.text(130, 45, 'Número de boleto: ' + numero_boleto);  
-                        doc.text(130, 55, 'Fecha: ' + fechaFormateada);  
-                        doc.text(20, 75, 'Nombre: ' + detallesBoleto.nombre);  
-                        doc.text(20, 85, 'Calle: ' + detallesBoleto.calle);  
-                        doc.text(120, 85, 'Número: ' + detallesBoleto.numero);  
-                        doc.text(20, 95, 'Ciudad: ' + detallesBoleto.ciudad);  
-                        doc.text(120, 95, 'Colonia: ' + detallesBoleto.colonia);  
-                        doc.text(20, 105, 'Télefono: ' + detallesBoleto.telefono1);  
+                        doc.text(130, 52, 'Fecha: ' + fechaFormateada);  
+                        doc.text(20, 74, 'Nombre: ' + detallesBoleto.nombre);  
+                        doc.text(20, 81, 'Calle: ' + detallesBoleto.calle);  
+                        doc.text(120, 81, 'Número: ' + detallesBoleto.numero);  
+                        doc.text(20, 88, 'Ciudad: ' + detallesBoleto.ciudad);  
+                        doc.text(120, 88, 'Colonia: ' + detallesBoleto.colonia);  
+                        doc.text(20, 95, 'Télefono: ' + detallesBoleto.telefono1);
+                        doc.text(120, 95, 'Télefono 2: ' + detallesBoleto.telefono2);  
 
-                        doc.text(20, 115, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
-                        doc.text(70, 125, '50% para el culto de Señor San José');  
-                        doc.text(72, 135, '50% para gastos de la mayordomía');  
+                        doc.text(20, 106, '$180.00 (ciento ochenta pesos 00/100 m.n.)');  
+                        doc.text(70, 116, '50% para el culto de Señor San José');  
+                        doc.text(72, 124, '50% para gastos de la mayordomía');
+                        doc.text(77, 135, 'boletos.mayordomiatickets.com');  
                         doc.text(180, 135, 'Original');  
                         doc.rect(10, 5, 190, 135);  
                 //--> Aqui termina boleto Original
@@ -346,21 +349,24 @@
                         doc.rect(10, 155, 190, 135);  
                         doc.addImage(imgData, 'JPEG', 20, 165, 55, 50);  
 
-                        doc.text(75, 165, 'Mayordomía Señor San José 2024');  
-                        doc.text(90, 175, 'Comprobante de pago');  
+                        doc.text(78, 165, 'Mayordomía Señor San José 2025'); 
+                        doc.text(92, 171, 'Mayordomía Tickets');   
+                        doc.text(90, 177, 'Comprobante de pago');  
 
                         doc.text(130, 195, 'Número de boleto: ' + numero_boleto);  
-                        doc.text(130, 205, 'Fecha: ' + fechaFormateada);  
+                        doc.text(130, 202, 'Fecha: ' + fechaFormateada);  
                         doc.text(20, 225, 'Nombre: ' + detallesBoleto.nombre);  
-                        doc.text(20, 235, 'Calle: ' + detallesBoleto.calle);  
-                        doc.text(120, 235, 'Número: ' + detallesBoleto.numero);  
-                        doc.text(20, 245, 'Ciudad: ' + detallesBoleto.ciudad);  
-                        doc.text(120, 245, 'Colonia: ' + detallesBoleto.colonia);  
-                        doc.text(20, 255, 'Télefono: ' + detallesBoleto.telefono1);  
-
-                        doc.text(20, 265, '$170.00 (ciento setenta pesos 00/100 m.n.)');  
-                        doc.text(70, 275, '50% para el culto de Señor San José');  
-                        doc.text(72, 285, '50% para gastos de la mayordomía');  
+                        doc.text(20, 232, 'Calle: ' + detallesBoleto.calle);  
+                        doc.text(120, 232, 'Número: ' + detallesBoleto.numero);  
+                        doc.text(20, 239, 'Ciudad: ' + detallesBoleto.ciudad);  
+                        doc.text(120, 239, 'Colonia: ' + detallesBoleto.colonia);  
+                        doc.text(20, 246, 'Télefono: ' + detallesBoleto.telefono1);
+                        doc.text(120, 246, 'Télefono 2: ' + detallesBoleto.telefono2);  
+  
+                        doc.text(20, 257, '$180.00 (ciento ochenta pesos 00/100 m.n.)');  
+                        doc.text(70, 267, '50% para el culto de Señor San José');  
+                        doc.text(72, 275, '50% para gastos de la mayordomía');
+                        doc.text(77, 286, 'boletos.mayordomiatickets.com');    
                         doc.text(180, 285, 'Copia');  
 
                 //--> Aqui termina boleto Copia
