@@ -1,11 +1,10 @@
-body {
+  body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
   }
   
   .section {
-    
     border-radius: 5px;
     padding: 20px;
     margin-bottom: 20px;
@@ -84,34 +83,31 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     margin-top: 20px;
-}
-
-.card h2 {
+  }
+  .card h2 {
     margin-top: 0;
     font-size: 20px;
+  }
 
-}
-
-.card ul {
+  .card ul {
     list-style: none;
     padding: 0;
-}
+  }
 
-
-.card ul li {
+  .card ul li {
     margin-bottom: 10px;
-}
+  }
 
-.card ul li strong {
+  .card ul li strong {
     display: inline-flex;
     width: 300px;
-}
+  }
 
-.buttons {
+  .buttons {
     margin-top: 20px;
-}
+  }
 
-.buttons button {
+  .buttons button {
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -119,37 +115,34 @@ body {
     margin-right: 10px;
     cursor: pointer;
     transition: background 0.2s;
-}
+  }
 
-.buttons .pre-invitacion {
+  .buttons .pre-invitacion {
     background: #244D0C;
-}
+  }
 
-.buttons .pre-invitacion:hover {
+  .buttons .pre-invitacion:hover {
     background: #398914; /* Un verde más claro para el hover */
-}
+  }
 
-.buttons .editar {
+  .buttons .editar {
     background: #D2CB27;
-}
+  }
 
-.buttons .editar:hover {
+  .buttons .editar:hover {
     background: #fff82f; /* Un amarillo más claro para el hover */
-}
+  }
 
-.buttons .guardar {
+  .buttons .guardar {
     background: #000;
     color: #ffffff;
-}
+  }
 
-.buttons .guardar:hover {
+  .buttons .guardar:hover {
     background: #3d3c3c; /* Gris para el hover */
-}
+  }  
 
-
-
-/* Tabla de infomacion de las rutas*/
-
+ /* Tabla de infomacion de las rutas*/
   .container {
     background-color: white;
     padding: 20px;
