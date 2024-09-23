@@ -222,8 +222,9 @@
                     doc.text(''+data.fecha_Limite,80,158);
                     doc.text('$180',120,158);
 
-                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria UNICAMENTE',20,168);
-                    doc.text('de BBVA Bancomer a BBVA Bancomer.',20,175);
+                    doc.text('En caja o practicaja del banco BBVA Bancomer ó bien, transferencia bancaria',20,168);
+                    doc.text('de BBVA a BBVA o de otro BANCO a BBVA.*',20,175);
+                    doc.text('* ',20,175);
                     doc.text('El concepto de pago será el número de boleto seguido de un "-" y la Frase "Mayordomia2025"',20,182);
                     doc.text('Como se muestra en la tabla de arriba',20,189);
                     doc.text('Los datos de la cuenta son:',20,196);
@@ -242,7 +243,7 @@
                     doc.text('Horarios de atención:',10,258);
                     doc.setFont("helvetica", "normal");
                     doc.text('Lunes a domingo', 10, 265);
-                    doc.text('11:30 hrs a 14:00 hrs', 10, 272);
+                    //doc.text('11:30 hrs a 14:00 hrs', 10, 272);
                     doc.text('17:30 hrs a 20:00 hrs', 10, 279);
 
                     doc.text('Catedral De Ciudad Guzmán', 70, 265);
