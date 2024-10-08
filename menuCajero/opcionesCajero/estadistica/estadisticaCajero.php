@@ -367,7 +367,11 @@
                         doc.text(70, 267, '50% para el culto de Señor San José');  
                         doc.text(72, 275, '50% para gastos de la mayordomía');
                         doc.text(77, 286, 'boletos.mayordomiatickets.com');    
-                        doc.text(180, 285, 'Copia');  
+                        doc.text(180, 285, 'Copia');
+                        doc.setFont("helvetica", "bold");
+                        doc.text(15,295, 'Nota:')
+                        doc.setFont("helvetica", "normal");
+                        doc.text(27,295, 'Conserva este boleto y cámbialo por una décima en las próximas fiestas en Octubre 2025.')
 
                 //--> Aqui termina boleto Copia
 
