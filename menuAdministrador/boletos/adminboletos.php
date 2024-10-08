@@ -4,7 +4,7 @@
     $db_name = "dbMayordomia";
     $username = "root";
     $password = "";
-$conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
+    $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
     
     // Consulta para obtener boletos apartados
     $queryBoletosApartados = "
