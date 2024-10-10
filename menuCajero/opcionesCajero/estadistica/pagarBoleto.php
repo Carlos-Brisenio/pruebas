@@ -11,6 +11,8 @@ try {
 
     // Obtener el número de boleto desde la solicitud POST
     $numero_boleto = $_POST['numero_boleto'];
+    $forma_pago = $_POST['forma_pago'];
+
 
     // Obtener el ID de usuario de la sesión (reemplaza esto con tu lógica de autenticación)
     $idUsuario = 1; // Reemplaza con la lógica para obtener el ID del usuario de la sesión
@@ -21,19 +23,17 @@ try {
     //strtotime("-1 hour")); funciona para que el registro de venta se guarde de manera correcta en el sistema
     //$fechaVenta = date("Y-m-d H:i:s"); //tiene como funcion de obtener la hora y fecha de méxico
 
-
-
-
     // Actualizar el estado del boleto a "Vendido" (status 3)
     $stmt = $conn->prepare("UPDATE Boletos SET status = 3 WHERE numero_boleto = :numero_boleto");
     $stmt->bindParam(':numero_boleto', $numero_boleto);
     $stmt->execute();
 
     // Insertar la venta en la tabla 'ventas'
-    $stmtVentas = $conn->prepare("INSERT INTO Ventas (idBoletos, idUsuario, fecha_Venta) VALUES (:idBoletos, :idUsuario, :fechaVenta)");
+    $stmtVentas = $conn->prepare("INSERT INTO Ventas (idBoletos, idUsuario, fecha_Venta, forma_pago) VALUES (:idBoletos, :idUsuario, :fechaVenta, :forma_pago)");
     $stmtVentas->bindParam(':idBoletos', $numero_boleto);
     $stmtVentas->bindParam(':idUsuario', $idUsuario);
     $stmtVentas->bindParam(':fechaVenta', $fechaVenta);
+    $stmtVentas->bindParam(':forma_pago', $forma_pago);
     $stmtVentas->execute();
 
     echo "Boleto pagado y registrado en la venta con éxito.";
@@ -41,4 +41,3 @@ try {
     echo "Error: " . $e->getMessage();
 }
 ?>
-s

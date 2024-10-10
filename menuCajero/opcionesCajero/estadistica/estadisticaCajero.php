@@ -271,7 +271,7 @@
              });
         });
     
-        function payTicket(numero_boleto) {
+        /*function payTicket(numero_boleto) {
             var confirmation = confirm("¿Realmente deseas pagar el boleto "+numero_boleto+"?");
             if (confirmation) {
                 $.ajax({
@@ -290,7 +290,61 @@
                 // El usuario decidió no continuar con el pago
                 console.log("Pago del boleto " + numero_boleto + " cancelado por el usuario.");
             }
+        }*/
+       // Abrir el modal de pago
+function payTicket(numero_boleto) {
+    // Guardamos el número de boleto en un atributo data para utilizarlo luego
+    $('#modalPago').data('boleto', numero_boleto);
+    $('#modalPago').show();
+}
+
+// Cerrar modales
+function closeModal(modalId) {
+    // Cerrar el modal ocultándolo
+    $('#' + modalId).hide();
+
+    // Recargar la página después de cerrar el modal
+    if (modalId === 'modalCambio') {
+        location.reload();  // Esto recargará la página después de cerrar el modal de cambio
+    }
+}
+
+
+function confirmarPago() {
+    var numero_boleto = $('#modalPago').data('boleto');
+    var recibe = parseFloat($('#recibe').val());
+    var precio = 180;
+    var formaPago = $('#formaPago').val();
+    var cambio = recibe - precio;
+
+    // Cerrar el modal de pago antes de realizar la solicitud
+    closeModal('modalPago');
+
+    // Llamada AJAX para procesar el pago en el servidor
+    $.ajax({
+        url: 'pagarBoleto.php',
+        type: 'POST',
+        data: {
+            numero_boleto: numero_boleto,
+            precio: precio,
+            forma_pago: formaPago
+        },
+        success: function(response) {
+            // Mostrar el modal de cambio con el resumen del pago una vez que el pago ha sido procesado
+            $('#detallePago').html('Número de boleto: ' + numero_boleto + '<br>Precio: $180<br>Forma de Pago: ' + formaPago);
+            $('#cambioMonto').html('Cambio: $' + cambio.toFixed(2));
+
+            // Mostrar el modal de cambio
+            $('#modalCambio').show();
+            
+            // Ya no hay límite de tiempo para cerrar el modal, se cierra con el botón "Cerrar"
+        },
+        error: function(error) {
+            alert('Error al procesar el pago.');
         }
+    });
+}
+
 
 
         function imprimirBoletos(numero_boleto) {
@@ -393,3 +447,77 @@
     
     </body>
     </html>
+
+    <!-- Modal de Pago -->
+<div id="modalPago" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modalPago')">&times;</span>
+        <h2>Confirmar Pago</h2>
+        <form id="pagoForm">
+            <label for="cantidad">Cantidad:</label>
+            <input type="text" id="cantidad" name="cantidad" value="1" readonly><br><br>
+
+            <label for="precio">Precio:</label>
+            <input type="text" id="precio" name="precio" value="180" readonly><br><br>
+
+            <label for="formaPago">Forma de Pago:</label>
+            <select id="formaPago" name="formaPago">
+                <option value="1">Efectivo</option>
+                <option value="2">Transferencia/Banco</option>
+                <option value="3">Tarjeta</option>
+            </select><br><br>
+
+            <label for="recibe">Recibe:</label>
+            <input type="number" id="recibe" name="recibe" required><br><br>
+
+            <button type="button" onclick="confirmarPago()">Pagar</button>
+            <button type="button" onclick="closeModal('modalPago')">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Cambio -->
+<div id="modalCambio" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('modalCambio')">&times;</span>
+        <h2>Pago Realizado</h2>
+        <p>Se ha realizado el pago correctamente.</p>
+        <p id="detallePago"></p>
+        <p id="cambioMonto"></p>
+        <!-- El botón de cerrar será el único medio para cerrar el modal -->
+        <button type="button" onclick="closeModal('modalCambio')">Cerrar</button>
+    </div>
+</div>
+
+<!-- Estilos para el modal -->
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
