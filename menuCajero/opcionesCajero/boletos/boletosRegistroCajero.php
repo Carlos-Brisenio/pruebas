@@ -432,6 +432,56 @@
                 }
             });
         });
+
+        //autocomplete todas las calles existentes colindancias 1
+        $(function() {
+            $("#colinda1").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "/pruebas/menuCajero/opcionesCajero/boletos/registroCallesExistentes.php", // apunta hacia un archivo php para hacer la consulta de datos
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    if (ui.item.data) {
+                        var data = ui.item.data;
+                        $("#colinda1").val(data.calle);
+                    }
+                }
+            });
+        });
+        
+        //autocomplete todas las calles existentes colindancias 2
+        $(function() {
+            $("#colinda2").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "/pruebas/menuCajero/opcionesCajero/boletos/registroCallesExistentes.php", // apunta hacia un archivo php para hacer la consulta de datos
+                        dataType: "json",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    if (ui.item.data) {
+                        var data = ui.item.data;
+                        $("#colinda2").val(data.calle);
+                    }
+                }
+            });
+        });
     </script>
 
 </body>

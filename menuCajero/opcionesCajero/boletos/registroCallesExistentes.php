@@ -10,28 +10,29 @@ $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
 if (isset($_GET['term'])) {
     $term = $_GET['term'];
     
-    // Nueva consulta utilizando la tabla Calles
-    $query = "SELECT idCalle, nombre_Calle 
+    // Consulta actualizada para evitar duplicados usando DISTINCT
+    $query = "SELECT DISTINCT idCalle, nombre_Calle 
               FROM Calles 
               WHERE nombre_Calle LIKE :term";
+    
     $stmt = $conn->prepare($query);
     $stmt->execute(['term' => '%' . $term . '%']);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     $suggestions = [];
     foreach ($results as $row) {
-        // Formato de autocompletado basado en el nombre de la calle
-        $calleNombre = $row['nombre_Calle'];
+        // Mantener solo el nombre de la calle
+        $nombreCalle = $row['nombre_Calle'];
         $suggestions[] = [
-            'label' => $calleNombre,  // Mostrar la calle con formato 'C. nombre_Calle'
-            'value' => $calleNombre,  // Usar el nombre de la calle como valor
-            'idCalle' => $row['idCalle']  // Mantener el idCalle si lo necesitas para otras operaciones
+            'label' => $nombreCalle,  // Mostrar solo el nombre de la calle
+            'value' => $nombreCalle,  // Usar el nombre de la calle como valor
+            'idCalle' => $row['idCalle']  // Devolver el ID de la calle si es necesario
         ];
     }
 
-    // Retornar resultados como JSON
     header('Content-Type: application/json');
     echo json_encode($suggestions);
     exit;
 }
 ?>
+
