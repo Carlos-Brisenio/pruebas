@@ -164,7 +164,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/pruebas/principal-Administracion.php">
+                    <a href="/pruebas/principal-Adminis.php">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>
