@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    
 // Conexión a la base de datos
 $host = "localhost";
 $db_name = "dbMayordomia";
@@ -30,11 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Obtener el tipo de usuario
     $tipoUsuario = obtenerTipoUsuario($conn, $usuario, $password);
-    echo $tipoUsuario;
+    //echo $tipoUsuario;
     if ($tipoUsuario != "") {
-        if ($tipoUsuario == 2) { // Modificado aquí para permitir solo idTipoUsuario 2
+        if ($tipoUsuario == 3) { // Modificado aquí para permitir solo idTipoUsuario 3
+            $_SESSION["isLoggedIn"] = true;
             // Redirigir al usuario con permisos
-            header("Location: menuCajero/indexCajero.html");
+            header("Location: menuCajero/indexLogistica.php");
             exit();
         } else {
             // Mostrar mensaje de falta de permisos
@@ -55,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="google" content="notranslate">
     <meta name="csrf-token" content="KrT0K4JDi7KSb2c43qIg4ffxdybnDXB6ru5JXNjT">
-	<title>Ticket-Mayordomia©</title>
+	<title>Mayordomía Tickets Proceso 2026©</title>
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico'>
     <link rel="stylesheet" href="style.css"></head>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -69,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="bannerV2.png" alt="Login" class="max-w-full">
             <br>
             <p class="text-center text-xs">
-                <a target="_blank">Mayordomía Señor San José 2025®</a><br>Todos los derechos reservados © 2023-2024.
+                <a target="_blank">Mayordomía Señor San José 2026®</a><br>Todos los derechos reservados © 2023-2025.
                 <br>Un producto de DreamCreators</a>.
             </p>
         </div>
@@ -77,11 +80,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <img src="banderinLogo.png" alt="Logo" class="max-w-full h-24">
             <br>
             <ul class="nav nav-pills-2 nav-center">
-                <li role="presentation"><a href="index.html">Usuarios</a></li>
-                <li role="presentation" class="active"><a href="principal-Cajeros.php">Cajeros</a></li>
+                <li role="presentation"><a href="index.php">Usuarios</a></li>
+                <li role="presentation"><a href="principal-Cajeros.php">Cajeros</a></li>
                 <li role="presentation"><a href="principal-Administracion.php">Administración</a></li>
-                <li role="presentation"><a href="principal-Logistica.php">Log&iacute;stica</a></li>
-
+                <li role="presentation"class="active"><a href="principal-Logistica.php">Log&iacute;stica</a></li>
             </ul>
             <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" id="login" class="w-full md:w-2/3 p-4">
                 <input type="hidden" name="_token">                <div class="row">
@@ -108,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="flex flex-col text-center text-xs flex md:hidden">
                         <img src="banderinLogo.png" alt="MindBox" class="w-32 mx-auto">
                     </a>
-                    Todos los derechos reservados © 2023-2024.
+                    Todos los derechos reservados © 2023-2025.
                 </p>
             </div>
         </div>
@@ -116,30 +118,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 	</div>
 	<div id="notify" class="notifxi-alert"></div>
-    <!--<script>
-        function login(){
-            var parametros = {
-                "usuario" : document.getElementById("user").value,
-                "password" : document.getElementById("password").value
-            }
-            $.ajax({
-                data: parametros,
-                url: "loginCajero.php",
-                type: "POST",
-                success: function(response){
-                    if(response[0]=="1"){
-                        //El usuario y contraseña son correctos
-
-                    }else{
-                        if(response[0]=="2"){
-                            //El usuario no cuenta con permisos suficientes
-                        }else{
-                            //El usuario y/o contraseña son incorrectos
-                        }
-                    }
-                }
-            });
-        }
-    </script>-->
 </body>
 </html>

@@ -79,6 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li role="presentation"><a href="index.html">Usuarios</a></li>
                 <li role="presentation"><a href="principal-Cajeros.php">Cajeros</a></li>
                 <li role="presentation" class="active"><a href="principal-Administracion.php">Administración</a></li>
+                <li role="presentation"><a href="principal-Logistica.php">Log&iacute;stica</a></li>
+
             </ul>
             <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" id="login" class="w-full md:w-2/3 p-4">
                 <input type="hidden" name="_token">                <div class="row">
