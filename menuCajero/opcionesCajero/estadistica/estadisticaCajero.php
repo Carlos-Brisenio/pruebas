@@ -293,10 +293,16 @@
         }*/
        // Abrir el modal de pago
 function payTicket(numero_boleto) {
-    // Guardamos el número de boleto en un atributo data para utilizarlo luego
+    // Guardamos el número de boleto en un atributo data
     $('#modalPago').data('boleto', numero_boleto);
+
+    // Mostramos el número en el badge dentro del modal
+    $('#boletoTexto').text("Boleto: " + numero_boleto);
+
+    // Mostramos el modal
     $('#modalPago').show();
 }
+
 
 // Cerrar modales
 function closeModal(modalId) {
@@ -312,13 +318,25 @@ function closeModal(modalId) {
 
 function confirmarPago() {
     var numero_boleto = $('#modalPago').data('boleto');
-    var recibe = parseFloat($('#recibe').val());
+    var recibeVal = $('#recibe').val();
     var precio = 180;
     var formaPago = $('#formaPago').val();
+    var formaPagoTexto = $('#formaPago option:selected').text();
+
+    // 🚨 Validación: campo vacío o no numérico
+    if (!recibeVal || isNaN(recibeVal)) {
+        alert("Por favor ingresa una cantidad válida.");
+        return;
+    }
+
+    var recibe = parseFloat(recibeVal);
     var cambio = recibe - precio;
 
-    // Cerrar el modal de pago antes de realizar la solicitud
-    closeModal('modalPago');
+    // 🚨 Validación: cantidad recibida insuficiente
+    if (recibe < precio) {
+        alert("La cantidad recibida es insuficiente. Debe cubrir el precio del boleto ($" + precio + ").");
+        return;
+    }
 
     // Llamada AJAX para procesar el pago en el servidor
     $.ajax({
@@ -327,24 +345,30 @@ function confirmarPago() {
         data: {
             numero_boleto: numero_boleto,
             precio: precio,
-            forma_pago: formaPago
+            forma_pago: formaPago,
+            recibe: recibe
         },
         success: function(response) {
-            // Mostrar el modal de cambio con el resumen del pago una vez que el pago ha sido procesado
-            $('#detallePago').html('Número de boleto: ' + numero_boleto + '<br>Precio: $180<br>Forma de Pago: ' + formaPago);
-            $('#cambioMonto').html('Cambio: $' + cambio.toFixed(2));
+            // Cerrar el modal de pago solo después de procesar el pago
+            closeModal('modalPago');
+
+            // Mostrar el resumen del pago en el modal de cambio
+            $('#detallePago').html(
+                'Número de boleto: ' + numero_boleto +
+                '<br>Precio: $' + precio +
+                '<br>Forma de Pago: ' + formaPagoTexto +
+                '<br>Recibido: $' + recibe.toFixed(2) +
+                '<br><strong>Cambio: $' + cambio.toFixed(2) + '</strong>'
+            );
 
             // Mostrar el modal de cambio
             $('#modalCambio').show();
-            
-            // Ya no hay límite de tiempo para cerrar el modal, se cierra con el botón "Cerrar"
         },
         error: function(error) {
             alert('Error al procesar el pago.');
         }
     });
 }
-
 
 
         function imprimirBoletos(numero_boleto) {
@@ -448,11 +472,18 @@ function confirmarPago() {
     </body>
     </html>
 
-    <!-- Modal de Pago -->
+<!-- Modal de Pago -->
 <div id="modalPago" class="modal" style="display:none;">
     <div class="modal-content">
         <span class="close" onclick="closeModal('modalPago')">&times;</span>
         <h2>Confirmar Pago</h2>
+
+        <!-- Aquí mostramos el número de boleto en grande -->
+        <h3 id="boletoTexto" style="text-align:center; font-size:22px; font-weight:bold; color:#333;">
+            Boleto: ---
+        </h3>
+        <hr>
+
         <form id="pagoForm">
             <label for="cantidad">Cantidad:</label>
             <input type="text" id="cantidad" name="cantidad" value="1" readonly><br><br>
@@ -475,6 +506,7 @@ function confirmarPago() {
         </form>
     </div>
 </div>
+
 
 <!-- Modal de Cambio -->
 <div id="modalCambio" class="modal" style="display:none;">

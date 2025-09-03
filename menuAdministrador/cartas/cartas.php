@@ -46,7 +46,8 @@
             recorrido,
             nombres,
             domicilio,
-            numeroBoletos
+            numeroBoletos,
+            proceso
         FROM Rutas";
     
     $stmtRutasTable = $conn->prepare($queryRutasTable);
@@ -66,6 +67,12 @@
     $stmtRutasExisten = $conn->prepare($queryRutasExisten);
     $stmtRutasExisten->execute();
     $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);
+
+    // Consulta para obtener procesos distintos de la tabla Historico
+    $queryProcesos = "SELECT DISTINCT proceso FROM Historico ORDER BY proceso ASC";
+    $stmtProcesos = $conn->prepare($queryProcesos);
+    $stmtProcesos->execute();
+    $procesos = $stmtProcesos->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <!DOCTYPE html>
@@ -279,6 +286,15 @@
                         <button id="printRutaButton" class="buttonSelectImprimir" onclick="ImprimirRuta()">Imprimir ruta</button>
                     </div>
 
+                    <div class="form-group-select">
+                        <label for="procesoSelect">Selecciona un proceso:</label>
+                        <select id="procesoSelect" class="form-control">
+                            <option value="">Todos los procesos</option>
+                            <?php foreach ($procesos as $proceso): ?>
+                                <option value="<?= htmlspecialchars($proceso) ?>"><?= htmlspecialchars($proceso) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                     <table id="rutasTable" class="table table-striped table-bordered">
                         <thead>
@@ -289,6 +305,7 @@
                                 <th>NOMBRES</th>
                                 <th>DOMICILIO</th>
                                 <th>N° BOLETOS COMPRADOS</th>
+                                <th>PROCESO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -300,6 +317,7 @@
                                     <td><?= htmlspecialchars($ruta['nombres']) ?></td>
                                     <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                     <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
+                                    <td><?= htmlspecialchars($ruta['proceso']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -531,20 +549,39 @@ Octubre 2025 tiene como objetivo principal presentar y difundir los datos técni
             };
         }
 
-        //Configuración de la tabla de rutas
-        $(document).ready(function() {
-            
-            // Configuración de DataTables para la tabla rutasTable
-            var rutasTable = $('#rutasTable').DataTable({
-                "searching": true,
-                "searchMinLength": 1,
-            });
-        
-            // Agregar funcionalidad de búsqueda personalizada para rutasTable
-            $('#searchVendidos').on('keyup', function() {
-                rutasTable.search(this.value).draw();
-            });
-        });
+$(document).ready(function() {
+    var rutasTable = $('#rutasTable').DataTable({
+        "searching": true,
+        "searchMinLength": 1
+    });
+
+    // Búsqueda global personalizada
+    $('#searchVendidos').on('keyup', function() {
+        rutasTable.search(this.value).draw();
+    });
+
+    // Filtrar por ruta (columna 1, que tiene un <input>)
+    $('#rutaSelect').on('change', function() {
+        var ruta = this.value;
+        if (ruta) {
+            rutasTable.column(1).search(ruta, true, false).draw();
+        } else {
+            rutasTable.column(1).search('').draw();
+        }
+    });
+
+    // Filtrar por proceso (columna 6)
+    $('#procesoSelect').on('change', function() {
+        var proceso = this.value;
+        if (proceso) {
+            rutasTable.column(6).search(proceso, true, false).draw();
+        } else {
+            rutasTable.column(6).search('').draw();
+        }
+    });
+});
+
+
     </script>
 
 <script>
