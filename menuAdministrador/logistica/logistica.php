@@ -19,7 +19,7 @@ try {
     echo "Error de conexión: " . $e->getMessage();
 }
 
-/*/ Función para truncar el campo nombres
+// Función para truncar el campo nombres
     function truncarNombres($nombre, $maxLength = 45) {
         if (mb_strlen($nombre) > $maxLength) {
             return mb_substr($nombre, 0, $maxLength) . '...';
@@ -54,7 +54,7 @@ try {
     $queryRutasExisten = "SELECT DISTINCT ruta FROM Rutas ORDER BY ruta ASC";
     $stmtRutasExisten = $conn->prepare($queryRutasExisten);
     $stmtRutasExisten->execute();
-    $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);*/
+    $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);
 
 ?>
 
