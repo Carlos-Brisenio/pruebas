@@ -12,12 +12,12 @@
     $username = "root";
     $password = "";
 
-try {
+//try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  /*  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Error de conexión: " . $e->getMessage();
-}
+}*/
 
 // Función para truncar el campo nombres
     function truncarNombres($nombre, $maxLength = 45) {
