@@ -1,10 +1,10 @@
 <?php
 
-    session_start();
-    if (!isset($_SESSION["isLoggedIn"]) || $_SESSION["isLoggedIn"] !== true) {
+    //session_start();
+    /*if (!isset($_SESSION["isLoggedIn"]) || $_SESSION["isLoggedIn"] !== true) {
         header("Location: /pruebas/principal-Logistica.php"); // Reemplaza 'login.php' con el nombre de tu archivo de inicio de sesión si es diferente
         exit;
-    }
+    }*/
 
 // Conexión a la base de datos
     $host = "localhost";
