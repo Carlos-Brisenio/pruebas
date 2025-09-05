@@ -27,7 +27,7 @@
         return $nombre;
     }
 
-    // Consulta para obtener rutas SOLO del proceso = año actual
+    // Consulta para obtener rutas SOLO del proceso = año actual y con status = 0
     $queryRutasTable = "
         SELECT
             idRutas, 
@@ -38,7 +38,7 @@
             numeroBoletos,
             proceso
         FROM Rutas
-        WHERE proceso = YEAR(CURDATE())
+        WHERE proceso = YEAR(CURDATE()) AND status = 0
     ";
 
     $stmtRutasTable = $conn->prepare($queryRutasTable);
@@ -75,9 +75,11 @@
             nombres,
             domicilio,
             numeroBoletos,
-            proceso
+            proceso,
+            entrego,
+            fechaEntrega
         FROM Rutas
-        WHERE proceso = YEAR(CURDATE())
+        WHERE proceso = YEAR(CURDATE()) AND status = 1
     ";
 
     $stmtInfoLogisticaTable = $conn->prepare($queryInfoLogisticaTable);
@@ -114,6 +116,56 @@
         }
     }
     $total = $noEntregados + $entregados;
+
+    $anioActual = date('Y');
+
+// Total de décimas en el proceso actual
+$queryTotalDecimas = "
+    SELECT SUM(numeroBoletos) as total
+    FROM Rutas
+    WHERE proceso = :anio
+";
+$stmtTotalDecimas = $conn->prepare($queryTotalDecimas);
+$stmtTotalDecimas->bindParam(':anio', $anioActual, PDO::PARAM_INT);
+$stmtTotalDecimas->execute();
+$totalDecimas = $stmtTotalDecimas->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+// Décimas entregadas por fecha
+$queryDecimasEntregadas = "
+    SELECT DATE(fechaEntrega) as fecha, SUM(numeroBoletos) as total_entregadas
+    FROM Rutas
+    WHERE status = 1 AND proceso = :anio
+    GROUP BY DATE(fechaEntrega)
+    ORDER BY fechaEntrega ASC
+";
+$stmtDecimasEntregadas = $conn->prepare($queryDecimasEntregadas);
+$stmtDecimasEntregadas->bindParam(':anio', $anioActual, PDO::PARAM_INT);
+$stmtDecimasEntregadas->execute();
+$decimasEntregadasRaw = $stmtDecimasEntregadas->fetchAll(PDO::FETCH_ASSOC);
+
+// Preparar datos acumulativos y por día
+$labels = [];
+$entregadas = [];
+$noEntregadas = [];
+$entregadasDia = [];
+
+$acumuladas = 0;
+foreach ($decimasEntregadasRaw as $row) {
+    $labels[] = $row['fecha'];
+    $entregadasDia[] = $row['total_entregadas']; // entregas de ese día
+    $acumuladas += $row['total_entregadas'];
+    $entregadas[] = $acumuladas; // acumuladas
+    $noEntregadas[] = $totalDecimas - $acumuladas; // por entregar
+}
+
+// Si no hay entregas aún
+if (empty($labels)) {
+    $labels[] = 'Aún no hay entregas';
+    $entregadas[] = 0;
+    $noEntregadas[] = $totalDecimas;
+    $entregadasDia[] = 0;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -248,43 +300,39 @@
                         <span class="switch"></span>
                     </div>
                 </li>
-                
             </div>
         </div>
-
     </nav>
    
     <section class="home">
         <div class="section">
+            <div id="resumenRutas">
+                <h1>Resumen estadisticas de Logística</h1>
+                <table class="resumen-table">
+                    <tr>
+                        <th>Estado</th>
+                        <th>Total Décimas</th>
+                    </tr>
+                    <tr>
+                        <td>No entregadas (NO)</td>
+                        <td id="tdNoEntregadas"><?= $noEntregados ?></td>
+                    </tr>
+                    <tr>
+                        <td>Entregadas (EN)</td>
+                        <td id="tdEntregadas"><?= $entregados ?></td>
+                    </tr>
+                    <tr>
+                        <th>Total = (NO + EN)</th>
+                        <th id="tdTotal"><?= $total ?></th>
+                    </tr>
+                </table>
+            </div>
 
-        <div id="resumenRutas">
-            <h2>Resumen de Entregas</h2>
-            <table class="resumen-table">
-                <tr>
-                    <th>Estado</th>
-                    <th>Total Décimas</th>
-                </tr>
-                <tr>
-                    <td>No entregadas</td>
-                    <td id="tdNoEntregadas"><?= $noEntregados ?></td>
-                </tr>
-                <tr>
-                    <td>Entregadas</td>
-                    <td id="tdEntregadas"><?= $entregados ?></td>
-                </tr>
-                <tr>
-                    <th>Total</th>
-                    <th id="tdTotal"><?= $total ?></th>
-                </tr>
-            </table>
-        </div>
-
-            <section class="logistica">
-                <h1>Logística de entrega de cartas y décimas</h1>
-                <br>
-            </section>
-                <div class="container">
-                    
+        <section class="logistica">
+            <h1>Logística de entrega de cartas y décimas</h1>
+            <br>
+        </section>
+            <div class="container">
                     <table id="rutasTable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -326,8 +374,9 @@
                             <th style="display:none;">RECORRIDO</th>
                             <th style="display:none;">NOMBRES</th>
                             <th>DOMICILIO</th>
-                            <th>N° BOLETOS DECIMAS ENTREGADAS</th>
+                            <th>N° DECIMAS ENTREGADAS</th>
                             <th>ENTREGO</th>
+                            <th>FECHA</th>
                             <th>PROCESO</th>
                             <th>Acciones</th>
                         </tr>
@@ -341,9 +390,10 @@
                                 <td style="display:none;"><?= htmlspecialchars($ruta['nombres']) ?></td>
                                 <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                 <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
-                                <td>Persona</td>
+                                <td><?= htmlspecialchars($ruta['entrego']) ?></td>
+                                <td><?= htmlspecialchars($ruta['fechaEntrega']) ?></td>
                                 <td><?= htmlspecialchars($ruta['proceso']) ?></td>
-                                <td><button class="btnCancelar"><i class='bx bx-x'></i></button></td>
+                                <td><button style="background-color:red" class="btnCancelar"><i class='bx bx-x'></i></button></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>  
@@ -351,6 +401,11 @@
             </div>
 
         </div>
+            <!--Aqui debe de ir el llamado para mostrar la grafica-->
+            <div class="container">
+                <h2 style="text-align: center">Décimas Por Entregar vs Entregadas(Día) vs Entregadas(Acumulativo) <br>(Proceso <?= $anioActual ?>)</h2>
+                <canvas id="decimasChart" width="800" height="400"></canvas>
+            </div>
     </section>
 
 
@@ -445,7 +500,6 @@
 
             // Aquí podrías hacer un $.ajax() para registrar en la BD la entrega
         });
-
     });
 
 
@@ -491,7 +545,7 @@
     // -------------------------
     // EVENTOS MODAL para infoLogisticaTable
     // -------------------------
-    $('#infoLogisticaTable').on('click', '.btnCheckInfo', function () {
+    $('#infoLogisticaTable').on('click', '.btnCancelar', function () {
         var fila = $(this).closest('tr');
         var nombres = fila.find('td:eq(3)').text();
         var domicilio = fila.find('td:eq(4)').text();
@@ -606,26 +660,27 @@ $('#btnEntregar, #btnCancelar').on('click', function () {
   </div>
 </div>
 
-
-<style>
-/* Estilos del modal */
-.modal {
-  display: none; 
-  position: fixed; 
-  z-index: 9999; 
-  padding-top: 100px; 
-  left: 0; top: 0; width: 100%; height: 100%;
-  overflow: auto; background-color: rgba(0,0,0,0.6);
-}
-.modal-content {
-  background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888;
-  width: 400px; border-radius: 12px; text-align: left;
-}
-.close {
-  color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
-}
-.close:hover { color: black; }
-</style>
+    <style>
+    /* Estilos del modal */
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 9999; 
+        padding-top: 100px; 
+        left: 0; top: 0; width: 100%; height: 100%;
+        overflow: auto; background-color: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+        background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888;
+        width: 400px; border-radius: 12px; text-align: left;
+    }
+    .close {
+        color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+    }
+    .close:hover { 
+        color: black; 
+    }
+    </style>
 
     <style>
     .resumen-table {
@@ -648,5 +703,56 @@ $('#btnEntregar, #btnCancelar').on('click', function () {
         background-color: #f9f9f9;
     }
     </style>
+
+    <script>
+// Datos desde PHP
+var labels = <?php echo json_encode($labels); ?>;
+var entregadas = <?php echo json_encode($entregadas); ?>;
+var noEntregadas = <?php echo json_encode($noEntregadas); ?>;
+var entregadasDia = <?php echo json_encode($entregadasDia); ?>;
+
+var ctxDecimas = document.getElementById('decimasChart').getContext('2d');
+var decimasChart = new Chart(ctxDecimas, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Décimas Por Entregar',
+                data: noEntregadas,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Décimas Entregadas del Día',
+                data: entregadasDia,
+                backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Décimas Entregadas (Acumuladas)',
+                data: entregadas,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Número de Décimas' }
+            },
+            x: {
+                title: { display: true, text: 'Fecha de Entrega' }
+            }
+        }
+    }
+});
+</script>
 
 </html>
