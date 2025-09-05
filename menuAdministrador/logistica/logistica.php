@@ -166,6 +166,54 @@ if (empty($labels)) {
     $entregadasDia[] = 0;
 }
 
+if (isset($_POST['entregarRuta'])) {
+    $idRutas = $_POST['idRutas'];
+    $idUsuario = $_POST['idUsuario'];
+    $fechaEntrega = $_POST['fechaEntrega'];
+
+    // 1️⃣ Obtener el nombre del usuario
+    $stmtUsuario = $conn->prepare("SELECT nombre FROM Usuarios WHERE idUsuario = :idUsuario");
+    $stmtUsuario->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    $stmtUsuario->execute();
+    $nombreUsuario = $stmtUsuario->fetchColumn();
+
+    // 2️⃣ Actualizar registro
+    $sql = "UPDATE Rutas SET status = 1, entrego = :nombreUsuario, fechaEntrega = :fechaEntrega WHERE idRutas = :idRutas";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idRutas', $idRutas, PDO::PARAM_INT);
+    $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
+    $stmt->bindParam(':fechaEntrega', $fechaEntrega);
+
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error']);
+    }
+    exit;
+}
+
+if (isset($_POST['cancelarEntrega'])) {
+    $idRutas = $_POST['idRutas'];
+
+    // Consulta para revertir la entrega
+    $sql = "UPDATE Rutas 
+            SET status = 0, 
+                entrego = '', 
+                fechaEntrega = NULL
+            WHERE idRutas = :idRutas";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':idRutas', $idRutas, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'No se pudo cancelar la entrega']);
+    }
+    exit;
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -333,6 +381,7 @@ if (empty($labels)) {
             <br>
         </section>
             <div class="container">
+                <h2 class="infoLogistica">Décimas por entregar</h2>
                     <table id="rutasTable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -365,14 +414,14 @@ if (empty($labels)) {
                 <br><br>
 
                 <div class="container">
-                <h2 class="infoLogistica">Información de entrega de cartas y décimas</h2>
+                <h2 class="infoLogistica">Información de Décimas entregadas</h2>
                 <table id="infoLogisticaTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th style="display:none;">idRutas</th>
                             <th style="display:none;">RUTAS</th>
                             <th style="display:none;">RECORRIDO</th>
-                            <th style="display:none;">NOMBRES</th>
+                            <th>NOMBRES</th>
                             <th>DOMICILIO</th>
                             <th>N° DECIMAS ENTREGADAS</th>
                             <th>ENTREGO</th>
@@ -387,7 +436,7 @@ if (empty($labels)) {
                                 <td class="idRutas" style="display:none;"><?= htmlspecialchars($ruta['idRutas']) ?></td>
                                 <td style="display:none;"><?= htmlspecialchars($ruta['ruta']) ?></td>
                                 <td style="display:none;"><?= htmlspecialchars($ruta['recorrido']) ?></td>
-                                <td style="display:none;"><?= htmlspecialchars($ruta['nombres']) ?></td>
+                                <td><?= htmlspecialchars($ruta['nombres']) ?></td>
                                 <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                 <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
                                 <td><?= htmlspecialchars($ruta['entrego']) ?></td>
@@ -470,7 +519,7 @@ if (empty($labels)) {
 
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script src="/pruebas/menuAdministrador/autologout.js"></script>
-    <script>
+<script>
 $(document).ready(function () {
     // -------------------------
     // TABLA RUTAS
@@ -478,40 +527,6 @@ $(document).ready(function () {
     var rutasTable = $('#rutasTable').DataTable({
         searching: true,
         searchMinLength: 1
-    });
-
-    // Filtros
-    $('#searchVendidos').on('keyup', function() {
-        rutasTable.search(this.value).draw();
-    });
-    $('#rutaSelect').on('change', function() {
-        rutasTable.column(1).search(this.value || '').draw();
-    });
-    $('#procesoSelect').on('change', function() {
-        rutasTable.column(6).search(this.value || '').draw();
-    });
-
-    // Botón CHECK en tabla rutas
-    $('#rutasTable').on('click', '.btnCheck', function () {
-        var fila = $(this).closest('tr');
-        $('#modalNombres').text(fila.find('td:eq(3)').text());
-        $('#modalDomicilio').text(fila.find('td:eq(4)').text());
-        $('#modalBoletos').text(fila.find('td:eq(5)').text());
-        $('#modalInfo').fadeIn(); // abre SOLO modalInfo
-    });
-
-    // Cerrar modal rutas
-    $('.closeModalInfo').on('click', function () {
-        $('#modalInfo').fadeOut();
-    });
-
-    // Botón Cancelar en modal rutas
-    $('#btnCancelarRuta').on('click', function () {
-        $('#modalMessage')
-            .text("Operación cancelada")
-            .css("color", "red")
-            .show();
-        $('#modalInfo').fadeOut();
     });
 
     // -------------------------
@@ -522,32 +537,58 @@ $(document).ready(function () {
         searchMinLength: 1
     });
 
-    // Botón CANCELAR en tabla logística
-    $('#infoLogisticaTable').on('click', '.btnCancelar', function () {
+    // -------------------------
+    // FILTROS
+    // -------------------------
+    $('#searchVendidos').on('keyup', function() {
+        rutasTable.search(this.value).draw();
+    });
+
+    $('#rutaSelect').on('change', function() {
+        rutasTable.column(1).search(this.value || '').draw();
+    });
+
+    $('#procesoSelect').on('change', function() {
+        rutasTable.column(6).search(this.value || '').draw();
+    });
+
+    // -------------------------
+    // MODAL RUTAS
+    // -------------------------
+    $('#rutasTable').on('click', '.btnCheck', function () {
         var fila = $(this).closest('tr');
+        fila.addClass('selected'); // marcar fila
+        $('#modalNombres').text(fila.find('td:eq(3)').text());
+        $('#modalDomicilio').text(fila.find('td:eq(4)').text());
+        $('#modalBoletos').text(fila.find('td:eq(5)').text());
+        $('#modalInfo').fadeIn();
+    });
+
+    $('.closeModalInfo, #btnCancelarRuta').on('click', function () {
+        $('#modalInfo').fadeOut();
+    });
+
+    // -------------------------
+    // MODAL LOGÍSTICA
+    // -------------------------
+    $('#infoLogisticaTable').on('click', '.btnCancelar', function () {
+        $('#infoLogisticaTable tr').removeClass('selected');
+        var fila = $(this).closest('tr');
+        fila.addClass('selected');
+
         $('#modalLogisticaDomicilio').text(fila.find('td:eq(4)').text());
         $('#modalLogisticaBoletos').text(fila.find('td:eq(5)').text());
-        $('#modalInfoLogistica').fadeIn(); // abre SOLO modalInfoLogistica
+        $('#modalInfoLogistica').fadeIn();
     });
 
-    // Cerrar modal logística
-    $('.closeModalInfoLogistica').on('click', function () {
-        $('#modalInfoLogistica').fadeOut();
-    });
-
-    // Botón Cancelar en modal logística
-    $('#btnCancelarLogistica').on('click', function () {
-        $('#modalMessage')
-            .text("Operación cancelada")
-            .css("color", "red")
-            .show();
+    $('.closeModalInfoLogistica, #btnCancelarLogistica').on('click', function () {
         $('#modalInfoLogistica').fadeOut();
     });
 
     // -------------------------
     // RESUMEN AJAX
     // -------------------------
-    function cargarResumen() {
+    /*function cargarResumen() {
         $.ajax({
             url: 'logistica.php?resumen=1',
             type: 'GET',
@@ -561,15 +602,101 @@ $(document).ready(function () {
                 alert('Error al actualizar el resumen');
             }
         });
-    }
+    }*/
 
-    // Refrescar resumen después de entregar
-    $('#btnEntregar').on('click', function () {
-        setTimeout(cargarResumen, 500);
+    // ===================== ENTREGAR DÉCIMA =====================
+        $('#btnEntregarRuta').on('click', function () {
+            var fila = $('#rutasTable').find('tr.selected');
+            if (!fila.length) {
+                fila = $('#rutasTable').find('tr').filter(function() {
+                    return $(this).find('td:eq(3)').text() === $('#modalNombres').text() &&
+                        $(this).find('td:eq(4)').text() === $('#modalDomicilio').text();
+                });
+            }
+
+            if (!fila.length) return alert('No se pudo identificar la fila seleccionada.');
+
+            var idRutas   = fila.find('td:eq(0)').text();
+            var idUsuario = $('#usuarioSelect').val(); // ahora mandamos el idUsuario
+            if (!idUsuario) return alert('Por favor seleccione un usuario responsable.');
+
+            if (!confirm('¿Está seguro de marcar esta entrega como completada?')) {
+                return;
+            }
+
+            var fechaEntrega = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+            $.ajax({
+                url: 'logistica.php',
+                type: 'POST',
+                data: {
+                    entregarRuta: 1,
+                    idRutas: idRutas,
+                    idUsuario: idUsuario,
+                    fechaEntrega: fechaEntrega
+                },
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    if(res.status === 'success'){
+                        $('#modalInfo').fadeOut();
+                        $('#modalMessageRuta').text('Entrega registrada correctamente.')
+                            .css('color','green').show().fadeOut(3000);
+
+                        // 🔄 Recargar ambas tablas por AJAX
+                        location.reload();
+
+                        // 🔄 Actualizar resumen
+                        //cargarResumen();
+                    } else {
+                        alert('Error al registrar entrega: ' + res.message);
+                    }
+                },
+                error: function () {
+                    alert('Error al registrar la entrega.');
+                }
+            });
+        });
+
+    // -------------------------
+    // CANCELAR ENTREGA
+    // -------------------------
+    $('#btnEliminarEntrega').on('click', function () {
+        var fila = $('#infoLogisticaTable tr.selected');
+        if(fila.length === 0) return alert("Selecciona una fila primero");
+
+        var idRutas = fila.find('td:eq(0)').text();
+        if(!confirm("¿Cancelar entrega?")) return;
+
+        $.ajax({
+            url: 'logistica.php',
+            type: 'POST',
+            data: { cancelarEntrega: 1, idRutas: idRutas },
+            success: function(response) {
+                var res = JSON.parse(response);
+                if(res.status === 'success') {
+                    $('#modalInfoLogistica').fadeOut();
+                    $('#modalMessageLogistica')
+                        .text("Entrega cancelada correctamente")
+                        .css("color", "green")
+                        .show().fadeOut(3000);
+
+                    // 🔄 Recargar ambas tablas por AJAX
+                    location.reload();
+
+
+                    // 🔄 Actualizar resumen
+                    //cargarResumen();
+                } else {
+                    alert('Error al cancelar entrega: ' + res.message);
+                }
+            },
+            error: function() {
+                alert("Error en la conexión con el servidor");
+            }
+        });
     });
 });
 </script>
-
 
 <script>
 // Datos desde PHP
