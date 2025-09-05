@@ -409,159 +409,104 @@ if (empty($labels)) {
     </section>
 
 
+    <!-- =========================
+     MODAL PARA TABLA RUTAS
+========================= -->
+<div id="modalInfo" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close closeModalInfo">&times;</span>
+        <h2>Entregar Décima(s) y Carta</h2>
+
+        <p><strong>Nombre:</strong> <span id="modalNombres"></span></p>
+        <p><strong>Domicilio:</strong> <span id="modalDomicilio"></span></p>
+        <p><strong>Décimas a entregar:</strong> <span id="modalBoletos"></span></p>
+        <p><strong>Cartas a entregar:</strong> 1</p>
+
+        <!-- Select con usuarios -->
+        <label for="usuarioSelect"><b>Usuario responsable:</b></label>
+        <select id="usuarioSelect" name="usuarioSelect">
+            <option value="">Seleccione un usuario</option>
+            <?php foreach ($usuarios as $usuario): ?>
+                <option value="<?= htmlspecialchars($usuario['idUsuario']) ?>">
+                    <?= htmlspecialchars($usuario['nombre']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <!-- Botones -->
+        <div class="modal-actions">
+            <button id="btnEntregarRuta">Entregar</button>
+            <button id="btnCancelarRuta">Cancelar</button>
+        </div>
+
+        <!-- Mensaje -->
+        <p id="modalMessageRuta" style="color:red; font-weight:bold; display:none;"></p>
+    </div>
+</div>
+
+<!-- ==============================
+     MODAL PARA TABLA LOGÍSTICA
+============================== -->
+<div id="modalInfoLogistica" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close closeModalInfoLogistica">&times;</span>
+        <h2>Cancelar entrega</h2>
+
+        <p><strong>Domicilio:</strong> <span id="modalLogisticaDomicilio"></span></p>
+        <p><strong>Décimas entregadas:</strong> <span id="modalLogisticaBoletos"></span></p>
+        <p><strong>Cartas entregadas:</strong> 1</p>
+
+        <!-- Botones -->
+        <div class="modal-actions">
+            <button id="btnEliminarEntrega">Cancelar Entrega</button>
+            <button id="btnCancelarLogistica">Cerrar</button>
+        </div>
+
+        <!-- Mensaje -->
+        <p id="modalMessageLogistica" style="color:red; font-weight:bold; display:none;"></p>
+    </div>
+</div>
+
+
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script src="/pruebas/menuAdministrador/autologout.js"></script>
     <script>
-    $(document).ready(function () {
-        // ✅ Inicializar la tabla SOLO una vez
-        var rutasTable;
-        if (!$.fn.DataTable.isDataTable('#rutasTable')) {
-            rutasTable = $('#rutasTable').DataTable({
-                "searching": true,
-                "searchMinLength": 1
-            });
-        } else {
-            rutasTable = $('#rutasTable').DataTable();
-        }
-
-        // -------------------------
-        // FILTROS Y BÚSQUEDAS
-        // -------------------------
-        $('#searchVendidos').on('keyup', function() {
-            rutasTable.search(this.value).draw();
-        });
-
-        $('#rutaSelect').on('change', function() {
-            var ruta = this.value;
-            rutasTable.column(1).search(ruta ? ruta : '').draw();
-        });
-
-        $('#procesoSelect').on('change', function() {
-            var proceso = this.value;
-            rutasTable.column(6).search(proceso ? proceso : '').draw();
-        });
-
-        // -------------------------
-        // MODAL (abrir/cerrar)
-        // -------------------------
-        $('#rutasTable').on('click', '.btnCheck', function () {
-            var fila = $(this).closest('tr');
-
-            var nombres = fila.find('td:eq(3)').text();
-            var domicilio = fila.find('td:eq(4)').text();
-            var boletos = fila.find('td:eq(5)').text();
-
-            $('#modalNombres').text(nombres);
-            $('#modalDomicilio').text(domicilio);
-            $('#modalBoletos').text(boletos);
-
-            $('#modalInfo').fadeIn();
-        });
-
-        // Botón Cancelar
-        $('#btnCancelar').on('click', function () {
-            $('#modalMessage')
-                .text("Operación cancelada")
-                .css("color", "red")
-                .show();
-                $('#modalInfo').fadeOut();
-
-        });
-
-        // Cerrar modal
-        $('.close').on('click', function () {
-            $('#modalInfo').fadeOut();
-        });
-
-        // Cerrar al hacer click fuera del modal
-        $(window).on('click', function (event) {
-            if ($(event.target).is('#modalInfo')) {
-                $('#modalInfo').fadeOut();
-            }
-        });
-
-
-
-        // Botón Entregar (ejemplo, lo puedes personalizar para enviar AJAX)
-        $('#btnEntregar').on('click', function () {
-            var usuario = $('#usuarioSelect').val();
-            if (!usuario) {
-                $('#modalMessage')
-                    .text("Debe seleccionar un usuario antes de entregar.")
-                    .css("color", "orange")
-                    .show();
-                return;
-            }
-
-            $('#modalMessage')
-                .text("Operación realizada por el usuario seleccionado.")
-                .css("color", "green")
-                .show();
-
-            // Aquí podrías hacer un $.ajax() para registrar en la BD la entrega
-        });
+$(document).ready(function () {
+    // -------------------------
+    // TABLA RUTAS
+    // -------------------------
+    var rutasTable = $('#rutasTable').DataTable({
+        searching: true,
+        searchMinLength: 1
     });
 
+    // Filtros
+    $('#searchVendidos').on('keyup', function() {
+        rutasTable.search(this.value).draw();
+    });
+    $('#rutaSelect').on('change', function() {
+        rutasTable.column(1).search(this.value || '').draw();
+    });
+    $('#procesoSelect').on('change', function() {
+        rutasTable.column(6).search(this.value || '').draw();
+    });
 
-    $(document).ready(function () {
-    // Tabla 1: rutasTable
-    var rutasTable;
-    if (!$.fn.DataTable.isDataTable('#rutasTable')) {
-        rutasTable = $('#rutasTable').DataTable({
-            "searching": true,
-            "searchMinLength": 1
-        });
-    } else {
-        rutasTable = $('#rutasTable').DataTable();
-    }
-
-    // Tabla 2: infoLogisticaTable
-    var infoLogisticaTable;
-    if (!$.fn.DataTable.isDataTable('#infoLogisticaTable')) {
-        infoLogisticaTable = $('#infoLogisticaTable').DataTable({
-            "searching": true,
-            "searchMinLength": 1
-        });
-    } else {
-        infoLogisticaTable = $('#infoLogisticaTable').DataTable();
-    }
-
-    // -------------------------
-    // EVENTOS MODAL para rutasTable
-    // -------------------------
+    // Botón CHECK en tabla rutas
     $('#rutasTable').on('click', '.btnCheck', function () {
         var fila = $(this).closest('tr');
-        var nombres = fila.find('td:eq(3)').text();
-        var domicilio = fila.find('td:eq(4)').text();
-        var boletos = fila.find('td:eq(5)').text();
-
-        $('#modalNombres').text(nombres);
-        $('#modalDomicilio').text(domicilio);
-        $('#modalBoletos').text(boletos);
-
-        $('#modalInfo').fadeIn();
+        $('#modalNombres').text(fila.find('td:eq(3)').text());
+        $('#modalDomicilio').text(fila.find('td:eq(4)').text());
+        $('#modalBoletos').text(fila.find('td:eq(5)').text());
+        $('#modalInfo').fadeIn(); // abre SOLO modalInfo
     });
 
-    // -------------------------
-    // EVENTOS MODAL para infoLogisticaTable
-    // -------------------------
-    $('#infoLogisticaTable').on('click', '.btnCancelar', function () {
-        var fila = $(this).closest('tr');
-        var nombres = fila.find('td:eq(3)').text();
-        var domicilio = fila.find('td:eq(4)').text();
-        var boletos = fila.find('td:eq(5)').text();
-
-        $('#modalNombres').text(nombres);
-        $('#modalDomicilio').text(domicilio);
-        $('#modalBoletos').text(boletos);
-
-        $('#modalInfo').fadeIn();
+    // Cerrar modal rutas
+    $('.closeModalInfo').on('click', function () {
+        $('#modalInfo').fadeOut();
     });
 
-    // -------------------------
-    // BOTONES MODAL
-    // -------------------------
-    $('#btnCancelar').on('click', function () {
+    // Botón Cancelar en modal rutas
+    $('#btnCancelarRuta').on('click', function () {
         $('#modalMessage')
             .text("Operación cancelada")
             .css("color", "red")
@@ -569,142 +514,64 @@ if (empty($labels)) {
         $('#modalInfo').fadeOut();
     });
 
-    $('#btnEntregar').on('click', function () {
-        var usuario = $('#usuarioSelect').val();
-        if (!usuario) {
-            $('#modalMessage')
-                .text("Debe seleccionar un usuario antes de entregar.")
-                .css("color", "orange")
-                .show();
-            return;
-        }
+    // -------------------------
+    // TABLA LOGÍSTICA
+    // -------------------------
+    var infoLogisticaTable = $('#infoLogisticaTable').DataTable({
+        searching: true,
+        searchMinLength: 1
+    });
+
+    // Botón CANCELAR en tabla logística
+    $('#infoLogisticaTable').on('click', '.btnCancelar', function () {
+        var fila = $(this).closest('tr');
+        $('#modalLogisticaDomicilio').text(fila.find('td:eq(4)').text());
+        $('#modalLogisticaBoletos').text(fila.find('td:eq(5)').text());
+        $('#modalInfoLogistica').fadeIn(); // abre SOLO modalInfoLogistica
+    });
+
+    // Cerrar modal logística
+    $('.closeModalInfoLogistica').on('click', function () {
+        $('#modalInfoLogistica').fadeOut();
+    });
+
+    // Botón Cancelar en modal logística
+    $('#btnCancelarLogistica').on('click', function () {
         $('#modalMessage')
-            .text("Operación realizada por el usuario seleccionado.")
-            .css("color", "green")
+            .text("Operación cancelada")
+            .css("color", "red")
             .show();
+        $('#modalInfoLogistica').fadeOut();
     });
 
-    // Cerrar modal
-    $('.close').on('click', function () {
-        $('#modalInfo').fadeOut();
-    });
-    $(window).on('click', function (event) {
-        if ($(event.target).is('#modalInfo')) {
-            $('#modalInfo').fadeOut();
-        }
+    // -------------------------
+    // RESUMEN AJAX
+    // -------------------------
+    function cargarResumen() {
+        $.ajax({
+            url: 'logistica.php?resumen=1',
+            type: 'GET',
+            success: function (data) {
+                var doc = new DOMParser().parseFromString(data, 'text/html');
+                $('#tdNoEntregadas').text(doc.querySelector('#tdNoEntregadas').innerText);
+                $('#tdEntregadas').text(doc.querySelector('#tdEntregadas').innerText);
+                $('#tdTotal').text(doc.querySelector('#tdTotal').innerText);
+            },
+            error: function () {
+                alert('Error al actualizar el resumen');
+            }
+        });
+    }
+
+    // Refrescar resumen después de entregar
+    $('#btnEntregar').on('click', function () {
+        setTimeout(cargarResumen, 500);
     });
 });
-
-// ✅ Función para refrescar el resumen con AJAX
-function cargarResumen() {
-    $.ajax({
-        url: 'logistica.php?resumen=1', // recarga solo el resumen
-        type: 'GET',
-        success: function (data) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(data, 'text/html');
-
-            // Extraer los valores de la nueva respuesta
-            var noEntregadas = doc.querySelector('#tdNoEntregadas').innerText;
-            var entregadas = doc.querySelector('#tdEntregadas').innerText;
-            var total = doc.querySelector('#tdTotal').innerText;
-
-            // Actualizar en la tabla actual
-            $('#tdNoEntregadas').text(noEntregadas);
-            $('#tdEntregadas').text(entregadas);
-            $('#tdTotal').text(total);
-        },
-        error: function () {
-            alert('Error al actualizar el resumen');
-        }
-    });
-}
-
-// ✅ Actualizar resumen cuando se entregue o cancele
-$('#btnEntregar, #btnCancelar').on('click', function () {
-    setTimeout(cargarResumen, 500);
-});
-    </script>
-</body>
-
-<!-- Modal -->
-<div id="modalInfo" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-
-    <h3>Entregar Decíma(s) y Carta</h3>
-    <p><b>Nombre:</b> <span id="modalNombres"></span></p>
-    <p><b>Domicilio:</b> <span id="modalDomicilio"></span></p>
-    <p><b>Decímas a entregar:  </b> <span id="modalBoletos"></span></p>
-    <p><b>Cartas a entregar:   1</b></span></p>
+</script>
 
 
-    <!-- Select con usuarios -->
-    <label for="usuarioSelect"><b>Usuario responsable:</b></label>
-    <select id="usuarioSelect" name="usuarioSelect">
-      <option value="">Seleccione un usuario</option>
-      <?php foreach ($usuarios as $usuario): ?>
-        <option value="<?= htmlspecialchars($usuario['idUsuario']) ?>">
-          <?= htmlspecialchars($usuario['nombre']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-
-    <br><br>
-    <!-- Botones -->
-    <button id="btnEntregar">Entregar</button>
-    <button id="btnCancelar">Cancelar</button>
-
-    <!-- Mensaje de resultado -->
-    <p id="modalMessage" style="color:red; font-weight:bold; display:none;"></p>
-  </div>
-</div>
-
-    <style>
-    /* Estilos del modal */
-    .modal {
-        display: none; 
-        position: fixed; 
-        z-index: 9999; 
-        padding-top: 100px; 
-        left: 0; top: 0; width: 100%; height: 100%;
-        overflow: auto; background-color: rgba(0,0,0,0.6);
-    }
-    .modal-content {
-        background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888;
-        width: 400px; border-radius: 12px; text-align: left;
-    }
-    .close {
-        color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
-    }
-    .close:hover { 
-        color: black; 
-    }
-    </style>
-
-    <style>
-    .resumen-table {
-        width: 50%;
-        margin: 20px auto;
-        border-collapse: collapse;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
-    }
-    .resumen-table th, .resumen-table td {
-        padding: 10px;
-        border: 1px solid #ccc;
-    }
-    .resumen-table th {
-        background-color: #2c3e50;
-        color: #fff;
-    }
-    .resumen-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    </style>
-
-    <script>
+<script>
 // Datos desde PHP
 var labels = <?php echo json_encode($labels); ?>;
 var entregadas = <?php echo json_encode($entregadas); ?>;
@@ -755,4 +622,99 @@ var decimasChart = new Chart(ctxDecimas, {
 });
 </script>
 
+<style>
+    /* Estilos del modal */
+    .modal {
+        display: none; 
+        position: fixed; 
+        z-index: 9999; 
+        padding-top: 100px; 
+        left: 0; top: 0; width: 100%; height: 100%;
+        overflow: auto; background-color: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+        background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888;
+        width: 400px; border-radius: 12px; text-align: left;
+    }
+    .close {
+        color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+    }
+    .close:hover { 
+        color: black; 
+    }
+    </style>
+
+    <style>
+    .resumen-table {
+        width: 50%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+    }
+    .resumen-table th, .resumen-table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    .resumen-table th {
+        background-color: #2c3e50;
+        color: #fff;
+    }
+    .resumen-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    </style>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    padding-top: 100px;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+}
+
+.close {
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#btnEntregarRuta, #btnEntregarLogistica {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#btnCancelarRuta, #btnCancelarLogistica {
+    background-color: #f44336;
+    color: white;
+}
+</style>
+
+</body>
 </html>
