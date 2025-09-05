@@ -1,4 +1,5 @@
 <?php
+
     // Conexión a la base de datos
     $host = "localhost";
     $db_name = "dbMayordomia";
@@ -164,7 +165,7 @@
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="/pruebas/principal-Adminis.php">
+                    <a href="/pruebas/principal-Administracion.php">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Salir</span>
                     </a>

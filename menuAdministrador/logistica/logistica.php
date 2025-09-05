@@ -27,7 +27,7 @@
         return $nombre;
     }
 
-// Consulta para obtener rutas
+    // Consulta para obtener rutas SOLO del proceso = año actual
     $queryRutasTable = "
         SELECT
             idRutas, 
@@ -37,11 +37,14 @@
             domicilio,
             numeroBoletos,
             proceso
-        FROM Rutas";
-    
+        FROM Rutas
+        WHERE proceso = YEAR(CURDATE())
+    ";
+
     $stmtRutasTable = $conn->prepare($queryRutasTable);
     $stmtRutasTable->execute();
     $rutasTable = $stmtRutasTable->fetchAll(PDO::FETCH_ASSOC);
+
     
     // Aplicar la función de truncado a cada nombre en los resultados
     $rutasTable = array_map(function($row) {
@@ -56,6 +59,61 @@
     $stmtRutasExisten->execute();
     $rutas = $stmtRutasExisten->fetchAll(PDO::FETCH_COLUMN);
 
+    // Consulta para obtener usuarios tipo 3
+    $queryUsuarios = "SELECT idUsuario, nombre FROM Usuarios WHERE idTipoUsuario = 3";
+    $stmtUsuarios = $conn->prepare($queryUsuarios);
+    $stmtUsuarios->execute();
+    $usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+
+
+    // Consulta para obtener rutas SOLO del proceso = año actual para infoLogistica
+    $queryInfoLogisticaTable = "
+        SELECT
+            idRutas, 
+            ruta,
+            recorrido,
+            nombres,
+            domicilio,
+            numeroBoletos,
+            proceso
+        FROM Rutas
+        WHERE proceso = YEAR(CURDATE())
+    ";
+
+    $stmtInfoLogisticaTable = $conn->prepare($queryInfoLogisticaTable);
+    $stmtInfoLogisticaTable->execute();
+    $infoLogisticaTable = $stmtInfoLogisticaTable->fetchAll(PDO::FETCH_ASSOC);
+
+    // Aplicar truncado también
+    $infoLogisticaTable = array_map(function($row) {
+        $row['nombres'] = truncarNombres($row['nombres']);
+        return $row;
+    }, $infoLogisticaTable);
+
+    // Consulta de resumen de entregas
+    $queryResumen = "
+        SELECT 
+            status,
+            SUM(numeroBoletos) AS total_boletos
+        FROM Rutas
+        WHERE proceso = YEAR(CURDATE())
+        GROUP BY status
+    ";
+    $stmtResumen = $conn->prepare($queryResumen);
+    $stmtResumen->execute();
+    $resumen = $stmtResumen->fetchAll(PDO::FETCH_ASSOC);
+
+    $noEntregados = 0;
+    $entregados = 0;
+
+    foreach ($resumen as $row) {
+        if ($row['status'] == 0) {
+            $noEntregados = $row['total_boletos'];
+        } elseif ($row['status'] == 1) {
+            $entregados = $row['total_boletos'];
+        }
+    }
+    $total = $noEntregados + $entregados;
 ?>
 
 <!DOCTYPE html>
@@ -196,9 +254,31 @@
 
     </nav>
    
-        
     <section class="home">
         <div class="section">
+
+        <div id="resumenRutas">
+            <h2>Resumen de Entregas</h2>
+            <table class="resumen-table">
+                <tr>
+                    <th>Estado</th>
+                    <th>Total Décimas</th>
+                </tr>
+                <tr>
+                    <td>No entregadas</td>
+                    <td id="tdNoEntregadas"><?= $noEntregados ?></td>
+                </tr>
+                <tr>
+                    <td>Entregadas</td>
+                    <td id="tdEntregadas"><?= $entregados ?></td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th id="tdTotal"><?= $total ?></th>
+                </tr>
+            </table>
+        </div>
+
             <section class="logistica">
                 <h1>Logística de entrega de cartas y décimas</h1>
                 <br>
@@ -213,7 +293,7 @@
                                 <th style="display:none;">RECORRIDO <i class='bx bx-trip icon'></th>
                                 <th>NOMBRES</th>
                                 <th>DOMICILIO</th>
-                                <th>N° BOLETOS COMPRADOS</th>
+                                <th>N° DE DÉCIMAS A ENTREGAR</th>
                                 <th>PROCESO</th>
                                 <th>Acciones</th>
                             </tr>
@@ -228,52 +308,345 @@
                                     <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                     <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
                                     <td><?= htmlspecialchars($ruta['proceso']) ?></td>
-                                    <td><button><i class='bx bx-check'></i></button><button style="background:red"><i class='bx bx-x'></i></button></td>
+                                    <td><button class="btnCheck"><i class='bx bx-check'></i></button></td>
                                 </tr>
                             <?php endforeach; ?>
-                        </tbody>
-                        
+                        </tbody>  
                     </table>
                 </div>
+                <br><br>
+
+                <div class="container">
+                <h2 class="infoLogistica">Información de entrega de cartas y décimas</h2>
+                <table id="infoLogisticaTable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="display:none;">idRutas</th>
+                            <th style="display:none;">RUTAS</th>
+                            <th style="display:none;">RECORRIDO</th>
+                            <th style="display:none;">NOMBRES</th>
+                            <th>DOMICILIO</th>
+                            <th>N° BOLETOS DECIMAS ENTREGADAS</th>
+                            <th>ENTREGO</th>
+                            <th>PROCESO</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($infoLogisticaTable as $ruta): ?>
+                            <tr>
+                                <td class="idRutas" style="display:none;"><?= htmlspecialchars($ruta['idRutas']) ?></td>
+                                <td style="display:none;"><?= htmlspecialchars($ruta['ruta']) ?></td>
+                                <td style="display:none;"><?= htmlspecialchars($ruta['recorrido']) ?></td>
+                                <td style="display:none;"><?= htmlspecialchars($ruta['nombres']) ?></td>
+                                <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
+                                <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
+                                <td>Persona</td>
+                                <td><?= htmlspecialchars($ruta['proceso']) ?></td>
+                                <td><button class="btnCancelar"><i class='bx bx-x'></i></button></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>  
+                </table>
+            </div>
 
         </div>
     </section>
+
+
     <script src="/pruebas/menuUsuario/script.js"></script>
     <script src="/pruebas/menuAdministrador/autologout.js"></script>
     <script>
-        $(document).ready(function() {
-    var rutasTable = $('#rutasTable').DataTable({
-        "searching": true,
-        "searchMinLength": 1
-    });
-
-    // Búsqueda global personalizada
-    $('#searchVendidos').on('keyup', function() {
-        rutasTable.search(this.value).draw();
-    });
-
-    // Filtrar por ruta (columna 1, que tiene un <input>)
-    $('#rutaSelect').on('change', function() {
-        var ruta = this.value;
-        if (ruta) {
-            rutasTable.column(1).search(ruta, true, false).draw();
+    $(document).ready(function () {
+        // ✅ Inicializar la tabla SOLO una vez
+        var rutasTable;
+        if (!$.fn.DataTable.isDataTable('#rutasTable')) {
+            rutasTable = $('#rutasTable').DataTable({
+                "searching": true,
+                "searchMinLength": 1
+            });
         } else {
-            rutasTable.column(1).search('').draw();
+            rutasTable = $('#rutasTable').DataTable();
         }
+
+        // -------------------------
+        // FILTROS Y BÚSQUEDAS
+        // -------------------------
+        $('#searchVendidos').on('keyup', function() {
+            rutasTable.search(this.value).draw();
+        });
+
+        $('#rutaSelect').on('change', function() {
+            var ruta = this.value;
+            rutasTable.column(1).search(ruta ? ruta : '').draw();
+        });
+
+        $('#procesoSelect').on('change', function() {
+            var proceso = this.value;
+            rutasTable.column(6).search(proceso ? proceso : '').draw();
+        });
+
+        // -------------------------
+        // MODAL (abrir/cerrar)
+        // -------------------------
+        $('#rutasTable').on('click', '.btnCheck', function () {
+            var fila = $(this).closest('tr');
+
+            var nombres = fila.find('td:eq(3)').text();
+            var domicilio = fila.find('td:eq(4)').text();
+            var boletos = fila.find('td:eq(5)').text();
+
+            $('#modalNombres').text(nombres);
+            $('#modalDomicilio').text(domicilio);
+            $('#modalBoletos').text(boletos);
+
+            $('#modalInfo').fadeIn();
+        });
+
+        // Botón Cancelar
+        $('#btnCancelar').on('click', function () {
+            $('#modalMessage')
+                .text("Operación cancelada")
+                .css("color", "red")
+                .show();
+                $('#modalInfo').fadeOut();
+
+        });
+
+        // Cerrar modal
+        $('.close').on('click', function () {
+            $('#modalInfo').fadeOut();
+        });
+
+        // Cerrar al hacer click fuera del modal
+        $(window).on('click', function (event) {
+            if ($(event.target).is('#modalInfo')) {
+                $('#modalInfo').fadeOut();
+            }
+        });
+
+
+
+        // Botón Entregar (ejemplo, lo puedes personalizar para enviar AJAX)
+        $('#btnEntregar').on('click', function () {
+            var usuario = $('#usuarioSelect').val();
+            if (!usuario) {
+                $('#modalMessage')
+                    .text("Debe seleccionar un usuario antes de entregar.")
+                    .css("color", "orange")
+                    .show();
+                return;
+            }
+
+            $('#modalMessage')
+                .text("Operación realizada por el usuario seleccionado.")
+                .css("color", "green")
+                .show();
+
+            // Aquí podrías hacer un $.ajax() para registrar en la BD la entrega
+        });
+
     });
 
-    // Filtrar por proceso (columna 6)
-    $('#procesoSelect').on('change', function() {
-        var proceso = this.value;
-        if (proceso) {
-            rutasTable.column(6).search(proceso, true, false).draw();
-        } else {
-            rutasTable.column(6).search('').draw();
+
+    $(document).ready(function () {
+    // Tabla 1: rutasTable
+    var rutasTable;
+    if (!$.fn.DataTable.isDataTable('#rutasTable')) {
+        rutasTable = $('#rutasTable').DataTable({
+            "searching": true,
+            "searchMinLength": 1
+        });
+    } else {
+        rutasTable = $('#rutasTable').DataTable();
+    }
+
+    // Tabla 2: infoLogisticaTable
+    var infoLogisticaTable;
+    if (!$.fn.DataTable.isDataTable('#infoLogisticaTable')) {
+        infoLogisticaTable = $('#infoLogisticaTable').DataTable({
+            "searching": true,
+            "searchMinLength": 1
+        });
+    } else {
+        infoLogisticaTable = $('#infoLogisticaTable').DataTable();
+    }
+
+    // -------------------------
+    // EVENTOS MODAL para rutasTable
+    // -------------------------
+    $('#rutasTable').on('click', '.btnCheck', function () {
+        var fila = $(this).closest('tr');
+        var nombres = fila.find('td:eq(3)').text();
+        var domicilio = fila.find('td:eq(4)').text();
+        var boletos = fila.find('td:eq(5)').text();
+
+        $('#modalNombres').text(nombres);
+        $('#modalDomicilio').text(domicilio);
+        $('#modalBoletos').text(boletos);
+
+        $('#modalInfo').fadeIn();
+    });
+
+    // -------------------------
+    // EVENTOS MODAL para infoLogisticaTable
+    // -------------------------
+    $('#infoLogisticaTable').on('click', '.btnCheckInfo', function () {
+        var fila = $(this).closest('tr');
+        var nombres = fila.find('td:eq(3)').text();
+        var domicilio = fila.find('td:eq(4)').text();
+        var boletos = fila.find('td:eq(5)').text();
+
+        $('#modalNombres').text(nombres);
+        $('#modalDomicilio').text(domicilio);
+        $('#modalBoletos').text(boletos);
+
+        $('#modalInfo').fadeIn();
+    });
+
+    // -------------------------
+    // BOTONES MODAL
+    // -------------------------
+    $('#btnCancelar').on('click', function () {
+        $('#modalMessage')
+            .text("Operación cancelada")
+            .css("color", "red")
+            .show();
+        $('#modalInfo').fadeOut();
+    });
+
+    $('#btnEntregar').on('click', function () {
+        var usuario = $('#usuarioSelect').val();
+        if (!usuario) {
+            $('#modalMessage')
+                .text("Debe seleccionar un usuario antes de entregar.")
+                .css("color", "orange")
+                .show();
+            return;
+        }
+        $('#modalMessage')
+            .text("Operación realizada por el usuario seleccionado.")
+            .css("color", "green")
+            .show();
+    });
+
+    // Cerrar modal
+    $('.close').on('click', function () {
+        $('#modalInfo').fadeOut();
+    });
+    $(window).on('click', function (event) {
+        if ($(event.target).is('#modalInfo')) {
+            $('#modalInfo').fadeOut();
         }
     });
 });
 
+// ✅ Función para refrescar el resumen con AJAX
+function cargarResumen() {
+    $.ajax({
+        url: 'logistica.php?resumen=1', // recarga solo el resumen
+        type: 'GET',
+        success: function (data) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(data, 'text/html');
 
+            // Extraer los valores de la nueva respuesta
+            var noEntregadas = doc.querySelector('#tdNoEntregadas').innerText;
+            var entregadas = doc.querySelector('#tdEntregadas').innerText;
+            var total = doc.querySelector('#tdTotal').innerText;
+
+            // Actualizar en la tabla actual
+            $('#tdNoEntregadas').text(noEntregadas);
+            $('#tdEntregadas').text(entregadas);
+            $('#tdTotal').text(total);
+        },
+        error: function () {
+            alert('Error al actualizar el resumen');
+        }
+    });
+}
+
+// ✅ Actualizar resumen cuando se entregue o cancele
+$('#btnEntregar, #btnCancelar').on('click', function () {
+    setTimeout(cargarResumen, 500);
+});
     </script>
 </body>
+
+<!-- Modal -->
+<div id="modalInfo" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+
+    <h3>Entregar Decíma(s) y Carta</h3>
+    <p><b>Nombre:</b> <span id="modalNombres"></span></p>
+    <p><b>Domicilio:</b> <span id="modalDomicilio"></span></p>
+    <p><b>Decímas a entregar:  </b> <span id="modalBoletos"></span></p>
+    <p><b>Cartas a entregar:   1</b></span></p>
+
+
+    <!-- Select con usuarios -->
+    <label for="usuarioSelect"><b>Usuario responsable:</b></label>
+    <select id="usuarioSelect" name="usuarioSelect">
+      <option value="">Seleccione un usuario</option>
+      <?php foreach ($usuarios as $usuario): ?>
+        <option value="<?= htmlspecialchars($usuario['idUsuario']) ?>">
+          <?= htmlspecialchars($usuario['nombre']) ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+
+    <br><br>
+    <!-- Botones -->
+    <button id="btnEntregar">Entregar</button>
+    <button id="btnCancelar">Cancelar</button>
+
+    <!-- Mensaje de resultado -->
+    <p id="modalMessage" style="color:red; font-weight:bold; display:none;"></p>
+  </div>
+</div>
+
+
+<style>
+/* Estilos del modal */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 9999; 
+  padding-top: 100px; 
+  left: 0; top: 0; width: 100%; height: 100%;
+  overflow: auto; background-color: rgba(0,0,0,0.6);
+}
+.modal-content {
+  background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888;
+  width: 400px; border-radius: 12px; text-align: left;
+}
+.close {
+  color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+}
+.close:hover { color: black; }
+</style>
+
+    <style>
+    .resumen-table {
+        width: 50%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+    }
+    .resumen-table th, .resumen-table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    .resumen-table th {
+        background-color: #2c3e50;
+        color: #fff;
+    }
+    .resumen-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    </style>
+
 </html>

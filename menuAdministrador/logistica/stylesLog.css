@@ -35,7 +35,6 @@ body {
   }
   
 
-  
   .button:hover {
     background-color: #45a049;
   }
@@ -57,6 +56,11 @@ body {
   }
 
   .logistica {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .infoLogistica {
     margin-top: 20px;
     text-align: center;
   }
@@ -110,31 +114,6 @@ body {
     transition: background 0.2s;
   }
 
-  .buttons .pre-invitacion {
-    background: #244D0C;
-  }
-
-  .buttons .pre-invitacion:hover {
-    background: #398914; /* Un verde más claro para el hover */
-  }
-
-  .buttons .editar {
-    background: #D2CB27;
-  }
-
-  .buttons .editar:hover {
-    background: #fff82f; /* Un amarillo más claro para el hover */
-  }
-
-  .buttons .guardar {
-    background: #000;
-    color: #ffffff;
-  }
-
-  .buttons .guardar:hover {
-    background: #3d3c3c; /* Gris para el hover */
-  }  
-
  /* Tabla de infomacion de las rutas*/
   .container {
     background-color: white;
@@ -164,73 +143,3 @@ body {
     display: flex;
     gap: 10px;
   }
-
-  .conjuncion{
-    padding: 10px 20px;
-    background-color: #ff7b00;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-  }
-
-  .conjuncion:hover{
-    background: #c86100;
-  }
-
-  .rutas{
-    background-color: #ffe600;
-    color: #000000;
-  }
-
-  .rutas:hover {
-    background-color: #c3af00;
-  }
-
-  .recorrido{
-    background-color: #205d00;
-  }
-
-  .recorrido:hover {
-    background-color: #377615;
-  }
-
-  .guardarRuta{
-    background-color: #00415d;
-  }
-
-  .guardarRuta:hover {
-    background-color: #02638d;
-  }
-
-  /* Estilo para el contenedor del select y el botón */
-  .form-group-select {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  .form-group-select label {
-    margin-right: 10px;
-  }
-
-  .form-group-select .form-control {
-    padding: 10px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    margin-right: 10px;
-  }
-
-  .buttonSelectImprimir {
-    padding: 10px 20px;
-    background-color: #272727;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .buttonSelectImprimir:hover {
-    background-color: #050505;
-  }
-  
