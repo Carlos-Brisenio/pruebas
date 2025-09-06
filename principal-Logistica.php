@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($tipoUsuario == 3) { // Modificado aquí para permitir solo idTipoUsuario 3
             $_SESSION["isLoggedIn"] = true;
             // Redirigir al usuario con permisos
-            header("Location: menuCajero/indexLogistica.php");
+            header("Location: menuLogistica/indexLogistica.php");
             exit();
         } else {
             // Mostrar mensaje de falta de permisos

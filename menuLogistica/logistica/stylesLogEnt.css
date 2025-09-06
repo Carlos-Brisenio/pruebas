@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .section {
+    
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 60px;
+    margin-right: 30px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .form-group input {
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+
+  .button:hover {
+    background-color: #45a049;
+  }
+  
+  .button-container {
+    text-align: right;
+  }
+
+  .form-row {
+    display: flex;
+  }
+  .form-row .form-group {
+    margin-right: 30px;
+  }
+
+  .cartas {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .logistica {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .infoLogistica {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .lugares {
+    list-style: disc; 
+    margin-left: 40px;
+  }
+
+  h1{
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+  }
+  .card h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    margin-bottom: 10px;
+  }
+
+  .card ul li strong {
+    display: inline-flex;
+    width: 300px;
+  }
+
+  .buttons {
+    margin-top: 20px;
+  }
+
+  .buttons button {
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+ /* Tabla de infomacion de las rutas*/
+  .container {
+    background-color: white;
+    padding: 20px;
+    margin-right: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1500px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .botones {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
