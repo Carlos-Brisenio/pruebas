@@ -123,6 +123,25 @@
                 <div class="text logo-text">
                     <span class="name">LOGÍSTICA</span>
                     <span class="profession" id="proceso-span">PROCESO</span>
+                    <span class="usuario">
+                        A: 
+                        <?php
+                        if (isset($_SESSION['usuario'])) {
+                            $usuario = htmlspecialchars($_SESSION['usuario']);
+                            $partes = explode(' ', $usuario);
+
+                            if (count($partes) > 2) {
+                                // Une las dos primeras palabras en la primera línea
+                                echo $partes[0] . ' ' . $partes[1] . '<br>' . implode(' ', array_slice($partes, 2));
+                            } else {
+                                // Si solo hay 1 o 2 palabras, imprime normal
+                                echo $usuario;
+                            }
+                        } else {
+                            echo 'Invitado';
+                        }
+                        ?>
+                    </span>
                 </div>
             </div>
 
@@ -139,7 +158,7 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="indexCajero.php">
+                        <a href="indexLogistica.php">
                             <i class='bx bx-home-alt icon' ></i>
                             <span class="text nav-text">Inicio</span>
                         </a>
@@ -187,7 +206,10 @@
     </nav>
 
     <section class="home">
-        <div class="text">Bienvenido a Mayordomía Tickets Proceso 2025©</div>
+    <div class="text">
+        Bienvenido "<?= isset($_SESSION['usuario']) ? htmlspecialchars($_SESSION['usuario']) : 'Usuario' ?> 
+        "<br> a Mayordomía Tickets Proceso <?= $anioActual+1 ?>©
+    </div>
         <h2 class="text">¿Qué deseas hacer?</h2>
         <div class="card-container">
             <div class="card">

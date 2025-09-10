@@ -1,6 +1,6 @@
 <?php
 
-    //session_start();
+    session_start();
     /*if (!isset($_SESSION["isLoggedIn"]) || $_SESSION["isLoggedIn"] !== true) {
         header("Location: /pruebas/principal-Logistica.php"); // Reemplaza 'login.php' con el nombre de tu archivo de inicio de sesión si es diferente
         exit;
@@ -58,31 +58,29 @@
     $stmtUsuarios->execute();
     $usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
 
-if (isset($_POST['entregarRuta'])) {
-    $idRutas = $_POST['idRutas'];
-    $idUsuario = $_POST['idUsuario'];
-    $fechaEntrega = $_POST['fechaEntrega'];
+    if (isset($_POST['entregarRuta'])) {
+        $idRutas      = $_POST['idRutas'];
+        $fechaEntrega = $_POST['fechaEntrega'];
 
-    // 1️⃣ Obtener el nombre del usuario
-    $stmtUsuario = $conn->prepare("SELECT nombre FROM Usuarios WHERE idUsuario = :idUsuario");
-    $stmtUsuario->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-    $stmtUsuario->execute();
-    $nombreUsuario = $stmtUsuario->fetchColumn();
+        // 🚀 Tomar el nombre del usuario en sesión
+        $nombreUsuario = $_SESSION['usuario'];
 
-    // 2️⃣ Actualizar registro
-    $sql = "UPDATE Rutas SET status = 1, entrego = :nombreUsuario, fechaEntrega = :fechaEntrega WHERE idRutas = :idRutas";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':idRutas', $idRutas, PDO::PARAM_INT);
-    $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
-    $stmt->bindParam(':fechaEntrega', $fechaEntrega);
+        // Actualizar registro
+        $sql = "UPDATE Rutas 
+                SET status = 1, entrego = :nombreUsuario, fechaEntrega = :fechaEntrega 
+                WHERE idRutas = :idRutas";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':idRutas', $idRutas, PDO::PARAM_INT);
+        $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
+        $stmt->bindParam(':fechaEntrega', $fechaEntrega);
 
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error']);
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error']);
+        }
+        exit;
     }
-    exit;
-}
 ?>
 
 <!DOCTYPE html>
@@ -109,6 +107,12 @@ if (isset($_POST['entregarRuta'])) {
     <title>Mayordomía Tickets®/Log&iacute;stica</title> 
 </head>
 <body>
+    <!-- Tarjeta usuario activo -->
+    <div class="usuario-activo">
+        <i class='bx bx-user-circle'></i>
+        <?= isset($_SESSION['usuario']) ? htmlspecialchars($_SESSION['usuario']) : 'Invitado' ?>
+    </div>
+
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -119,6 +123,25 @@ if (isset($_POST['entregarRuta'])) {
                 <div class="text logo-text">
                 	<span class="name">LOGÍSTICA</span>
                  	<span class="profession" id="proceso-span">PROCESO</span>
+                    <span class="usuario">
+                        L: 
+                        <?php
+                        if (isset($_SESSION['usuario'])) {
+                            $usuario = htmlspecialchars($_SESSION['usuario']);
+                            $partes = explode(' ', $usuario);
+
+                            if (count($partes) > 2) {
+                                // Une las dos primeras palabras en la primera línea
+                                echo $partes[0] . ' ' . $partes[1] . '<br>' . implode(' ', array_slice($partes, 2));
+                            } else {
+                                // Si solo hay 1 o 2 palabras, imprime normal
+                                echo $usuario;
+                            }
+                        } else {
+                            echo 'Invitado';
+                        }
+                        ?>
+                    </span>
                 </div>
             </div>
 
@@ -228,15 +251,12 @@ if (isset($_POST['entregarRuta'])) {
         <p><strong>Cartas a entregar:</strong> 1</p>
 
         <!-- Select con usuarios -->
-        <label for="usuarioSelect"><b>Usuario responsable:</b></label>
-        <select id="usuarioSelect" name="usuarioSelect">
-            <option value="">Seleccione un usuario</option>
-            <?php foreach ($usuarios as $usuario): ?>
-                <option value="<?= htmlspecialchars($usuario['idUsuario']) ?>">
-                    <?= htmlspecialchars($usuario['nombre']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+        <label><b>Usuario responsable:</b></label><br>
+        <input type="hidden" id="usuario" name="usuario" value="<?= htmlspecialchars($_SESSION['usuario']) ?>">
+        <span class="form-control-plaintext">
+            <?= htmlspecialchars($_SESSION['usuario']) ?>
+        </span>
+
 
         <!-- Botones -->
         <div class="modal-actions">
@@ -295,57 +315,55 @@ $(document).ready(function () {
 
     // ===================== ENTREGAR DÉCIMA =====================
         $('#btnEntregarRuta').on('click', function () {
-            var fila = $('#rutasTable').find('tr.selected');
-            if (!fila.length) {
-                fila = $('#rutasTable').find('tr').filter(function() {
-                    return $(this).find('td:eq(3)').text() === $('#modalNombres').text() &&
-                        $(this).find('td:eq(4)').text() === $('#modalDomicilio').text();
-                });
-            }
-
-            if (!fila.length) return alert('No se pudo identificar la fila seleccionada.');
-
-            var idRutas   = fila.find('td:eq(0)').text();
-            var idUsuario = $('#usuarioSelect').val(); // ahora mandamos el idUsuario
-            if (!idUsuario) return alert('Por favor seleccione un usuario responsable.');
-
-            if (!confirm('¿Está seguro de marcar esta entrega como completada?')) {
-                return;
-            }
-
-            // ✅ Fecha local correcta
-            var hoy = new Date();
-            var fechaEntrega = hoy.getFullYear() + '-' +
-                            String(hoy.getMonth() + 1).padStart(2, '0') + '-' +
-                            String(hoy.getDate()).padStart(2, '0');
-
-            $.ajax({
-                url: 'logisticaEntrega.php',
-                type: 'POST',
-                data: {
-                    entregarRuta: 1,
-                    idRutas: idRutas,
-                    idUsuario: idUsuario,
-                    fechaEntrega: fechaEntrega
-                },
-                success: function (response) {
-                    var res = JSON.parse(response);
-                    if(res.status === 'success'){
-                        $('#modalInfo').fadeOut();
-                        $('#modalMessageRuta').text('Entrega registrada correctamente.')
-                            .css('color','green').show().fadeOut(3000);
-
-                        // 🔄 Recargar AJAX
-                        location.reload();
-                    } else {
-                        alert('Error al registrar entrega: ' + res.message);
-                    }
-                },
-                error: function () {
-                    alert('Error al registrar la entrega.');
-                }
+        var fila = $('#rutasTable').find('tr.selected');
+        if (!fila.length) {
+            fila = $('#rutasTable').find('tr').filter(function() {
+                return $(this).find('td:eq(3)').text() === $('#modalNombres').text() &&
+                    $(this).find('td:eq(4)').text() === $('#modalDomicilio').text();
             });
+        }
+
+        if (!fila.length) return alert('No se pudo identificar la fila seleccionada.');
+
+        var idRutas = fila.find('td:eq(0)').text();
+
+        if (!confirm('¿Está seguro de marcar esta entrega como completada?')) {
+            return;
+        }
+
+        // ✅ Fecha local correcta
+        var hoy = new Date();
+        var fechaEntrega = hoy.getFullYear() + '-' +
+                        String(hoy.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(hoy.getDate()).padStart(2, '0');
+
+        $.ajax({
+            url: 'logisticaEntrega.php',
+            type: 'POST',
+            data: {
+                entregarRuta: 1,
+                idRutas: idRutas,
+                fechaEntrega: fechaEntrega
+            },
+            success: function (response) {
+                var res = JSON.parse(response);
+                if(res.status === 'success'){
+                    $('#modalInfo').fadeOut();
+                    $('#modalMessageRuta').text('Entrega registrada correctamente.')
+                        .css('color','green').show().fadeOut(3000);
+
+                    // 🔄 Recargar AJAX
+                    location.reload();
+                } else {
+                    alert('Error al registrar entrega: ' + res.message);
+                }
+            },
+            error: function () {
+                alert('Error al registrar la entrega.');
+            }
         });
+    });
+
 
 });
 </script>
@@ -442,6 +460,28 @@ $(document).ready(function () {
     background-color: #f44336;
     color: white;
 }
+
+.usuario-activo {
+    position: fixed;
+    top: 15px;
+    right: 50px;
+    background: #2c3e50;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+    z-index: 10000;
+}
+
+.usuario-activo i {
+    font-size: 18px;
+}
+
 </style>
 
 </body>

@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     // Conexión a la base de datos
     $host = "localhost";
     $db_name = "dbMayordomia";
@@ -79,6 +81,9 @@
 
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
 
+     <!----===== Actualizador de procesos ===== -->
+    <script src="/pruebas/menuUsuario/opcionesUsuario/actualizadorProceso.js"></script>
+
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Incluye la librería de Chart.js -->
@@ -87,6 +92,11 @@
 
 </head>
 <body>
+    <!-- Tarjeta usuario activo -->
+    <div class="usuario-activo">
+        <i class='bx bx-user-circle'></i>
+        <?= isset($_SESSION['usuario']) ? htmlspecialchars($_SESSION['usuario']) : 'Invitado' ?>
+    </div>
 <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -96,7 +106,26 @@
 
                 <div class="text logo-text">
                     <span class="name">ADMINISTRADOR</span>
-                    <span class="profession">M-2024</span>
+                    <span class="profession" id="proceso-span">PROCESO</span>
+                    <span class="usuario">
+                        L: 
+                        <?php
+                        if (isset($_SESSION['usuario'])) {
+                            $usuario = htmlspecialchars($_SESSION['usuario']);
+                            $partes = explode(' ', $usuario);
+
+                            if (count($partes) > 2) {
+                                // Une las dos primeras palabras en la primera línea
+                                echo $partes[0] . ' ' . $partes[1] . '<br>' . implode(' ', array_slice($partes, 2));
+                            } else {
+                                // Si solo hay 1 o 2 palabras, imprime normal
+                                echo $usuario;
+                            }
+                        } else {
+                            echo 'Invitado';
+                        }
+                        ?>
+                    </span>
                 </div>
             </div>
 
@@ -268,6 +297,29 @@
 
 
     <script src="/pruebas/menuUsuario/script.js"></script>
+
+    <style>
+        .usuario-activo {
+        position: fixed;
+        top: 15px;
+        right: 50px;
+        background: #2c3e50;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+        z-index: 10000;
+    }
+
+    .usuario-activo i {
+        font-size: 18px;
+    }
+    </style>
 
 </body>
 </html>

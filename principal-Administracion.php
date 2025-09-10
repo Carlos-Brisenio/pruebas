@@ -1,4 +1,8 @@
 <?php
+
+    session_start();
+
+
 // Conexión a la base de datos
 $host = "localhost";
 $db_name = "dbMayordomia";
@@ -13,7 +17,7 @@ try {
     die();
 }
 
-// Función para obtener el tipo de usuario
+/* Función para obtener el tipo de usuario
 function obtenerTipoUsuario($conn, $usuario, $password) {
     $query = "SELECT idTipoUsuario FROM Usuarios WHERE usuario = '".$usuario."' AND password = '".$password."'";
     //echo $query;
@@ -21,7 +25,18 @@ function obtenerTipoUsuario($conn, $usuario, $password) {
     $stmt->execute();    
     @$result = $stmt->fetch(PDO::FETCH_ASSOC);    
     return @$result['idTipoUsuario'];
+}*/
+function obtenerDatosUsuario($conn, $usuario, $password) {
+    $query = "SELECT idTipoUsuario, nombre, usuario 
+              FROM Usuarios 
+              WHERE usuario = :usuario AND password = :password";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":usuario", $usuario);
+    $stmt->bindParam(":password", $password);
+    @$stmt->execute();    
+    return @$stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un array con los datos
 }
+
 
 // Verificar el inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] == "POST") {    
@@ -29,19 +44,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["passwordAdmin"]; // Supongamos que almacenas contraseñas en formato MD5
 
     // Obtener el tipo de usuario
-    $tipoUsuario = obtenerTipoUsuario($conn, $usuario, $password);
-    echo $tipoUsuario;
-    if ($tipoUsuario != "") {
-        if ($tipoUsuario == 1) { // Modificado aquí para permitir solo idTipoUsuario 1
-            // Redirigir al usuario con permisos
+    $datosUsuario = obtenerDatosUsuario($conn, $usuario, $password);
+
+    if ($datosUsuario) {
+        if ($datosUsuario['idTipoUsuario'] == 1) { 
+            $_SESSION["isLoggedIn"] = true;
+            $_SESSION["usuario"] = $datosUsuario['nombre']; // 👈 aquí guardas el nombre
+            // Si prefieres el campo "usuario", cámbialo por ['usuario']
+
             header("Location: menuAdministrador/indexAdministrador.php");
             exit();
         } else {
-            // Mostrar mensaje de falta de permisos
             $mensaje = "Este usuario no cuenta con permisos suficientes para iniciar sesión.";
         }
     } else {
-        // Mostrar mensaje de usuario o contraseña incorrectos
         $mensaje = "Usuario o contraseña incorrectos.";
     }
 }

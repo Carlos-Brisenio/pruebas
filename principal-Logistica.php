@@ -15,7 +15,7 @@ try {
     die();
 }
 
-// Función para obtener el tipo de usuario
+/* Función para obtener el tipo de usuario
 function obtenerTipoUsuario($conn, $usuario, $password) {
     $query = "SELECT idTipoUsuario FROM Usuarios WHERE usuario = '".$usuario."' AND password = '".$password."'";
     //echo $query;
@@ -23,14 +23,26 @@ function obtenerTipoUsuario($conn, $usuario, $password) {
     $stmt->execute();    
     @$result = $stmt->fetch(PDO::FETCH_ASSOC);    
     return @$result['idTipoUsuario'];
+}*/
+
+function obtenerDatosUsuario($conn, $usuario, $password) {
+    $query = "SELECT idTipoUsuario, nombre, usuario 
+              FROM Usuarios 
+              WHERE usuario = :usuario AND password = :password";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":usuario", $usuario);
+    $stmt->bindParam(":password", $password);
+    @$stmt->execute();    
+    return @$stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un array con los datos
 }
+
 
 // Verificar el inicio de sesión
 if ($_SERVER["REQUEST_METHOD"] == "POST") {    
     $usuario = $_POST["user"];
     $password = $_POST["password"]; // Supongamos que almacenas contraseñas en formato MD5
 
-    // Obtener el tipo de usuario
+    /* Obtener el tipo de usuario
     $tipoUsuario = obtenerTipoUsuario($conn, $usuario, $password);
     //echo $tipoUsuario;
     if ($tipoUsuario != "") {
@@ -46,9 +58,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // Mostrar mensaje de usuario o contraseña incorrectos
         $mensaje = "Usuario o contraseña incorrectos.";
+    }*/
+    // Obtener los datos del usuario
+    $datosUsuario = obtenerDatosUsuario($conn, $usuario, $password);
+
+    if ($datosUsuario) {
+        if ($datosUsuario['idTipoUsuario'] == 3) { 
+            $_SESSION["isLoggedIn"] = true;
+            $_SESSION["usuario"] = $datosUsuario['nombre']; // 👈 aquí guardas el nombre
+            // Si prefieres el campo "usuario", cámbialo por ['usuario']
+
+            header("Location: menuLogistica/indexLogistica.php");
+            exit();
+        } else {
+            $mensaje = "Este usuario no cuenta con permisos suficientes para iniciar sesión.";
+        }
+    } else {
+        $mensaje = "Usuario o contraseña incorrectos.";
     }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
