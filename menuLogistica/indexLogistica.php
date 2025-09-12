@@ -18,68 +18,44 @@
             echo "Error de conexión: " . $e->getMessage();
     }*/
 
-    // Consulta de resumen de entregas
-    $queryResumen = "
-        SELECT 
-            status,
-            SUM(numeroBoletos) AS total_boletos
-        FROM Rutas
-        WHERE proceso = YEAR(CURDATE())
-        GROUP BY status
-    ";
-    $stmtResumen = $conn->prepare($queryResumen);
-    $stmtResumen->execute();
-    $resumen = $stmtResumen->fetchAll(PDO::FETCH_ASSOC);
-
-    $noEntregados = 0;
-    $entregados = 0;
-
     $anioActual = date('Y');
 
-    // Total de décimas en el proceso actual
-    $queryTotalDecimas = "
-        SELECT SUM(numeroBoletos) as total
-        FROM Rutas
-        WHERE proceso = :anio
-    ";
-    $stmtTotalDecimas = $conn->prepare($queryTotalDecimas);
-    $stmtTotalDecimas->bindParam(':anio', $anioActual, PDO::PARAM_INT);
-    $stmtTotalDecimas->execute();
-    $totalDecimas = $stmtTotalDecimas->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+    // ✅ Tomamos el usuario de la sesión
+    $usuarioSesion = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
 
-    // Décimas entregadas por fecha
+    // Décimas entregadas por FECHA (solo del usuario actual -> entrego)
     $queryDecimasEntregadas = "
         SELECT DATE(fechaEntrega) as fecha, SUM(numeroBoletos) as total_entregadas
         FROM Rutas
-        WHERE status = 1 AND proceso = :anio
+        WHERE status = 1 
+        AND proceso = :anio
+        AND TRIM(LOWER(entrego)) = TRIM(LOWER(:usuario))
         GROUP BY DATE(fechaEntrega)
         ORDER BY fechaEntrega ASC
     ";
     $stmtDecimasEntregadas = $conn->prepare($queryDecimasEntregadas);
     $stmtDecimasEntregadas->bindParam(':anio', $anioActual, PDO::PARAM_INT);
+    $stmtDecimasEntregadas->bindParam(':usuario', $usuarioSesion, PDO::PARAM_STR);
     $stmtDecimasEntregadas->execute();
     $decimasEntregadasRaw = $stmtDecimasEntregadas->fetchAll(PDO::FETCH_ASSOC);
 
     // Preparar datos acumulativos y por día
     $labels = [];
-    $entregadas = [];
-    $noEntregadas = [];
-    $entregadasDia = [];
+    $entregadas = [];      // acumuladas
+    $entregadasDia = [];   // entregas del día
 
     $acumuladas = 0;
     foreach ($decimasEntregadasRaw as $row) {
         $labels[] = $row['fecha'];
-        $entregadasDia[] = $row['total_entregadas']; // entregas de ese día
+        $entregadasDia[] = $row['total_entregadas'];
         $acumuladas += $row['total_entregadas'];
-        $entregadas[] = $acumuladas; // acumuladas
-        $noEntregadas[] = $totalDecimas - $acumuladas; // por entregar
+        $entregadas[] = $acumuladas;
     }
 
     // Si no hay entregas aún
     if (empty($labels)) {
         $labels[] = 'Aún no hay entregas';
         $entregadas[] = 0;
-        $noEntregadas[] = $totalDecimas;
         $entregadasDia[] = 0;
     }
 ?>
@@ -93,8 +69,10 @@
     
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="/pruebas/menuUsuario/styleMenu.css">
-        <link rel="stylesheet" href="/pruebas/menuLogistica/logistica/stylesLogEnt.css">
-
+    <link rel="stylesheet" href="/pruebas/menuLogistica/logistica/stylesLogEnt.css">
+    
+    <!----======== identificador de usuario ======== -->
+    <link rel="stylesheet" href="/pruebas/etiquetaUsuarios.css">
     
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -109,10 +87,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 
-    
 	<title>Mayordomía Tickets©</title>
 </head>
 <body>
+    <!-- Tarjeta usuario activo -->
+    <div class="usuario-activo">
+        <i class='bx bx-user-circle'></i>
+        <?= isset($_SESSION['usuario']) ? htmlspecialchars($_SESSION['usuario']) : 'Invitado' ?>
+    </div>
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -235,7 +217,10 @@
         <br>
         <!--Aqui debe de ir el llamado para mostrar la grafica-->
             <div class="container">
-                <h2 style="text-align: center">Décimas Por Entregar vs Entregadas(Día) vs Entregadas(Acumulativo) <br>(Proceso <?= $anioActual ?>)</h2>
+                <h2 style="text-align: center">
+                    Usuario: <?= htmlspecialchars($usuarioSesion) ?> | Proceso <?= $anioActual+1 ?><br><br>
+                    Décimas Entregadas (Día) y rango de Entregadas (Acumuladas) <br>    
+                </h2>
                 <canvas id="decimasChart" width="800" height="400"></canvas>
             </div>
     </section>
@@ -318,7 +303,6 @@
         // Datos desde PHP
         var labels = <?php echo json_encode($labels); ?>;
         var entregadas = <?php echo json_encode($entregadas); ?>;
-        var noEntregadas = <?php echo json_encode($noEntregadas); ?>;
         var entregadasDia = <?php echo json_encode($entregadasDia); ?>;
 
         var ctxDecimas = document.getElementById('decimasChart').getContext('2d');
@@ -328,30 +312,32 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Décimas Por Entregar',
-                        data: noEntregadas,
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    },
-                    {
                         label: 'Décimas Entregadas del Día',
                         data: entregadasDia,
                         backgroundColor: 'rgba(255, 206, 86, 0.6)',
                         borderColor: 'rgba(255, 206, 86, 1)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'y'
                     },
                     {
                         label: 'Décimas Entregadas (Acumuladas)',
                         data: entregadas,
+                        type: 'line',
                         backgroundColor: 'rgba(54, 162, 235, 0.6)',
                         borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.3,
+                        yAxisID: 'y'
                     }
                 ]
             },
             options: {
                 responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -363,6 +349,7 @@
                 }
             }
         });
-        </script>
+
+    </script>
 </body>
 </html>
