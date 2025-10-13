@@ -13,10 +13,16 @@
     $stmtCP = $conn->prepare($queryCP);
     $stmtCP->execute();
 
-    // Consulta para obtener las colonias
+    /*/ Consulta para obtener las colonias
     $queryColonia = "SELECT idColonia, nombre FROM Colonias";
     $stmtColonia = $conn->prepare($queryColonia);
+    $stmtColonia->execute(); */
+
+    // Consulta para obtener las colonias con su código postal
+    $queryColonia = "SELECT idColonia, nombre, codigo_postal FROM Colonias";
+    $stmtColonia = $conn->prepare($queryColonia);
     $stmtColonia->execute();
+
 
     $numeroBoleto = "";
     if (isset($_GET['token'])) {
@@ -202,9 +208,13 @@
                 <!-- Colonia -->
                 <div class="form-group">
                     <label for="colonia">Colonia:</label>
-                    <select id="colonia" name="colonia" required>
+
+                    <select id="colonia" name="colonia" required onchange="setCodigoPostal()">
+                        <option value="">-- Selecciona una colonia --</option>
                         <?php while($colonia = $stmtColonia->fetch(PDO::FETCH_ASSOC)): ?>
-                            <option value="<?= $colonia['idColonia'] ?>"><?= $colonia['nombre'] ?></option>
+                            <option value="<?= $colonia['nombre'] ?>" data-cp="<?= $colonia['codigo_postal'] ?>">
+                                <?= $colonia['nombre'] ?>
+                            </option>
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -292,6 +302,16 @@
                             coloniaSelect.appendChild(option);
                         });
                     });
+            }
+        }
+
+        function setCodigoPostal() {
+            var coloniaSelect = document.getElementById("colonia");
+            var selectedOption = coloniaSelect.options[coloniaSelect.selectedIndex];
+            var cp = selectedOption.getAttribute("data-cp");
+            
+            if (cp) {
+                document.getElementById("codigo_postal").value = cp;
             }
         }
 
@@ -390,11 +410,13 @@
                     });
                 },
                 minLength: 2,
-                select: function(event, ui) {
+                //ORIGINAL
+                /*select: function(event, ui) {
                     if (ui.item.data) {
                         var data = ui.item.data;
                         $("#nombre_boleto").val(data.nombre);
                         $("#colonia").val(data.colonia);
+                        $("#codigo_postal").val(data.codigo_postal);
                         $("#calle").val(data.calle);
                         $("#numero").val(data.numero);
                         $("#colinda1").val(data.colinda1);
@@ -404,7 +426,67 @@
                         $("#telefono2").val(data.telefono2);
                         $("#correo").val(data.correo_Electronico);
                     }
-                }
+                }*/
+               select: function(event, ui) {
+    if (ui.item && ui.item.data) {
+        var data = ui.item.data;
+
+        // Rellenar campos (respetando tu orden si lo necesitas)
+        $("#nombre_boleto").val(data.nombre || data.nombre_boleto || "");
+        $("#colonia").val(data.colonia);
+        $("#calle").val(data.calle);
+        $("#numero").val(data.numero);
+        $("#colinda1").val(data.colinda1);
+        $("#colinda2").val(data.colinda2);
+        $("#referencia").val(data.referencia);
+        $("#telefono1").val(data.telefono1);
+        $("#telefono2").val(data.telefono2);
+        $("#correo").val(data.correo_Electronico);
+
+        // Seleccionar la option que coincida con la colonia (por texto)
+        var coloniaTexto2 = (data.colonia || "").trim();
+        if (coloniaTexto2) {
+            var $opt2 = $("#colonia option").filter(function() {
+                return $(this).text().trim().toLowerCase() === coloniaTexto2.toLowerCase();
+            });
+
+            if ($opt2.length) {
+                $opt2.prop("selected", true);
+            } else {
+                // Si no existe la opción, agregamos temporalmente y seleccionamos
+                $("#colonia").append($("<option>", { value: coloniaTexto2, text: coloniaTexto2, selected: true }));
+            }
+        }
+
+        // Llamamos a setCodigoPostal() para que rellene #codigo_postal según la option seleccionada
+        if (typeof setCodigoPostal === "function") {
+            setCodigoPostal();
+        } else {
+            if (data.codigo_postal) $("#codigo_postal").val(data.codigo_postal);
+        }
+    }
+}
+                /*select: function(event, ui) {
+                    if (ui.item.data) {
+                        var data = ui.item.data;
+                        $("#nombre_boleto").val(data.nombre);
+                        $("#colonia").val(data.colonia);
+                        $("#codigo_postal").val(data.codigo_postal);
+                        $("#calle").val(data.calle);
+                        $("#numero").val(data.numero);
+                        $("#colinda1").val(data.colinda1);
+                        $("#colinda2").val(data.colinda2);
+                        $("#referencia").val(data.referencia);
+                        $("#telefono1").val(data.telefono1);
+                        $("#telefono2").val(data.telefono2);
+                        $("#correo").val(data.correo_Electronico);
+
+                        // 🆕 Nuevo: asignar el código postal correspondiente a la colonia
+                        if (data.codigo_postal) {
+                            $("#codigo_postal").val(data.codigo_postal);
+                        }
+                    }
+                }*/
             });
         });
 

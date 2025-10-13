@@ -77,6 +77,7 @@
             numeroBoletos,
             proceso,
             entrego,
+            recibe,
             fechaEntrega
         FROM Rutas
         WHERE proceso = YEAR(CURDATE()) AND status = 1
@@ -198,7 +199,8 @@ if (isset($_POST['cancelarEntrega'])) {
     // Consulta para revertir la entrega
     $sql = "UPDATE Rutas 
             SET status = 0, 
-                entrego = '', 
+                entrego = '',
+                recibe ='', 
                 fechaEntrega = NULL
             WHERE idRutas = :idRutas";
 
@@ -449,6 +451,7 @@ if (isset($_POST['cancelarEntrega'])) {
                             <th>DOMICILIO</th>
                             <th>N° DECIMAS ENTREGADAS</th>
                             <th>ENTREGO</th>
+                            <th>RECIBIO</th>
                             <th>FECHA</th>
                             <th>PROCESO</th>
                             <th>Acciones</th>
@@ -464,6 +467,7 @@ if (isset($_POST['cancelarEntrega'])) {
                                 <td><?= htmlspecialchars($ruta['domicilio']) ?></td>
                                 <td><?= htmlspecialchars($ruta['numeroBoletos']) ?></td>
                                 <td><?= htmlspecialchars($ruta['entrego']) ?></td>
+                                <td><?= htmlspecialchars($ruta['recibe']) ?></td>
                                 <td><?= htmlspecialchars($ruta['fechaEntrega']) ?></td>
                                 <td><?= htmlspecialchars($ruta['proceso']) ?></td>
                                 <td><button style="background-color:red" class="btnCancelar"><i class='bx bx-x'></i></button></td>
@@ -505,6 +509,10 @@ if (isset($_POST['cancelarEntrega'])) {
                 </option>
             <?php endforeach; ?>
         </select>
+        <p><strong>Recibe: </strong> 
+            <input type="text" id="recibe" name="recibe" placeholder="Juan Perez" required>
+        </p>
+
 
         <!-- Botones -->
         <div class="modal-actions">
