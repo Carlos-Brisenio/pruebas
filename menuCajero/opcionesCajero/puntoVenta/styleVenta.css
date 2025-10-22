@@ -1,0 +1,145 @@
+body {
+  background-color: #dcdde1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home {
+  padding: 20px;
+}
+
+
+.btn-eliminar {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-eliminar:hover {
+  background: #c0392b;
+}
+
+
+.venta-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #bfc1c6;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.resumen {
+  flex: 3;
+  background-color: #d5d6e0;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.resumen h3 {
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 20px;
+  color: #000;
+}
+
+.detalle-venta {
+  background-color: #5a5b5e;
+  color: white;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.detalle-venta span {
+  float: right;
+}
+
+.panel-derecho {
+  flex: 1.3;
+  background-color: #5a5b5e;
+  color: black;
+  border-radius: 10px;
+  padding: 20px;
+  margin-left: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.panel-derecho h4 {
+  background-color: #d5d6e0;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.panel-derecho input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  text-align: center;
+}
+
+.panel-derecho label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: left;
+  color: white;
+}
+
+.total {
+  background-color: white;
+  border-radius: 5px;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 25px;
+}
+
+.botones button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.boton-pagar {
+  background-color: #1dbd1d;
+  color: black;
+}
+
+.boton-cancelar {
+  background-color: #e40000;
+  color: white;
+}
+
+.fecha {
+  color: white;
+  margin-top: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+}
